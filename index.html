@@ -1414,11 +1414,21 @@
                     <div class="recipe-card">
                         <h3 style="color: var(--accent-primary);">Events</h3>
                         <div style="margin: 15px 0;">
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">Weather Events:</p>
+                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('cloudy')">Start Cloudy Event</button>
+                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('rainy')" style="margin-top: 5px;">Start Rainy Event</button>
+                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('storming')" style="margin-top: 5px;">Start Storming Event</button>
+                            
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 15px 0 10px 0;">Special Events:</p>
+                            <button class="btn btn-accept" onclick="adminStartSpecialEvent('disco')" style="background: #ff00ff;">🪩 Disco Event</button>
+                            <button class="btn btn-accept" onclick="adminStartSpecialEvent('galactic')" style="margin-top: 5px; background: #4B0082;">🌌 Galactic Event</button>
+                            <button class="btn btn-accept" onclick="adminStartSpecialEvent('glitch')" style="margin-top: 5px; background: #00ff00; color: black;">⚡ Glitch Event</button>
+                            <button class="btn btn-accept" onclick="adminStartSpecialEvent('fullmoon')" style="margin-top: 5px; background: #f0f0f0; color: black;">🌕 Full Moon Event</button>
+                            <button class="btn btn-accept" onclick="adminStartSpecialEvent('bloodmoon')" style="margin-top: 5px; background: #8B0000;">🔴 Blood Moon Event</button>
+                            
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 15px 0 10px 0;">Other Events:</p>
                             <button class="btn btn-accept" onclick="adminToggleChristmas()">Toggle Christmas Event</button>
-                            <button class="btn btn-accept" onclick="adminSpawnTrade()" style="margin-top: 10px;">Spawn Trade Now</button>
-                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('cloudy')" style="margin-top: 10px;">Start Cloudy Event</button>
-                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('rainy')" style="margin-top: 10px;">Start Rainy Event</button>
-                            <button class="btn btn-accept" onclick="adminStartWeatherEvent('storming')" style="margin-top: 10px;">Start Storming Event</button>
+                            <button class="btn btn-accept" onclick="adminSpawnTrade()" style="margin-top: 5px;">Spawn Trade Now</button>
                         </div>
                     </div>
                     
@@ -1512,6 +1522,7 @@
             lastWeatherEvent: 0,
             specialEvent: null, // 'disco', 'galactic', 'glitch', 'fullmoon', 'bloodmoon', or null
             specialEventEnd: null,
+            specialEventIsAdmin: false, // true if triggered by admin, false if scheduled
             questsCompleted: 0,
             dailyStreak: 0,
             weeklyQuestsCompleted: 0,
@@ -2089,12 +2100,12 @@
             { id: 'multi_millionaire', name: 'Multi-Millionaire', desc: 'Reach $10,000,000 total value', reward: 'Diamond Crown', check: () => gameState.totalValue >= 10000000 },
             { id: 'mega_rich', name: 'Mega Rich', desc: 'Reach $100,000,000 total value', reward: 'Cosmic Crown', check: () => gameState.totalValue >= 100000000 },
             { id: 'ultra_rich', name: 'Ultra Rich', desc: 'Reach $1,000,000,000 total value', reward: 'Absolute Crown', check: () => gameState.totalValue >= 1000000000 },
-            { id: 'legendary_pull', name: 'Legendary Pull', desc: 'Get a Legendary item', reward: 'Rare Spin Boost', check: () => Object.keys(gameState.inventory).some(key => key.includes('Legendary')) },
-            { id: 'mythic_pull', name: 'Mythic Hunter', desc: 'Get a Mythic item', reward: 'Mythic Aura', check: () => Object.keys(gameState.inventory).some(key => key.includes('Mythic')) },
-            { id: 'exotic_pull', name: 'Exotic Collector', desc: 'Get an Exotic item', reward: 'Exotic Badge', check: () => Object.keys(gameState.inventory).some(key => key.includes('Exotic')) },
-            { id: 'divine_pull', name: 'Divine Blessing', desc: 'Get a Divine item', reward: 'Divine Halo', check: () => Object.keys(gameState.inventory).some(key => key.includes('Divine')) },
-            { id: 'infinite_pull', name: 'Infinite Luck', desc: 'Get an Infinite item', reward: 'Infinite Power', check: () => Object.keys(gameState.inventory).some(key => key.includes('Infinite')) },
-            { id: 'absolute_pull', name: 'Absolute Master', desc: 'Get an Absolute item', reward: 'Absolute Authority', check: () => Object.keys(gameState.inventory).some(key => key.includes('Absolute')) },
+            { id: 'legendary_pull', name: 'Legendary Pull', desc: 'Get a Legendary item', reward: 'Rare Spin Boost', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Legendary') },
+            { id: 'mythic_pull', name: 'Mythic Hunter', desc: 'Get a Mythic item', reward: 'Mythic Aura', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Mythic') },
+            { id: 'exotic_pull', name: 'Exotic Collector', desc: 'Get an Exotic item', reward: 'Exotic Badge', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Exotic') },
+            { id: 'divine_pull', name: 'Divine Blessing', desc: 'Get a Divine item', reward: 'Divine Halo', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Divine') },
+            { id: 'infinite_pull', name: 'Infinite Luck', desc: 'Get an Infinite item', reward: 'Infinite Power', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Infinite') },
+            { id: 'absolute_pull', name: 'Absolute Master', desc: 'Get an Absolute item', reward: 'Absolute Authority', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Absolute') },
             { id: 'trade_king', name: 'Trade King', desc: 'Win 50 trades', reward: 'Trader Badge', check: () => gameState.tradeWins >= 50 },
             { id: 'trade_emperor', name: 'Trade Emperor', desc: 'Win 500 trades', reward: 'Emperor Medal', check: () => gameState.tradeWins >= 500 },
             { id: 'trade_god', name: 'Trade God', desc: 'Win 5,000 trades', reward: 'Trade Master', check: () => gameState.tradeWins >= 5000 },
@@ -2117,16 +2128,16 @@
             { id: 'first_rebirth', name: 'Reborn', desc: 'Complete your first rebirth', reward: 'Rebirth Crown', check: () => gameState.rebirths >= 1 },
             { id: 'rebirth_5', name: 'Serial Rebirther', desc: 'Complete 5 rebirths', reward: 'Eternal Crown', check: () => gameState.rebirths >= 5 },
             { id: 'rebirth_10', name: 'Rebirth Master', desc: 'Complete 10 rebirths', reward: 'Infinite Rebirth', check: () => gameState.rebirths >= 10 },
-            { id: 'paradox_pull', name: 'Paradoxical', desc: 'Get a Paradox item', reward: 'Reality Breaker', check: () => Object.keys(gameState.inventory).some(key => key.includes('Paradox')) },
-            { id: 'singularity_pull', name: 'Singularity Hunter', desc: 'Get a Singularity item', reward: 'Black Hole Core', check: () => Object.keys(gameState.inventory).some(key => key.includes('Singularity')) },
-            { id: 'void_pull', name: 'Void Walker', desc: 'Get a Void item', reward: 'Void Cloak', check: () => Object.keys(gameState.inventory).some(key => key.includes('Void')) },
-            { id: 'everything_pull', name: 'Universe Creator', desc: 'Get an Everything item', reward: 'Creation Power', check: () => Object.keys(gameState.inventory).some(key => key.includes('Everything')) },
-            { id: 'theone_pull', name: 'THE ONE', desc: 'Get The One item', reward: 'EXISTENCE ITSELF', check: () => Object.keys(gameState.inventory).some(key => key.includes('The One')) },
-            { id: 'quantum_pull', name: 'Quantum Collector', desc: 'Get a Quantum item', reward: 'Quantum Mastery', check: () => Object.keys(gameState.inventory).some(key => key.includes('Quantum')) },
-            { id: 'hyperversal_pull', name: 'Hyperversal Explorer', desc: 'Get a Hyperversal item', reward: 'Reality Shifter', check: () => Object.keys(gameState.inventory).some(key => key.includes('Hyperversal')) },
-            { id: 'abstract_pull', name: 'Conceptual Being', desc: 'Get an Abstract or Conceptual item', reward: 'Pure Thought', check: () => Object.keys(gameState.inventory).some(key => key.includes('Abstract') || key.includes('Conceptual')) },
-            { id: 'source_pull', name: 'Source Finder', desc: 'Get The Source item', reward: 'Origin Power', check: () => Object.keys(gameState.inventory).some(key => key.includes('The Source')) },
-            { id: 'beyond_infinity_pull', name: 'BEYOND ALL', desc: 'Get Beyond Infinity item', reward: 'TRANSCENDENCE', check: () => Object.keys(gameState.inventory).some(key => key.includes('Beyond Infinity')) },
+            { id: 'paradox_pull', name: 'Paradoxical', desc: 'Get a Paradox item', reward: 'Reality Breaker', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Paradox') },
+            { id: 'singularity_pull', name: 'Singularity Hunter', desc: 'Get a Singularity item', reward: 'Black Hole Core', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Singularity') },
+            { id: 'void_pull', name: 'Void Walker', desc: 'Get a Void item', reward: 'Void Cloak', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Void') },
+            { id: 'everything_pull', name: 'Universe Creator', desc: 'Get an Everything item', reward: 'Creation Power', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Everything') },
+            { id: 'theone_pull', name: 'THE ONE', desc: 'Get The One item', reward: 'EXISTENCE ITSELF', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'The One') },
+            { id: 'quantum_pull', name: 'Quantum Collector', desc: 'Get a Quantum item', reward: 'Quantum Mastery', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Quantum') },
+            { id: 'hyperversal_pull', name: 'Hyperversal Explorer', desc: 'Get a Hyperversal item', reward: 'Reality Shifter', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Hyperversal') },
+            { id: 'abstract_pull', name: 'Conceptual Being', desc: 'Get an Abstract or Conceptual item', reward: 'Pure Thought', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && (item.rarity === 'Abstract' || item.rarity === 'Conceptual')) },
+            { id: 'source_pull', name: 'Source Finder', desc: 'Get The Source item', reward: 'Origin Power', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'The Source') },
+            { id: 'beyond_infinity_pull', name: 'BEYOND ALL', desc: 'Get Beyond Infinity item', reward: 'TRANSCENDENCE', check: () => Object.values(gameState.inventory).some(item => item.count > 0 && item.rarity === 'Beyond Infinity') },
             { id: 'ultra_rich', name: 'Quadrillionaire', desc: 'Reach $1 Quadrillion total value', reward: 'Ultimate Wealth', check: () => gameState.totalValue >= 1000000000000000 },
             { id: 'quest_master', name: 'Quest Master', desc: 'Complete 10 quests', reward: 'Quest Master Badge', check: () => gameState.questsCompleted >= 10 },
             { id: 'quest_legend', name: 'Quest Legend', desc: 'Complete 50 quests', reward: 'Quest Legend Crown', check: () => gameState.questsCompleted >= 50 },
@@ -2141,7 +2152,35 @@
             { id: 'mega_crafter', name: 'Mega Crafter', desc: 'Craft 1,000 items', reward: 'Mega Kit', check: () => gameState.craftCount >= 1000 },
             { id: 'rebirth_legend', name: 'Rebirth Legend', desc: 'Complete 25 rebirths', reward: 'Legend Status', check: () => gameState.rebirths >= 25 },
             { id: 'rebirth_god', name: 'Rebirth God', desc: 'Complete 50 rebirths', reward: 'God Status', check: () => gameState.rebirths >= 50 },
-            { id: 'ultimate_collector', name: 'Ultimate Collector', desc: 'Have 250 different items', reward: 'Ultimate Badge', check: () => Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length >= 250 }
+            { id: 'ultimate_collector', name: 'Ultimate Collector', desc: 'Have 250 different items', reward: 'Ultimate Badge', check: () => Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length >= 250 },
+            { id: 'disco_fever', name: 'Disco Fever', desc: 'Collect 10 Disco items', reward: 'Disco King', check: () => Object.keys(gameState.inventory).filter(k => k.includes('🪩') || k.includes('🕺') || k.includes('💃')).length >= 10 },
+            { id: 'galactic_explorer', name: 'Galactic Explorer', desc: 'Collect 10 Galactic items', reward: 'Space Badge', check: () => Object.keys(gameState.inventory).filter(k => k.includes('🌌') || k.includes('⭐') || k.includes('🌠')).length >= 10 },
+            { id: 'glitch_master', name: 'Glitch Master', desc: 'Collect 10 Glitch items', reward: 'Digital Crown', check: () => Object.keys(gameState.inventory).filter(k => k.includes('⚡') || k.includes('🔲') || k.includes('📟')).length >= 10 },
+            { id: 'lunar_collector', name: 'Lunar Collector', desc: 'Collect 10 Full Moon items', reward: 'Moon Crown', check: () => Object.keys(gameState.inventory).filter(k => k.includes('🌕') || k.includes('🐺') || k.includes('🌙')).length >= 10 },
+            { id: 'blood_hunter', name: 'Blood Hunter', desc: 'Collect 10 Blood Moon items', reward: 'Crimson Crown', check: () => Object.keys(gameState.inventory).filter(k => k.includes('🔴') || k.includes('🩸') || k.includes('🌑')).length >= 10 },
+            { id: 'event_master', name: 'Event Master', desc: 'Collect items from all 5 special events', reward: 'Event King', check: () => {
+                const hasDisco = Object.keys(gameState.inventory).some(k => k.includes('🪩'));
+                const hasGalactic = Object.keys(gameState.inventory).some(k => k.includes('🌌'));
+                const hasGlitch = Object.keys(gameState.inventory).some(k => k.includes('⚡') && (k.includes('Error') || k.includes('Pixel')));
+                const hasMoon = Object.keys(gameState.inventory).some(k => k.includes('🌕'));
+                const hasBlood = Object.keys(gameState.inventory).some(k => k.includes('🔴') && (k.includes('Crimson') || k.includes('Blood')));
+                return hasDisco && hasGalactic && hasGlitch && hasMoon && hasBlood;
+            } },
+            { id: 'upgrade_addict', name: 'Upgrade Addict', desc: 'Max out 5 different upgrades', reward: 'Master Upgrader', check: () => Object.entries(gameState.upgrades).filter(([key, val]) => upgradeData[key] && val >= upgradeData[key].maxLevel).length >= 5 },
+            { id: 'upgrade_legend', name: 'Upgrade Legend', desc: 'Max out 10 different upgrades', reward: 'Legendary Upgrader', check: () => Object.entries(gameState.upgrades).filter(([key, val]) => upgradeData[key] && val >= upgradeData[key].maxLevel).length >= 10 },
+            { id: 'billionaire', name: 'Billionaire', desc: 'Have $1,000,000,000 in cash', reward: 'Billion Badge', check: () => gameState.money >= 1000000000 },
+            { id: 'trillionaire', name: 'Trillionaire', desc: 'Have $1,000,000,000,000 in cash', reward: 'Trillion Badge', check: () => gameState.money >= 1000000000000 },
+            { id: 'quest_god', name: 'Quest God', desc: 'Complete 100 quests', reward: 'Quest Deity', check: () => gameState.questsCompleted >= 100 },
+            { id: 'perfect_streak', name: 'Perfect Streak', desc: 'Maintain 10 day daily quest streak', reward: 'Streak Master', check: () => gameState.dailyStreak >= 10 },
+            { id: 'shop_whale', name: 'Shop Whale', desc: 'Buy 500 items from shop', reward: 'Platinum Card', check: () => gameState.shopPurchases >= 500 },
+            { id: 'mega_hoarder', name: 'Mega Hoarder', desc: 'Have 10,000 total items', reward: 'Warehouse King', check: () => Object.values(gameState.inventory).reduce((sum, item) => sum + item.count, 0) >= 10000 },
+            { id: 'trade_master_ultimate', name: 'Ultimate Trade Master', desc: 'Win 25,000 trades', reward: 'Trade Deity', check: () => gameState.tradeWins >= 25000 },
+            { id: 'craft_deity', name: 'Crafting Deity', desc: 'Craft 5,000 items', reward: 'Divine Crafting Kit', check: () => gameState.craftCount >= 5000 },
+            { id: 'enchant_deity', name: 'Enchantment Deity', desc: 'Successfully enchant 1,000 items', reward: 'Divine Robe', check: () => gameState.enchantSuccess >= 1000 },
+            { id: 'super_lucky', name: 'Super Lucky', desc: 'Reach 25x luck multiplier', reward: 'Luck God', check: () => (gameState.luckMultiplier * gameState.permanentLuckBoost) >= 25 },
+            { id: 'mega_spinner', name: 'Mega Spinner', desc: 'Spin 10,000,000 items', reward: 'Spinner Deity', check: () => gameState.totalSpins >= 10000000 },
+            { id: 'quintillionaire', name: 'Quintillionaire', desc: 'Reach $1 Quintillion total value', reward: 'Ultimate Fortune', check: () => gameState.totalValue >= 1000000000000000000 },
+            { id: 'collection_master', name: 'Collection Master', desc: 'Have 500 different items', reward: 'Master Collection Badge', check: () => Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length >= 500 }
         ];
         
         // Battle Pass Tiers
@@ -4265,56 +4304,80 @@
         
         function checkSpecialEvents() {
             const now = new Date();
+            const currentTime = now.getTime();
             const minutes = now.getMinutes();
             const hours = now.getHours();
             
-            // Check if current special event has ended
-            if (gameState.specialEvent && gameState.specialEventEnd && Date.now() >= gameState.specialEventEnd) {
+            // First, check if any active event has expired (admin or scheduled)
+            if (gameState.specialEvent && gameState.specialEventEnd && currentTime >= gameState.specialEventEnd) {
                 const eventEmojis = { disco: '🪩', galactic: '🌌', glitch: '⚡', fullmoon: '🌕', bloodmoon: '🔴' };
                 showNotification(`${eventEmojis[gameState.specialEvent]} ${gameState.specialEvent.toUpperCase()} Event Ended!`, 'var(--text-secondary)');
                 gameState.specialEvent = null;
                 gameState.specialEventEnd = null;
+                gameState.specialEventIsAdmin = false;
                 updateEventBonuses();
             }
             
-            // Don't start new event if one is active
-            if (gameState.specialEvent) return;
+            // Don't manage scheduled events if admin event is active
+            if (gameState.specialEventIsAdmin) {
+                return;
+            }
             
-            // Disco Event - Every hour at :15-:19 (5 minutes)
+            let shouldBeActive = null;
+            let endMinute = 0;
+            
+            // Determine which event should be active based on current time
             if (minutes >= 15 && minutes < 20) {
-                if (!gameState.specialEvent) {
-                    startSpecialEvent('disco');
-                }
+                shouldBeActive = 'disco';
+                endMinute = 20;
+            } else if (minutes >= 30 && minutes < 35) {
+                shouldBeActive = 'galactic';
+                endMinute = 35;
+            } else if (minutes >= 45 && minutes < 50) {
+                shouldBeActive = 'glitch';
+                endMinute = 50;
+            } else if (minutes >= 20 && minutes < 25 && hours % 2 === 0) {
+                shouldBeActive = 'fullmoon';
+                endMinute = 25;
+            } else if (minutes >= 50 && minutes < 55 && hours % 3 === 0) {
+                shouldBeActive = 'bloodmoon';
+                endMinute = 55;
             }
-            // Galactic Event - Every hour at :30-:34 (5 minutes)
-            else if (minutes >= 30 && minutes < 35) {
-                if (!gameState.specialEvent) {
-                    startSpecialEvent('galactic');
-                }
+            
+            // Handle scheduled event state changes
+            if (shouldBeActive && !gameState.specialEvent) {
+                // Start new scheduled event
+                startSpecialEvent(shouldBeActive, endMinute, false);
+            } else if (shouldBeActive && gameState.specialEvent && shouldBeActive !== gameState.specialEvent) {
+                // Wrong scheduled event is active, switch to correct one
+                gameState.specialEvent = null;
+                startSpecialEvent(shouldBeActive, endMinute, false);
             }
-            // Glitch Event - Every hour at :45-:49 (5 minutes)
-            else if (minutes >= 45 && minutes < 50) {
-                if (!gameState.specialEvent) {
-                    startSpecialEvent('glitch');
-                }
-            }
-            // Full Moon Event - Every 2 hours at :20-:24 (5 minutes)
-            else if (minutes >= 20 && minutes < 25 && hours % 2 === 0) {
-                if (!gameState.specialEvent) {
-                    startSpecialEvent('fullmoon');
-                }
-            }
-            // Blood Moon Event - Every 3 hours at :50-:54 (5 minutes)
-            else if (minutes >= 50 && minutes < 55 && hours % 3 === 0) {
-                if (!gameState.specialEvent) {
-                    startSpecialEvent('bloodmoon');
-                }
-            }
+            // If shouldBeActive is null and there's an event, it will be ended by the time check above
         }
         
-        function startSpecialEvent(eventType) {
+        function startSpecialEvent(eventType, endMinute = null, isAdmin = true) {
             gameState.specialEvent = eventType;
-            gameState.specialEventEnd = Date.now() + 300000; // 5 minutes
+            gameState.specialEventIsAdmin = isAdmin;
+            
+            // Calculate exact end time based on the end minute of the time window
+            if (endMinute !== null) {
+                const now = new Date();
+                const endTime = new Date(now);
+                endTime.setMinutes(endMinute);
+                endTime.setSeconds(0);
+                endTime.setMilliseconds(0);
+                
+                // If end time is in the past (shouldn't happen), add an hour
+                if (endTime <= now) {
+                    endTime.setHours(endTime.getHours() + 1);
+                }
+                
+                gameState.specialEventEnd = endTime.getTime();
+            } else {
+                // Admin-triggered events last 5 minutes
+                gameState.specialEventEnd = Date.now() + 300000;
+            }
             
             const eventNames = { 
                 disco: 'DISCO 🪩', 
@@ -4330,7 +4393,9 @@
                 fullmoon: '#f0f0f0',
                 bloodmoon: '#8B0000'
             };
-            showNotification(`✨ ${eventNames[eventType]} EVENT STARTED! 5 minutes! ✨`, eventColors[eventType]);
+            
+            const eventTypeLabel = isAdmin ? 'Admin' : 'Scheduled';
+            showNotification(`✨ ${eventNames[eventType]} EVENT STARTED! (${eventTypeLabel}) ✨`, eventColors[eventType]);
             updateEventBonuses();
         }
         
@@ -4445,6 +4510,7 @@
                 if (gameState.upgrades.sellPrice === undefined) gameState.upgrades.sellPrice = 0;
                 if (gameState.upgrades.questSpeed === undefined) gameState.upgrades.questSpeed = 0;
                 if (gameState.upgrades.mysteryBox === undefined) gameState.upgrades.mysteryBox = 0;
+                if (gameState.specialEventIsAdmin === undefined) gameState.specialEventIsAdmin = false;
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
                 gameState.settings = data.settings || {
@@ -4559,6 +4625,18 @@
         function adminStartWeatherEvent(eventType) {
             startWeatherEvent(eventType);
             showNotification(`Admin: Started ${eventType} event!`, '#00aaff');
+        }
+        
+        function adminStartSpecialEvent(eventType) {
+            startSpecialEvent(eventType);
+            const eventColors = {
+                disco: '#ff00ff',
+                galactic: '#4B0082',
+                glitch: '#00ff00',
+                fullmoon: '#f0f0f0',
+                bloodmoon: '#8B0000'
+            };
+            showNotification(`Admin: Started ${eventType} event!`, eventColors[eventType]);
         }
         
         function adminClearInventory() {
@@ -5074,6 +5152,7 @@
                 if (gameState.upgrades.sellPrice === undefined) gameState.upgrades.sellPrice = 0;
                 if (gameState.upgrades.questSpeed === undefined) gameState.upgrades.questSpeed = 0;
                 if (gameState.upgrades.mysteryBox === undefined) gameState.upgrades.mysteryBox = 0;
+                if (gameState.specialEventIsAdmin === undefined) gameState.specialEventIsAdmin = false;
                 
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
@@ -5128,13 +5207,13 @@
         setInterval(checkWeatherEvents, 30000);
         checkWeatherEvents();
         
-        // Check for Special events every 30 seconds
-        setInterval(checkSpecialEvents, 30000);
+        // Check for Special events every 10 seconds
+        setInterval(checkSpecialEvents, 10000);
         checkSpecialEvents();
         
         // Update event timers every second
         setInterval(() => {
-            if (gameState.christmasEvent || gameState.weatherEvent) {
+            if (gameState.christmasEvent || gameState.weatherEvent || gameState.specialEvent) {
                 updateEventBonuses();
             }
         }, 1000);
