@@ -1024,10 +1024,369 @@
             color: var(--text-secondary);
             margin-top: 10px;
         }
+        
+        /* ===== MOBILE SUPPORT ===== */
+        
+        /* Prevent text selection on interactive elements */
+        button, .inventory-item, .tab-button, .trade-card {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Touch-friendly tap targets (minimum 44x44px) */
+        @media (max-width: 768px) {
+            /* Mobile navigation - hamburger menu */
+            .mobile-menu-toggle {
+                display: block;
+                position: fixed;
+                top: 15px;
+                right: 15px;
+                z-index: 1001;
+                background: var(--accent-primary);
+                border: none;
+                padding: 12px 15px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: var(--bg-dark);
+                box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+            }
+            
+            .mobile-menu-toggle:active {
+                transform: scale(0.95);
+            }
+            
+            /* Tab navigation responsive */
+            .tab-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: var(--bg-dark);
+                border-left: 2px solid var(--accent-primary);
+                z-index: 1000;
+                overflow-y: auto;
+                transition: right 0.3s ease;
+                padding: 80px 10px 20px 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .tab-nav.mobile-open {
+                right: 0;
+            }
+            
+            .tab-button {
+                width: 100%;
+                margin: 0;
+                padding: 15px;
+                font-size: 1rem;
+                min-height: 50px;
+                border-radius: 8px;
+            }
+            
+            /* Container adjustments */
+            .container {
+                padding: 10px;
+                margin: 0;
+                max-width: 100%;
+            }
+            
+            header {
+                font-size: 1.5rem;
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            /* Stats bar - stack on mobile */
+            .stats-bar {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .stat-card {
+                width: 100%;
+                padding: 12px;
+            }
+            
+            .stat-label {
+                font-size: 0.8rem;
+            }
+            
+            .stat-value {
+                font-size: 1.1rem;
+            }
+            
+            /* Buttons */
+            .btn, .spin-button {
+                padding: 15px 20px;
+                font-size: 1rem;
+                min-height: 50px;
+                touch-action: manipulation;
+            }
+            
+            .spin-button {
+                font-size: 1.2rem;
+                padding: 20px 30px;
+            }
+            
+            /* Inventory grid - 2 columns on mobile */
+            .inventory-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .inventory-item {
+                padding: 12px;
+                min-height: 120px;
+            }
+            
+            .item-name {
+                font-size: 0.8rem;
+            }
+            
+            .item-value {
+                font-size: 0.75rem;
+            }
+            
+            /* Crafting/recipe grids - 1 column on mobile */
+            .crafting-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .recipe-card, .stat-card {
+                padding: 15px;
+            }
+            
+            /* Trade cards */
+            .trade-card {
+                padding: 15px;
+            }
+            
+            /* Tabs content */
+            .tab-content {
+                padding: 15px 10px;
+            }
+            
+            /* Result display */
+            .result-display {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .item-display {
+                font-size: 1rem;
+                padding: 15px;
+            }
+            
+            /* Lucky Spin buttons - stack on mobile */
+            .tab-content > div > div[style*="grid-template-columns: repeat(3"] {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+            
+            /* Progress bars */
+            .progress-bar {
+                height: 25px;
+            }
+            
+            .progress-fill {
+                font-size: 0.85rem;
+            }
+            
+            /* Pity counter */
+            #pityCounterDisplay {
+                font-size: 0.9rem;
+            }
+            
+            /* Notifications */
+            .notification {
+                width: 90%;
+                max-width: 350px;
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+            
+            /* Quest container */
+            #questContainer {
+                padding: 10px;
+            }
+            
+            /* Battle Pass */
+            #bpTiers {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Fusion grid */
+            #fusionItemsContainer {
+                grid-template-columns: 1fr !important;
+            }
+            
+            #fusionInventoryGrid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Collections grid */
+            #collectionBonusesGrid,
+            #rarityMilestonesGrid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Admin panel */
+            .admin-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Font size adjustments */
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            h3 {
+                font-size: 1.1rem;
+            }
+            
+            p {
+                font-size: 0.9rem;
+            }
+            
+            /* Save/Load buttons */
+            .container > div[style*="display: flex; justify-content: center"] {
+                flex-direction: column;
+                gap: 10px !important;
+                padding: 0 10px;
+            }
+            
+            .container > div[style*="display: flex; justify-content: center"] button {
+                width: 100%;
+            }
+            
+            /* Ultra rare overlay text */
+            .animation-result-item {
+                font-size: 1.8rem;
+            }
+            
+            .animation-result-rarity {
+                font-size: 1.2rem;
+            }
+            
+            .animation-result-chance {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Small phones (max 480px) */
+        @media (max-width: 480px) {
+            header {
+                font-size: 1.2rem;
+                padding: 12px;
+            }
+            
+            .inventory-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-value {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 12px 15px;
+            }
+            
+            .spin-button {
+                font-size: 1.1rem;
+                padding: 18px 25px;
+            }
+            
+            .tab-button {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
+            
+            h2 {
+                font-size: 1.1rem;
+            }
+            
+            h3 {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Landscape phones */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .stats-bar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .stat-card {
+                width: calc(50% - 5px);
+            }
+            
+            .inventory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Tablet adjustments */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .inventory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .crafting-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-bar {
+                flex-wrap: wrap;
+            }
+            
+            .stat-card {
+                flex: 1 1 calc(33.333% - 10px);
+                min-width: 150px;
+            }
+        }
+        
+        /* Hide mobile menu toggle on desktop */
+        @media (min-width: 769px) {
+            .mobile-menu-toggle {
+                display: none;
+            }
+        }
+        
+        /* Prevent zoom on double-tap */
+        * {
+            touch-action: manipulation;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Better touch feedback */
+        button:active, .inventory-item:active, .tab-button:active {
+            transform: scale(0.98);
+            transition: transform 0.1s;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" id="mobileMenuBtn">☰</button>
+        
         <header>
             ⚡ RNG TRADER ⚡
         </header>
@@ -1060,7 +1419,7 @@
             </div>
         </div>
         
-        <div class="tabs">
+        <div class="tabs tab-nav" id="tabNav">
             <button class="tab-button active" onclick="switchTab('spin')">🎰 Spin</button>
             <button class="tab-button" onclick="switchTab('inventory')">🎒 Inventory</button>
             <button class="tab-button" onclick="switchTab('shop')">🏪 Shop</button>
@@ -1070,6 +1429,9 @@
             <button class="tab-button" onclick="switchTab('enchanting')">✨ Enchanting</button>
             <button class="tab-button" onclick="switchTab('achievements')">🏆 Achievements</button>
             <button class="tab-button" onclick="switchTab('quests')">📋 Quests</button>
+            <button class="tab-button" onclick="switchTab('fusion')">🔮 Fusion</button>
+            <button class="tab-button" onclick="switchTab('statistics')">📊 Statistics</button>
+            <button class="tab-button" onclick="switchTab('collections')">🏆 Collections</button>
             <button class="tab-button" onclick="switchTab('battlepass')">🎫 Battle Pass</button>
             <button class="tab-button" onclick="switchTab('rebirth')">♻️ Rebirth</button>
             <button class="tab-button" onclick="switchTab('events')">🎄 Events</button>
@@ -1081,7 +1443,45 @@
         <div id="spin" class="tab-content active">
             <div class="spin-section">
                 <h2 style="margin-bottom: 20px; color: var(--accent-primary);">🎲 Spin the Wheel of Fortune! 🎲</h2>
+                
+                <!-- Pity Counter Display -->
+                <div class="stat-card" style="max-width: 600px; margin: 20px auto; background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: var(--accent-gold); font-weight: bold;">🍀 Pity System</span>
+                        <span id="pityCounterDisplay" style="color: var(--warning); font-weight: bold;">0 / 100</span>
+                    </div>
+                    <div class="progress-bar" style="height: 20px;">
+                        <div class="progress-fill" id="pityProgressBar" style="width: 0%; background: linear-gradient(90deg, var(--warning) 0%, var(--accent-gold) 100%);">
+                            <span style="font-size: 0.85rem; font-weight: bold;">0%</span>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px; text-align: center;">
+                        Guaranteed Legendary+ at 100!
+                    </p>
+                </div>
+                
                 <button class="spin-button" onclick="spinItem()" id="spinBtn">SPIN NOW!</button>
+                
+                <!-- Lucky Spin Mode -->
+                <div style="margin-top: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    <h3 style="color: var(--accent-gold); text-align: center; margin-bottom: 15px;">⭐ Lucky Spin Mode ⭐</h3>
+                    <p style="color: var(--text-secondary); text-align: center; margin-bottom: 20px;">Pay money for boosted odds!</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <button class="btn btn-accept" onclick="luckySpinItem(2)" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); padding: 15px; font-size: 1rem;">
+                            <div style="font-weight: bold; font-size: 1.1rem;">2x Luck</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">$10,000</div>
+                        </button>
+                        <button class="btn btn-accept" onclick="luckySpinItem(5)" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); padding: 15px; font-size: 1rem;">
+                            <div style="font-weight: bold; font-size: 1.1rem;">5x Luck</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">$100,000</div>
+                        </button>
+                        <button class="btn btn-accept" onclick="luckySpinItem(10)" style="background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); padding: 15px; font-size: 1rem;">
+                            <div style="font-weight: bold; font-size: 1.1rem;">10x Luck</div>
+                            <div style="font-size: 0.9rem; margin-top: 5px;">$1,000,000</div>
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="result-display" id="resultDisplay">
                     <p style="color: var(--text-secondary);">Click SPIN to get your first item!</p>
                 </div>
@@ -1091,7 +1491,40 @@
         <!-- Inventory Tab -->
         <div id="inventory" class="tab-content">
             <h2>Your Inventory</h2>
-            <p style="margin: 10px 0; color: var(--text-secondary);">Click an item to flex it! Right-click to sell it for money.</p>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Tap/Click an item to flex it! Long-press/Right-click to sell it for money.</p>
+            
+            <!-- Sorting Options -->
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; justify-content: center;">
+                <button class="btn btn-accept" onclick="sortInventory('rarity')" style="padding: 10px 15px;">Sort by Rarity</button>
+                <button class="btn btn-accept" onclick="sortInventory('value')" style="padding: 10px 15px;">Sort by Value</button>
+                <button class="btn btn-accept" onclick="sortInventory('count')" style="padding: 10px 15px;">Sort by Count</button>
+                <select id="filterType" onchange="filterInventory()" style="padding: 10px; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; cursor: pointer;">
+                    <option value="all">All Items</option>
+                    <optgroup label="By Rarity">
+                        <option value="common">Common</option>
+                        <option value="uncommon">Uncommon</option>
+                        <option value="rare">Rare</option>
+                        <option value="epic">Epic</option>
+                        <option value="legendary">Legendary</option>
+                        <option value="mythic">Mythic</option>
+                        <option value="exotic">Exotic</option>
+                        <option value="celestial">Celestial</option>
+                        <option value="divine">Divine+</option>
+                    </optgroup>
+                    <optgroup label="By Type">
+                        <option value="event">All Event Items</option>
+                        <option value="christmas">Christmas Items</option>
+                        <option value="disco">Disco Items</option>
+                        <option value="galactic">Galactic Items</option>
+                        <option value="glitch">Glitch Items</option>
+                        <option value="fullmoon">Full Moon Items</option>
+                        <option value="bloodmoon">Blood Moon Items</option>
+                        <option value="weather">Weather Items</option>
+                        <option value="battlepass">Battle Pass Items</option>
+                    </optgroup>
+                </select>
+            </div>
+            
             <button class="btn btn-decline" onclick="sellAllItems()" style="margin: 10px 0;">💰 Sell All Items (70% value)</button>
             <div class="inventory-grid" id="inventoryGrid"></div>
         </div>
@@ -1185,6 +1618,163 @@
             
             <div id="questContainer" style="max-width: 800px; margin: 0 auto;">
                 <!-- Quests will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Fusion Tab -->
+        <div id="fusion" class="tab-content">
+            <h2>🔮 Item Fusion</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Combine items of the same rarity to create a higher rarity item!</p>
+            
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="stat-card" style="margin-bottom: 30px; background: linear-gradient(135deg, var(--bg-medium) 0%, var(--bg-dark) 100%);">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 15px;">How Fusion Works</h3>
+                    <p style="margin: 10px 0;">• Select 3 items of the <strong>same rarity</strong></p>
+                    <p style="margin: 10px 0;">• Items will be consumed in the fusion process</p>
+                    <p style="margin: 10px 0;">• You'll receive 1 item of the <strong>next rarity tier</strong></p>
+                    <p style="margin: 10px 0; color: var(--warning);">⚠️ This process cannot be undone!</p>
+                </div>
+                
+                <div id="fusionItemsContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px;">
+                    <div class="stat-card" style="min-height: 150px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--accent-primary);">
+                        <span style="color: var(--text-secondary);">Item Slot 1</span>
+                    </div>
+                    <div class="stat-card" style="min-height: 150px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--accent-primary);">
+                        <span style="color: var(--text-secondary);">Item Slot 2</span>
+                    </div>
+                    <div class="stat-card" style="min-height: 150px; display: flex; align-items: center; justify-content: center; border: 2px dashed var(--accent-primary);">
+                        <span style="color: var(--text-secondary);">Item Slot 3</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <button class="btn btn-accept" onclick="performFusion()" id="fusionButton" disabled style="opacity: 0.5; font-size: 1.2rem; padding: 15px 40px;">
+                        ⚗️ FUSE ITEMS
+                    </button>
+                    <button class="btn btn-decline" onclick="clearFusionSlots()" style="margin-left: 10px; padding: 15px 30px;">
+                        Clear Slots
+                    </button>
+                </div>
+                
+                <h3 style="color: var(--accent-primary); margin: 40px 0 20px 0;">Available Items for Fusion</h3>
+                <div id="fusionInventoryGrid" class="inventory-grid" style="margin-top: 20px;">
+                    <!-- Fusion inventory will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Tab -->
+        <div id="statistics" class="tab-content">
+            <h2>📊 Statistics & Records</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">Your complete game statistics and achievements</p>
+            
+            <div class="crafting-grid" style="max-width: 1200px; margin: 0 auto;">
+                <!-- General Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 15px;">🎲 General Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Total Spins:</strong> <span id="statTotalSpins">0</span></p>
+                        <p><strong>Total Logins:</strong> <span id="statTotalLogins">0</span></p>
+                        <p><strong>Current Login Streak:</strong> <span id="statLoginStreak">0</span> days</p>
+                        <p><strong>Total Rebirths:</strong> <span id="statRebirths">0</span></p>
+                        <p><strong>Quests Completed:</strong> <span id="statQuestsCompleted">0</span></p>
+                    </div>
+                </div>
+                
+                <!-- Money Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 15px;">💰 Financial Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Current Money:</strong> $<span id="statCurrentMoney">0</span></p>
+                        <p><strong>Total Value:</strong> $<span id="statTotalValue">0</span></p>
+                        <p><strong>Lifetime Earned:</strong> $<span id="statLifetimeEarned">0</span></p>
+                        <p><strong>Lifetime Spent:</strong> $<span id="statLifetimeSpent">0</span></p>
+                        <p><strong>Net Profit:</strong> $<span id="statNetProfit">0</span></p>
+                    </div>
+                </div>
+                
+                <!-- Trading Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--success); margin-bottom: 15px;">🤝 Trading Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Trade Wins:</strong> <span id="statTradeWins">0</span></p>
+                        <p><strong>Trade Losses:</strong> <span id="statTradeLosses">0</span></p>
+                        <p><strong>Win Rate:</strong> <span id="statWinRate">0</span>%</p>
+                        <p><strong>Biggest Win:</strong> $<span id="statBiggestWin">0</span></p>
+                        <p><strong>Biggest Loss:</strong> $<span id="statBiggestLoss">0</span></p>
+                    </div>
+                </div>
+                
+                <!-- Crafting Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 15px;">🔨 Creation Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Items Crafted:</strong> <span id="statCrafted">0</span></p>
+                        <p><strong>Enchant Success:</strong> <span id="statEnchantSuccess">0</span></p>
+                        <p><strong>Enchant Fails:</strong> <span id="statEnchantFails">0</span></p>
+                        <p><strong>Enchant Success Rate:</strong> <span id="statEnchantRate">0</span>%</p>
+                        <p><strong>Shop Purchases:</strong> <span id="statShopPurchases">0</span></p>
+                    </div>
+                </div>
+                
+                <!-- Collection Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--accent-purple); margin-bottom: 15px;">📦 Collection Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Unique Items:</strong> <span id="statUniqueItems">0</span></p>
+                        <p><strong>Total Items:</strong> <span id="statTotalItems">0</span></p>
+                        <p><strong>Event Items:</strong> <span id="statEventItems">0</span></p>
+                        <p><strong>Achievements:</strong> <span id="statAchievements">0</span></p>
+                        <p><strong>Battle Pass Tier:</strong> <span id="statBPTier">0</span></p>
+                    </div>
+                </div>
+                
+                <!-- Pity System Stats -->
+                <div class="stat-card">
+                    <h3 style="color: var(--warning); margin-bottom: 15px;">🍀 Luck & Pity Stats</h3>
+                    <div style="text-align: left;">
+                        <p><strong>Current Luck:</strong> <span id="statCurrentLuck">1.0</span>x</p>
+                        <p><strong>Pity Counter:</strong> <span id="statPityCounter">0</span> / <span id="statPityThreshold">100</span></p>
+                        <p><strong>Pity Triggered:</strong> <span id="statPityTriggered">0</span> times</p>
+                        <div class="progress-bar" style="margin-top: 10px;">
+                            <div class="progress-fill" id="pityProgress" style="width: 0%; background: var(--warning);">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rarity Distribution -->
+                <div class="stat-card" style="grid-column: span 2;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 15px;">🎯 Rarity Distribution</h3>
+                    <div id="rarityDistribution" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Rarity counts will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Collections Tab -->
+        <div id="collections" class="tab-content">
+            <h2>🏆 Collection Bonuses & Milestones</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">Complete collections for permanent bonuses!</p>
+            
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <!-- Collection Bonuses -->
+                <div style="margin-bottom: 40px;">
+                    <h3 style="color: var(--accent-primary); margin-bottom: 20px;">🎁 Event Collection Bonuses</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Collect all items from an event to unlock permanent bonuses during that event!</p>
+                    <div id="collectionBonusesGrid" class="crafting-grid">
+                        <!-- Collection bonuses will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Rarity Milestones -->
+                <div>
+                    <h3 style="color: var(--accent-gold); margin-bottom: 20px;">⭐ Rarity Milestones</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">Collect certain amounts of each rarity to unlock permanent luck boosts!</p>
+                    <div id="rarityMilestonesGrid" class="crafting-grid">
+                        <!-- Rarity milestones will be populated here -->
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1284,6 +1874,56 @@
                         <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
                             <input type="checkbox" id="settingAutoSaveNotif" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
                             <span>Show Auto-Save Notifications</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingPityNotif" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Show Pity System Notifications</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingFusionNotif" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Show Fusion Notifications</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingCollectionNotif" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Show Collection Completions</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h3 style="color: var(--accent-primary);">Gameplay</h3>
+                    <div style="margin: 15px 0;">
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingConfirmSell" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Confirm Before Selling Items</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingAnimations" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Enable Ultra-Rare Animations</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingCompactMode" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Compact UI Mode</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingShowValue" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Show Item Values in Inventory</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h3 style="color: var(--accent-primary);">Auto-Save</h3>
+                    <div style="margin: 15px 0;">
+                        <label style="display: block; margin: 10px 0;">
+                            <span style="color: var(--text-secondary); display: block; margin-bottom: 5px;">Auto-Save Interval</span>
+                            <select id="settingAutoSaveInterval" onchange="updateSettings()" style="width: 100%; padding: 10px; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px;">
+                                <option value="30">30 seconds</option>
+                                <option value="60" selected>1 minute</option>
+                                <option value="120">2 minutes</option>
+                                <option value="300">5 minutes</option>
+                                <option value="0">Disabled</option>
+                            </select>
                         </label>
                     </div>
                 </div>
@@ -1512,11 +2152,24 @@
                 xpBoost: 0,
                 sellPrice: 0,
                 questSpeed: 0,
-                mysteryBox: 0
+                mysteryBox: 0,
+                autoFusion: 0
             },
             adminUnlocked: false,
             rebirths: 0,
             permanentLuckBoost: 1.0,
+            // Collection Bonuses
+            collectionBonuses: {
+                discoComplete: false,
+                galacticComplete: false,
+                glitchComplete: false,
+                fullmoonComplete: false,
+                bloodmoonComplete: false,
+                weatherComplete: false,
+                christmasComplete: false
+            },
+            // Rarity Milestones
+            rarityMilestones: {},
             weatherEvent: null, // 'cloudy', 'rainy', 'storming', or null
             weatherEventEnd: null,
             lastWeatherEvent: 0,
@@ -1530,14 +2183,47 @@
             activeQuests: [],
             completedQuests: [],
             lastQuestRefresh: 0,
+            // Pity System
+            pityCounter: 0,
+            pityThreshold: 100,
+            pityTriggered: 0,
+            // Daily Login
+            lastLoginDate: null,
+            loginStreak: 0,
+            totalLogins: 0,
+            loginRewardsClaimed: [],
+            // Stats Tracking
+            lifetimeMoneyEarned: 0,
+            lifetimeMoneySpent: 0,
+            biggestTradeWin: 0,
+            biggestTradeLoss: 0,
+            rarityCounts: {},
+            itemsFromEvents: 0,
+            craftCount: 0,
+            enchantSuccess: 0,
+            enchantFails: 0,
+            fusionCount: 0,
+            // Notification Queue
+            notificationQueue: [],
+            isShowingNotification: false,
             settings: {
                 showTradeNotifications: true,
                 showExpiredNotifications: true,
                 showSpinResults: true,
                 showAchievementNotifications: true,
                 showRandomEvents: true,
-                showAutoSaveNotifications: false
-            }
+                showAutoSaveNotifications: false,
+                showPityNotifications: true,
+                showFusionNotifications: true,
+                showCollectionNotifications: true,
+                confirmSell: false,
+                animations: true,
+                compactMode: false,
+                showValue: true,
+                autoSaveInterval: 60
+            },
+            inventorySort: 'rarity',
+            inventoryFilter: 'all'
         };
         
         const ADMIN_PASSWORD = "admin123"; // Change this to your desired password
@@ -1671,6 +2357,14 @@
                 baseCost: 150000,
                 costMultiplier: 7,
                 effect: (level) => `${level * 2}% chance for bonus item`
+            },
+            autoFusion: {
+                name: 'Auto-Fusion',
+                description: 'Automatically fuse 3 items of same rarity',
+                maxLevel: 1,
+                baseCost: 500000,
+                costMultiplier: 1,
+                effect: (level) => level > 0 ? 'Auto-fuses items' : 'Not unlocked'
             }
         };
         
@@ -2063,30 +2757,30 @@
         
         // Crafting Recipes
         const recipes = [
-            { name: 'Steel Sword', requires: { 'Common': 5 }, result: 'Uncommon', value: 12 },
-            { name: 'Magic Staff', requires: { 'Uncommon': 3 }, result: 'Rare', value: 30 },
-            { name: 'Dragon Scale', requires: { 'Rare': 4 }, result: 'Epic', value: 80 },
-            { name: 'Phoenix Feather', requires: { 'Epic': 3 }, result: 'Legendary', value: 200 },
-            { name: 'Void Crystal', requires: { 'Legendary': 2 }, result: 'Mythic', value: 500 },
-            { name: 'Stardust Shard', requires: { 'Mythic': 2 }, result: 'Exotic', value: 1200 },
-            { name: 'Celestial Fragment', requires: { 'Exotic': 2 }, result: 'Celestial', value: 3000 },
-            { name: 'Divine Essence', requires: { 'Celestial': 2 }, result: 'Divine', value: 8000 },
-            { name: 'Cosmic Dust', requires: { 'Divine': 2 }, result: 'Cosmic', value: 20000 },
-            { name: 'Infinite Loop', requires: { 'Cosmic': 2 }, result: 'Infinite', value: 50000 },
-            { name: 'Transcendence Core', requires: { 'Infinite': 2 }, result: 'Transcendent', value: 120000 },
-            { name: 'Ethereal Wisp', requires: { 'Transcendent': 2 }, result: 'Ethereal', value: 280000 },
-            { name: 'Primordial Spark', requires: { 'Ethereal': 2 }, result: 'Primordial', value: 650000 },
-            { name: 'Omega Sigil', requires: { 'Primordial': 2 }, result: 'Omega', value: 1500000 },
-            { name: 'Supreme Authority', requires: { 'Omega': 2 }, result: 'Supreme', value: 3800000 },
-            { name: 'Godly Pinnacle', requires: { 'Supreme': 2 }, result: 'Godlike', value: 9500000 },
-            { name: 'Universal Key', requires: { 'Godlike': 2 }, result: 'Universal', value: 23000000 },
-            { name: 'Multiversal Gate', requires: { 'Universal': 2 }, result: 'Multiversal', value: 55000000 },
-            { name: 'Omnipotent Crown', requires: { 'Multiversal': 2 }, result: 'Omnipotent', value: 135000000 },
-            { name: 'Absolute Perfection', requires: { 'Omnipotent': 3 }, result: 'Absolute', value: 75000000000 },
-            { name: 'Beyond Comprehension', requires: { 'Absolute': 2 }, result: 'Beyond', value: 180000000000 },
-            { name: 'Incomprehensible Core', requires: { 'Beyond': 2 }, result: 'Incomprehensible', value: 400000000000 },
-            { name: 'Unimaginable Essence', requires: { 'Incomprehensible': 2 }, result: 'Unimaginable', value: 800000000000 },
-            { name: 'Impossible Artifact', requires: { 'Unimaginable': 3 }, result: 'Impossible', value: 8000000000000 }
+            { name: 'Steel Sword', requires: { 'Common': 10 }, result: 'Uncommon', value: 12 },
+            { name: 'Magic Staff', requires: { 'Uncommon': 8 }, result: 'Rare', value: 30 },
+            { name: 'Dragon Scale', requires: { 'Rare': 7 }, result: 'Epic', value: 80 },
+            { name: 'Phoenix Feather', requires: { 'Epic': 6 }, result: 'Legendary', value: 200 },
+            { name: 'Void Crystal', requires: { 'Legendary': 5 }, result: 'Mythic', value: 500 },
+            { name: 'Stardust Shard', requires: { 'Mythic': 5 }, result: 'Exotic', value: 1200 },
+            { name: 'Celestial Fragment', requires: { 'Exotic': 4 }, result: 'Celestial', value: 3000 },
+            { name: 'Divine Essence', requires: { 'Celestial': 4 }, result: 'Divine', value: 8000 },
+            { name: 'Cosmic Dust', requires: { 'Divine': 4 }, result: 'Cosmic', value: 20000 },
+            { name: 'Infinite Loop', requires: { 'Cosmic': 3 }, result: 'Infinite', value: 50000 },
+            { name: 'Transcendence Core', requires: { 'Infinite': 3 }, result: 'Transcendent', value: 120000 },
+            { name: 'Ethereal Wisp', requires: { 'Transcendent': 3 }, result: 'Ethereal', value: 280000 },
+            { name: 'Primordial Spark', requires: { 'Ethereal': 3 }, result: 'Primordial', value: 650000 },
+            { name: 'Omega Sigil', requires: { 'Primordial': 3 }, result: 'Omega', value: 1500000 },
+            { name: 'Supreme Authority', requires: { 'Omega': 3 }, result: 'Supreme', value: 3800000 },
+            { name: 'Godly Pinnacle', requires: { 'Supreme': 3 }, result: 'Godlike', value: 9500000 },
+            { name: 'Universal Key', requires: { 'Godlike': 3 }, result: 'Universal', value: 23000000 },
+            { name: 'Multiversal Gate', requires: { 'Universal': 3 }, result: 'Multiversal', value: 55000000 },
+            { name: 'Omnipotent Crown', requires: { 'Multiversal': 4 }, result: 'Omnipotent', value: 135000000 },
+            { name: 'Absolute Perfection', requires: { 'Omnipotent': 5 }, result: 'Absolute', value: 75000000000 },
+            { name: 'Beyond Comprehension', requires: { 'Absolute': 4 }, result: 'Beyond', value: 180000000000 },
+            { name: 'Incomprehensible Core', requires: { 'Beyond': 4 }, result: 'Incomprehensible', value: 400000000000 },
+            { name: 'Unimaginable Essence', requires: { 'Incomprehensible': 4 }, result: 'Unimaginable', value: 800000000000 },
+            { name: 'Impossible Artifact', requires: { 'Unimaginable': 5 }, result: 'Impossible', value: 8000000000000 }
         ];
         
         // Achievements
@@ -2180,7 +2874,49 @@
             { id: 'super_lucky', name: 'Super Lucky', desc: 'Reach 25x luck multiplier', reward: 'Luck God', check: () => (gameState.luckMultiplier * gameState.permanentLuckBoost) >= 25 },
             { id: 'mega_spinner', name: 'Mega Spinner', desc: 'Spin 10,000,000 items', reward: 'Spinner Deity', check: () => gameState.totalSpins >= 10000000 },
             { id: 'quintillionaire', name: 'Quintillionaire', desc: 'Reach $1 Quintillion total value', reward: 'Ultimate Fortune', check: () => gameState.totalValue >= 1000000000000000000 },
-            { id: 'collection_master', name: 'Collection Master', desc: 'Have 500 different items', reward: 'Master Collection Badge', check: () => Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length >= 500 }
+            { id: 'collection_master', name: 'Collection Master', desc: 'Have 500 different items', reward: 'Master Collection Badge', check: () => Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length >= 500 },
+            // Fusion Achievements
+            { id: 'first_fusion', name: 'First Fusion', desc: 'Fuse your first item', reward: 'Alchemist Badge', check: () => gameState.fusionCount >= 1 },
+            { id: 'fusion_adept', name: 'Fusion Adept', desc: 'Fuse 25 items', reward: 'Fusion Master', check: () => gameState.fusionCount >= 25 },
+            { id: 'fusion_master', name: 'Fusion Master', desc: 'Fuse 100 items', reward: 'Grand Alchemist', check: () => gameState.fusionCount >= 100 },
+            { id: 'fusion_legend', name: 'Fusion Legend', desc: 'Fuse 500 items', reward: 'Legendary Alchemist', check: () => gameState.fusionCount >= 500 },
+            // Pity System Achievements
+            { id: 'pity_triggered', name: 'Pity Party', desc: 'Trigger pity system for the first time', reward: 'Lucky Charm', check: () => gameState.pityTriggered >= 1 },
+            { id: 'pity_master', name: 'Pity Master', desc: 'Trigger pity system 10 times', reward: 'Pity Crown', check: () => gameState.pityTriggered >= 10 },
+            { id: 'pity_god', name: 'Pity God', desc: 'Trigger pity system 50 times', reward: 'Divine Pity', check: () => gameState.pityTriggered >= 50 },
+            // Daily Login Achievements
+            { id: 'first_login', name: 'Welcome Back', desc: 'Login for the first time', reward: 'Greeting Card', check: () => gameState.totalLogins >= 1 },
+            { id: 'faithful', name: 'Faithful', desc: 'Login 30 days in a row', reward: 'Dedication Medal', check: () => gameState.loginStreak >= 30 },
+            { id: 'daily_legend', name: 'Daily Legend', desc: 'Login 100 days in a row', reward: 'Legend Badge', check: () => gameState.loginStreak >= 100 },
+            { id: 'lucky_seven', name: 'Lucky Seven', desc: 'Reach day 7 login reward', reward: 'Jackpot', check: () => gameState.loginStreak >= 7 },
+            { id: 'login_veteran', name: 'Login Veteran', desc: 'Login 365 total times', reward: 'Veteran Badge', check: () => gameState.totalLogins >= 365 },
+            // Statistics Achievements
+            { id: 'statistics_nerd', name: 'Statistics Nerd', desc: 'Open the statistics tab', reward: 'Nerd Glasses', check: () => gameState.statisticsViewed === true },
+            { id: 'profit_king', name: 'Profit King', desc: 'Earn $1 Billion net profit', reward: 'Business Tycoon', check: () => {
+                const netProfit = (gameState.lifetimeMoneyEarned || 0) - (gameState.lifetimeMoneySpent || 0);
+                return netProfit >= 1000000000;
+            } },
+            { id: 'big_spender', name: 'Big Spender', desc: 'Spend $100 Million total', reward: 'Spender Badge', check: () => gameState.lifetimeMoneySpent >= 100000000 },
+            // Collection Achievements
+            { id: 'disco_collector', name: 'Disco Collector', desc: 'Complete the Disco collection', reward: 'Disco King', check: () => gameState.collectionBonuses.discoComplete === true },
+            { id: 'galactic_collector', name: 'Galactic Collector', desc: 'Complete the Galactic collection', reward: 'Space Explorer', check: () => gameState.collectionBonuses.galacticComplete === true },
+            { id: 'glitch_collector', name: 'Glitch Collector', desc: 'Complete the Glitch collection', reward: 'Bug Hunter', check: () => gameState.collectionBonuses.glitchComplete === true },
+            { id: 'lunar_collector', name: 'Lunar Collector', desc: 'Complete the Full Moon collection', reward: 'Moon Master', check: () => gameState.collectionBonuses.fullmoonComplete === true },
+            { id: 'blood_collector', name: 'Blood Moon Collector', desc: 'Complete the Blood Moon collection', reward: 'Eclipse Lord', check: () => gameState.collectionBonuses.bloodmoonComplete === true },
+            { id: 'weather_collector', name: 'Weather Collector', desc: 'Complete the Weather collection', reward: 'Storm Caller', check: () => gameState.collectionBonuses.weatherComplete === true },
+            { id: 'christmas_collector', name: 'Christmas Collector', desc: 'Complete the Christmas collection', reward: 'Santa\'s Helper', check: () => gameState.collectionBonuses.christmasComplete === true },
+            { id: 'master_collector', name: 'Master Collector', desc: 'Complete all 7 collections', reward: 'Grand Collector', check: () => {
+                return gameState.collectionBonuses.discoComplete &&
+                       gameState.collectionBonuses.galacticComplete &&
+                       gameState.collectionBonuses.glitchComplete &&
+                       gameState.collectionBonuses.fullmoonComplete &&
+                       gameState.collectionBonuses.bloodmoonComplete &&
+                       gameState.collectionBonuses.weatherComplete &&
+                       gameState.collectionBonuses.christmasComplete;
+            }},
+            // Rarity Milestone Achievements
+            { id: 'milestone_hunter', name: 'Milestone Hunter', desc: 'Unlock 10 rarity milestones', reward: 'Milestone Badge', check: () => Object.keys(gameState.rarityMilestones).length >= 10 },
+            { id: 'milestone_master', name: 'Milestone Master', desc: 'Unlock 25 rarity milestones', reward: 'Master Badge', check: () => Object.keys(gameState.rarityMilestones).length >= 25 }
         ];
         
         // Battle Pass Tiers
@@ -2492,7 +3228,29 @@
             
             setTimeout(() => {
                 // Apply both regular luck multiplier AND permanent luck boost
-                const totalLuck = gameState.luckMultiplier * gameState.permanentLuckBoost;
+                let totalLuck = gameState.luckMultiplier * gameState.permanentLuckBoost;
+                
+                // Apply collection bonuses during active events
+                if (gameState.specialEvent) {
+                    if (gameState.specialEvent === 'disco' && gameState.collectionBonuses.discoComplete) {
+                        totalLuck *= 1.1;
+                    } else if (gameState.specialEvent === 'galactic' && gameState.collectionBonuses.galacticComplete) {
+                        totalLuck *= 1.1;
+                    } else if (gameState.specialEvent === 'glitch' && gameState.collectionBonuses.glitchComplete) {
+                        totalLuck *= 1.1;
+                    } else if (gameState.specialEvent === 'fullmoon' && gameState.collectionBonuses.fullmoonComplete) {
+                        totalLuck *= 1.1;
+                    } else if (gameState.specialEvent === 'bloodmoon' && gameState.collectionBonuses.bloodmoonComplete) {
+                        totalLuck *= 1.1;
+                    }
+                }
+                if (gameState.weatherEvent && gameState.collectionBonuses.weatherComplete) {
+                    totalLuck *= 1.15;
+                }
+                if (gameState.christmasEvent && gameState.collectionBonuses.christmasComplete) {
+                    totalLuck *= 1.15;
+                }
+                
                 const roll = Math.random() * totalLuck;
                 let selectedRarity = rarities[0];
                 
@@ -2514,6 +3272,7 @@
                     if (rarity) {
                         selectedRarity = rarity;
                         addItemToInventory(specialItem.name, selectedRarity);
+                        gameState.itemsFromEvents++;
                     }
                 }
                 // Check for Weather Event items (30% base + eventLuck upgrade)
@@ -2528,6 +3287,7 @@
                         if (rarity) {
                             selectedRarity = rarity;
                             addItemToInventory(weatherItem.name, selectedRarity);
+                            gameState.itemsFromEvents++;
                         }
                     }
                 }
@@ -2538,20 +3298,42 @@
                     if (rarity) {
                         selectedRarity = rarity;
                         addItemToInventory(christmasItem.name, selectedRarity);
+                        gameState.itemsFromEvents++;
                     }
                 } else {
-                    // Regular item generation
-                    let cumulativeChance = 0;
-                    for (let i = rarities.length - 1; i >= 0; i--) {
-                        cumulativeChance += rarities[i].chance;
-                        if (roll < cumulativeChance) {
-                            selectedRarity = rarities[i];
-                            break;
+                    // Check Pity System first
+                    if (gameState.pityCounter >= gameState.pityThreshold) {
+                        // Pity activated! Give guaranteed Legendary+ item
+                        const pityRarities = rarities.filter((r, i) => i >= 4); // Legendary and above
+                        selectedRarity = pityRarities[Math.floor(Math.random() * Math.min(5, pityRarities.length))];
+                        const itemName = generateItemName(selectedRarity);
+                        addItemToInventory(itemName, selectedRarity);
+                        
+                        gameState.pityCounter = 0;
+                        gameState.pityTriggered++;
+                        showNotification(`🍀 PITY SYSTEM ACTIVATED! Guaranteed ${selectedRarity.name} item!`, selectedRarity.color);
+                    } else {
+                        // Regular item generation
+                        let cumulativeChance = 0;
+                        for (let i = rarities.length - 1; i >= 0; i--) {
+                            cumulativeChance += rarities[i].chance;
+                            if (roll < cumulativeChance) {
+                                selectedRarity = rarities[i];
+                                break;
+                            }
+                        }
+                        
+                        const itemName = generateItemName(selectedRarity);
+                        addItemToInventory(itemName, selectedRarity);
+                        
+                        // Update pity counter
+                        const rarityIndex = rarities.findIndex(r => r.name === selectedRarity.name);
+                        if (rarityIndex < 4) { // Common to Epic
+                            gameState.pityCounter++;
+                        } else { // Legendary or higher - reset pity
+                            gameState.pityCounter = 0;
                         }
                     }
-                    
-                    const itemName = generateItemName(selectedRarity);
-                    addItemToInventory(itemName, selectedRarity);
                 }
                 
                 // Check for spin multiplier from Chaotics Thoughts enchant
@@ -2628,6 +3410,274 @@
                         spinItem();
                     }
                 }, interval);
+            }
+        }
+        
+        // Lucky Spin Mode
+        function luckySpinItem(multiplier) {
+            const costs = { 2: 10000, 5: 100000, 10: 1000000 };
+            const cost = costs[multiplier];
+            
+            if (gameState.money < cost) {
+                showNotification('Not enough money for Lucky Spin!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.money -= cost;
+            gameState.lifetimeMoneySpent = (gameState.lifetimeMoneySpent || 0) + cost;
+            
+            // Temporarily boost luck
+            const originalLuck = gameState.luckMultiplier;
+            gameState.luckMultiplier *= multiplier;
+            
+            showNotification(`⭐ LUCKY SPIN! ${multiplier}x Luck Boost!`, 'var(--accent-gold)');
+            
+            // Spin with boosted luck
+            spinItem();
+            
+            // Restore original luck after spin completes
+            setTimeout(() => {
+                gameState.luckMultiplier = originalLuck;
+                updateStats();
+            }, 1500);
+        }
+        
+        // Auto-Fusion System
+        function checkAutoFusion() {
+            if (gameState.upgrades.autoFusion === 0) return;
+            
+            // Find items with 3+ count of same rarity
+            const rarityCounts = {};
+            
+            for (const [key, item] of Object.entries(gameState.inventory)) {
+                if (item.count >= 3) {
+                    const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                    // Don't auto-fuse max rarity
+                    if (rarityIndex < rarities.length - 1) {
+                        if (!rarityCounts[item.rarity]) {
+                            rarityCounts[item.rarity] = [];
+                        }
+                        rarityCounts[item.rarity].push(key);
+                    }
+                }
+            }
+            
+            // Auto-fuse if we have 3+ of same rarity
+            for (const [rarity, itemKeys] of Object.entries(rarityCounts)) {
+                if (itemKeys.length >= 3) {
+                    // Pick first 3 items
+                    const fusionItems = itemKeys.slice(0, 3);
+                    const rarityIndex = rarities.findIndex(r => r.name === rarity);
+                    const nextRarity = rarities[rarityIndex + 1];
+                    
+                    // Remove 3 items
+                    fusionItems.forEach(key => {
+                        const item = gameState.inventory[key];
+                        if (item && item.count > 0) {
+                            item.count--;
+                            gameState.totalValue -= item.value;
+                        }
+                    });
+                    
+                    // Create new item
+                    const newItemName = generateItemName(nextRarity);
+                    addItemToInventory(newItemName, nextRarity);
+                    gameState.fusionCount++;
+                    
+                    showNotification(`🤖 AUTO-FUSION! Created ${newItemName}!`, nextRarity.color);
+                    updateStats();
+                    updateInventory();
+                    checkAchievements();
+                    return; // Only fuse one at a time
+                }
+            }
+        }
+        
+        // Collection Bonus System
+        const collectionData = {
+            disco: {
+                name: 'Disco Collection',
+                items: ['🪩 Disco Ball', '🕺 Groove Shoes', '💃 Dance Floor Tile', '🎵 Funky Beat', '✨ Glitter Bomb', '🎶 Rhythm Soul'],
+                bonus: 'event',
+                bonusAmount: 0.1,
+                description: '+10% luck during Disco events'
+            },
+            galactic: {
+                name: 'Galactic Collection',
+                items: ['🌌 Nebula Fragment', '⭐ Star Dust', '🌠 Comet Tail', '🪐 Planet Core', '🌟 Supernova Spark', '🔭 Galaxy Eye'],
+                bonus: 'event',
+                bonusAmount: 0.1,
+                description: '+10% luck during Galactic events'
+            },
+            glitch: {
+                name: 'Glitch Collection',
+                items: ['⚡ Error Code', '🔲 Corrupted Pixel', '📟 Digital Anomaly', '💾 Data Fragment', '🖥️ System Break', '⌨️ Reality Bug'],
+                bonus: 'event',
+                bonusAmount: 0.1,
+                description: '+10% luck during Glitch events'
+            },
+            fullmoon: {
+                name: 'Full Moon Collection',
+                items: ['🌕 Moonstone', '🐺 Lunar Howl', '🌙 Silver Beam', '✨ Moon Dust', '🌛 Crescent Blade', '🔮 Lunar Oracle'],
+                bonus: 'event',
+                bonusAmount: 0.1,
+                description: '+10% luck during Full Moon events'
+            },
+            bloodmoon: {
+                name: 'Blood Moon Collection',
+                items: ['🔴 Crimson Orb', '🩸 Blood Crystal', '🌑 Eclipse Shard', '⚔️ Scarlet Blade', '💀 Cursed Relic', '👁️ Crimson Eye'],
+                bonus: 'event',
+                bonusAmount: 0.1,
+                description: '+10% luck during Blood Moon events'
+            },
+            weather: {
+                name: 'Weather Collection',
+                items: ['☁️ Cloud Fragment', '🌧️ Raindrop', '⛈️ Lightning Bolt'],
+                bonus: 'event',
+                bonusAmount: 0.15,
+                description: '+15% luck during Weather events'
+            },
+            christmas: {
+                name: 'Christmas Collection',
+                items: ['🎄 Christmas Tree', '🎅 Santa Hat', '🎁 Gift Box', '⛄ Snowman', '🔔 Jingle Bell', '🕯️ Candle'],
+                bonus: 'event',
+                bonusAmount: 0.15,
+                description: '+15% luck during Christmas events'
+            }
+        };
+        
+        function checkCollectionBonuses() {
+            for (const [key, collection] of Object.entries(collectionData)) {
+                const hasAllItems = collection.items.every(itemName => {
+                    return Object.keys(gameState.inventory).some(invKey => 
+                        invKey.startsWith(itemName) && gameState.inventory[invKey].count > 0
+                    );
+                });
+                
+                if (hasAllItems && !gameState.collectionBonuses[key + 'Complete']) {
+                    gameState.collectionBonuses[key + 'Complete'] = true;
+                    showNotification(`🏆 COLLECTION COMPLETE! ${collection.name} unlocked!`, 'var(--accent-gold)');
+                    checkAchievements();
+                }
+            }
+        }
+        
+        // Rarity Milestone System
+        const rarityMilestoneData = [
+            { rarity: 'Common', milestones: [500, 2500, 10000], bonuses: [0.005, 0.01, 0.02] },
+            { rarity: 'Uncommon', milestones: [250, 1000, 5000], bonuses: [0.005, 0.015, 0.025] },
+            { rarity: 'Rare', milestones: [100, 500, 2000], bonuses: [0.01, 0.02, 0.04] },
+            { rarity: 'Epic', milestones: [50, 200, 1000], bonuses: [0.015, 0.03, 0.06] },
+            { rarity: 'Legendary', milestones: [25, 100, 500], bonuses: [0.02, 0.05, 0.10] },
+            { rarity: 'Mythic', milestones: [10, 50, 250], bonuses: [0.03, 0.07, 0.15] },
+            { rarity: 'Exotic', milestones: [5, 25, 100], bonuses: [0.05, 0.10, 0.20] },
+            { rarity: 'Celestial', milestones: [3, 10, 50], bonuses: [0.07, 0.15, 0.30] },
+            { rarity: 'Divine', milestones: [2, 5, 25], bonuses: [0.10, 0.20, 0.40] }
+        ];
+        
+        function checkRarityMilestones() {
+            let bonusApplied = false;
+            
+            rarityMilestoneData.forEach(data => {
+                const count = gameState.rarityCounts[data.rarity] || 0;
+                
+                data.milestones.forEach((milestone, index) => {
+                    const milestoneKey = `${data.rarity}_${milestone}`;
+                    
+                    if (count >= milestone && !gameState.rarityMilestones[milestoneKey]) {
+                        gameState.rarityMilestones[milestoneKey] = true;
+                        gameState.permanentLuckBoost += data.bonuses[index];
+                        showNotification(`⭐ MILESTONE! ${count} ${data.rarity} items! +${(data.bonuses[index] * 100).toFixed(0)}% permanent luck!`, 'var(--accent-gold)');
+                        bonusApplied = true;
+                    }
+                });
+            });
+            
+            if (bonusApplied) {
+                updateStats();
+                checkAchievements();
+            }
+        }
+        
+        function updateCollectionsDisplay() {
+            const bonusesGrid = document.getElementById('collectionBonusesGrid');
+            const milestonesGrid = document.getElementById('rarityMilestonesGrid');
+            
+            if (bonusesGrid) {
+                bonusesGrid.innerHTML = '';
+                
+                for (const [key, collection] of Object.entries(collectionData)) {
+                    const hasAllItems = collection.items.every(itemName => {
+                        return Object.keys(gameState.inventory).some(invKey => 
+                            invKey.startsWith(itemName) && gameState.inventory[invKey].count > 0
+                        );
+                    });
+                    
+                    const ownedCount = collection.items.filter(itemName => {
+                        return Object.keys(gameState.inventory).some(invKey => 
+                            invKey.startsWith(itemName) && gameState.inventory[invKey].count > 0
+                        );
+                    }).length;
+                    
+                    const isComplete = gameState.collectionBonuses[key + 'Complete'];
+                    
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.style.borderColor = isComplete ? 'var(--accent-gold)' : 'var(--bg-medium)';
+                    card.innerHTML = `
+                        <h3 style="color: ${isComplete ? 'var(--accent-gold)' : 'var(--text-primary)'};">
+                            ${isComplete ? '✅' : '⬜'} ${collection.name}
+                        </h3>
+                        <p style="color: var(--text-secondary); margin: 10px 0;">${collection.description}</p>
+                        <div class="progress-bar" style="margin: 10px 0;">
+                            <div class="progress-fill" style="width: ${(ownedCount / collection.items.length) * 100}%; background: ${isComplete ? 'var(--accent-gold)' : 'var(--accent-primary)'};">
+                                ${ownedCount} / ${collection.items.length}
+                            </div>
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                            ${collection.items.map(item => {
+                                const owned = Object.keys(gameState.inventory).some(invKey => 
+                                    invKey.startsWith(item) && gameState.inventory[invKey].count > 0
+                                );
+                                return `<span style="color: ${owned ? 'var(--success)' : 'var(--text-secondary)'}">${owned ? '✓' : '✗'} ${item}</span>`;
+                            }).join('<br>')}
+                        </div>
+                    `;
+                    bonusesGrid.appendChild(card);
+                }
+            }
+            
+            if (milestonesGrid) {
+                milestonesGrid.innerHTML = '';
+                
+                rarityMilestoneData.forEach(data => {
+                    const count = gameState.rarityCounts[data.rarity] || 0;
+                    const rarity = rarities.find(r => r.name === data.rarity);
+                    
+                    const card = document.createElement('div');
+                    card.className = 'stat-card';
+                    card.style.borderColor = rarity.color;
+                    
+                    const milestoneHTML = data.milestones.map((milestone, index) => {
+                        const milestoneKey = `${data.rarity}_${milestone}`;
+                        const achieved = gameState.rarityMilestones[milestoneKey] === true;
+                        const bonus = (data.bonuses[index] * 100).toFixed(0);
+                        
+                        return `
+                            <div style="display: flex; justify-content: space-between; padding: 5px; background: ${achieved ? 'rgba(0,255,0,0.1)' : 'var(--bg-dark)'}; margin: 3px 0; border-radius: 5px;">
+                                <span style="color: ${achieved ? 'var(--success)' : 'var(--text-secondary)'}">${achieved ? '✅' : '⬜'} ${milestone} items</span>
+                                <span style="color: var(--accent-gold);">+${bonus}% luck</span>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    card.innerHTML = `
+                        <h3 style="color: ${rarity.color};">${data.rarity}</h3>
+                        <p style="color: var(--text-primary); font-size: 1.2rem; margin: 10px 0;">Current: ${count}</p>
+                        ${milestoneHTML}
+                    `;
+                    milestonesGrid.appendChild(card);
+                });
             }
         }
         
@@ -3283,6 +4333,13 @@
             
             gameState.totalValue += value;
             
+            // Check for auto-fusion
+            checkAutoFusion();
+            
+            // Check collection bonuses and rarity milestones
+            checkCollectionBonuses();
+            checkRarityMilestones();
+            
             // Trigger ultra-rare animation for Cosmic and beyond (1 in 1024+)
             const rarityIndex = rarities.findIndex(r => r.name === rarity.name);
             if (rarityIndex >= 9) { // Index 9 is Cosmic
@@ -3313,48 +4370,166 @@
             const combinedLuck = gameState.luckMultiplier * gameState.permanentLuckBoost;
             document.getElementById('luckMultiplier').textContent = combinedLuck.toFixed(1) + 'x';
             document.getElementById('tradeWins').textContent = formatNumber(gameState.tradeWins);
+            updatePityDisplay();
+        }
+        
+        function updatePityDisplay() {
+            const counter = document.getElementById('pityCounterDisplay');
+            const progressBar = document.getElementById('pityProgressBar');
+            
+            if (counter && progressBar) {
+                const pityCount = gameState.pityCounter || 0;
+                const pityThreshold = gameState.pityThreshold || 100;
+                const pityPercent = Math.min(100, (pityCount / pityThreshold) * 100);
+                
+                counter.textContent = `${pityCount} / ${pityThreshold}`;
+                progressBar.style.width = `${pityPercent}%`;
+                progressBar.innerHTML = `<span style="font-size: 0.85rem; font-weight: bold;">${pityPercent.toFixed(0)}%</span>`;
+                
+                // Change color as it gets closer to pity
+                if (pityPercent >= 90) {
+                    progressBar.style.background = 'linear-gradient(90deg, #ff0000 0%, #ff6600 100%)';
+                } else if (pityPercent >= 70) {
+                    progressBar.style.background = 'linear-gradient(90deg, #ff6600 0%, var(--accent-gold) 100%)';
+                } else {
+                    progressBar.style.background = 'linear-gradient(90deg, var(--warning) 0%, var(--accent-gold) 100%)';
+                }
+            }
         }
         
         function updateInventory() {
             const grid = document.getElementById('inventoryGrid');
             grid.innerHTML = '';
             
-            for (const [key, item] of Object.entries(gameState.inventory)) {
-                if (item.count > 0) {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'inventory-item' + (gameState.flexedItem === key ? ' flexed' : '');
-                    itemDiv.style.borderColor = item.color;
-                    itemDiv.onclick = () => flexItem(key);
-                    itemDiv.oncontextmenu = (e) => {
-                        e.preventDefault();
-                        sellItem(key);
-                    };
-                    
-                    // Show enchantments if present
-                    let enchantDisplay = '';
-                    if (item.enchantments && item.enchantments.length > 0) {
-                        const enchantList = item.enchantments.map(e => {
-                            const enchantData = enchantments[e];
-                            const color = enchantData.type === 'ultimate' ? '#ff00ff' : 
-                                         enchantData.type === 'godly' ? 'var(--accent-gold)' : 
-                                         enchantData.type === 'bad' ? 'var(--danger)' : 
-                                         'var(--accent-primary)';
-                            return `<span style="color: ${color};">✨${e}</span>`;
-                        }).join(' ');
-                        enchantDisplay = `<div style="font-size: 0.65rem; margin-top: 3px;">${enchantList}</div>`;
+            // Get and sort/filter inventory
+            let items = Object.entries(gameState.inventory).filter(([key, item]) => item.count > 0);
+            
+            // Apply filter
+            const filterType = gameState.inventoryFilter || 'all';
+            if (filterType !== 'all') {
+                items = items.filter(([key, item]) => {
+                    // Rarity filters
+                    if (filterType === 'common') return item.rarity === 'Common';
+                    if (filterType === 'uncommon') return item.rarity === 'Uncommon';
+                    if (filterType === 'rare') return item.rarity === 'Rare';
+                    if (filterType === 'epic') return item.rarity === 'Epic';
+                    if (filterType === 'legendary') return item.rarity === 'Legendary';
+                    if (filterType === 'mythic') return item.rarity === 'Mythic';
+                    if (filterType === 'exotic') return item.rarity === 'Exotic';
+                    if (filterType === 'celestial') return item.rarity === 'Celestial';
+                    if (filterType === 'divine') {
+                        // Divine+ includes Divine and all higher rarities
+                        const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                        return rarityIndex >= 8; // Divine is index 8
                     }
                     
-                    itemDiv.innerHTML = `
-                        ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
-                        <div style="font-size: 2rem;">💎</div>
-                        <div class="item-name" style="color: ${item.color};">${item.name}</div>
-                        <div style="font-size: 0.8rem; color: ${item.color};">${item.rarity}</div>
-                        <div class="item-value">$${formatNumber(item.value)}</div>
-                        ${enchantDisplay}
-                        <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 5px;">Right-click to sell</div>
-                    `;
-                    grid.appendChild(itemDiv);
+                    // Type filters
+                    if (filterType === 'event') {
+                        return key.includes('🪩') || key.includes('🌌') || key.includes('⚡') || 
+                               key.includes('🌕') || key.includes('🔴') || key.includes('☁️') || 
+                               key.includes('🌧️') || key.includes('⛈️') || key.includes('🎄');
+                    } else if (filterType === 'christmas') {
+                        return key.includes('🎄') || key.includes('🎅') || key.includes('⛄') || 
+                               key.includes('🎁') || key.includes('🔔') || key.includes('🕯️');
+                    } else if (filterType === 'disco') {
+                        return key.includes('🪩') || key.includes('🕺') || key.includes('💃') || 
+                               key.includes('🎵') || key.includes('✨') || key.includes('🎶');
+                    } else if (filterType === 'galactic') {
+                        return key.includes('🌌') || key.includes('⭐') || key.includes('🌠') || 
+                               key.includes('🪐') || key.includes('🌟') || key.includes('🔭');
+                    } else if (filterType === 'glitch') {
+                        return key.includes('⚡') || key.includes('🔲') || key.includes('📟') || 
+                               key.includes('💾') || key.includes('🖥️') || key.includes('⌨️');
+                    } else if (filterType === 'fullmoon') {
+                        return key.includes('🌕') || key.includes('🐺') || key.includes('🌙') || 
+                               key.includes('🌛') || key.includes('🔮');
+                    } else if (filterType === 'bloodmoon') {
+                        return key.includes('🔴') || key.includes('🩸') || key.includes('🌑') || 
+                               key.includes('⚔️') || key.includes('💀') || key.includes('👁️');
+                    } else if (filterType === 'weather') {
+                        return key.includes('☁️') || key.includes('🌧️') || key.includes('⛈️');
+                    } else if (filterType === 'battlepass') {
+                        // Battle pass items don't have specific markers, so this shows all for now
+                        return true;
+                    }
+                    return true;
+                });
+            }
+            
+            // Apply sort
+            const sortType = gameState.inventorySort || 'rarity';
+            if (sortType === 'rarity') {
+                items.sort((a, b) => {
+                    const rarityA = rarities.findIndex(r => r.name === a[1].rarity);
+                    const rarityB = rarities.findIndex(r => r.name === b[1].rarity);
+                    return rarityB - rarityA; // Higher rarity first
+                });
+            } else if (sortType === 'value') {
+                items.sort((a, b) => b[1].value - a[1].value); // Higher value first
+            } else if (sortType === 'count') {
+                items.sort((a, b) => b[1].count - a[1].count); // Higher count first
+            }
+            
+            // Display items
+            for (const [key, item] of items) {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item' + (gameState.flexedItem === key ? ' flexed' : '');
+                itemDiv.style.borderColor = item.color;
+                itemDiv.onclick = () => flexItem(key);
+                itemDiv.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    sellItem(key);
+                };
+                
+                // Mobile long-press to sell
+                let pressTimer;
+                itemDiv.ontouchstart = (e) => {
+                    pressTimer = setTimeout(() => {
+                        sellItem(key);
+                        navigator.vibrate && navigator.vibrate(50); // Haptic feedback
+                    }, 500); // 500ms long press
+                };
+                itemDiv.ontouchend = () => {
+                    clearTimeout(pressTimer);
+                };
+                itemDiv.ontouchmove = () => {
+                    clearTimeout(pressTimer);
+                };
+                
+                // Build detailed tooltip for hover
+                let tooltipText = `${item.name} (${item.rarity})\nCount: ${item.count}\nValue: $${formatNumber(item.value)} each`;
+                if (item.enchantments && item.enchantments.length > 0) {
+                    tooltipText += `\nEnchantments: ${item.enchantments.join(', ')}`;
                 }
+                tooltipText += `\nTotal Value: $${formatNumber(item.value * item.count)}`;
+                tooltipText += `\n\nLeft-click: Flex | Right-click: Sell`;
+                
+                itemDiv.title = tooltipText;
+                
+                // Show enchantments if present
+                let enchantDisplay = '';
+                if (item.enchantments && item.enchantments.length > 0) {
+                    const enchantList = item.enchantments.map(e => {
+                        const enchantData = enchantments[e];
+                        const color = enchantData.type === 'ultimate' ? '#ff00ff' : 
+                                     enchantData.type === 'godly' ? 'var(--accent-gold)' : 
+                                     enchantData.type === 'bad' ? 'var(--danger)' : 
+                                     'var(--accent-primary)';
+                        return `<span style="color: ${color};">✨${e}</span>`;
+                    }).join(' ');
+                    enchantDisplay = `<div style="font-size: 0.65rem; margin-top: 3px;">${enchantList}</div>`;
+                }
+                
+                itemDiv.innerHTML = `
+                    ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
+                    <div style="font-size: 2rem;">💎</div>
+                    <div class="item-name" style="color: ${item.color};">${item.name}</div>
+                    <div style="font-size: 0.8rem; color: ${item.color};">${item.rarity}</div>
+                    <div class="item-value">$${formatNumber(item.value)}</div>
+                    ${enchantDisplay}
+                    <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 5px;">Tap: Flex | Long-press/Right-click: Sell</div>
+                `;
+                grid.appendChild(itemDiv);
             }
         }
         
@@ -3385,6 +4560,7 @@
             
             const sellPrice = Math.floor(item.value * sellMultiplier);
             gameState.money += sellPrice;
+            gameState.lifetimeMoneyEarned = (gameState.lifetimeMoneyEarned || 0) + sellPrice;
             gameState.totalValue -= item.value;
             item.count--;
             
@@ -3417,6 +4593,19 @@
                 showNotification(`Now flexing: ${itemKey}!`, gameState.inventory[itemKey].color);
             }
             updateInventory();
+        }
+        
+        function sortInventory(sortType) {
+            gameState.inventorySort = sortType;
+            updateInventory();
+            showNotification(`Sorted by ${sortType}`, 'var(--accent-primary)');
+        }
+        
+        function filterInventory() {
+            const filterSelect = document.getElementById('filterType');
+            gameState.inventoryFilter = filterSelect.value;
+            updateInventory();
+            showNotification(`Filtered: ${filterSelect.options[filterSelect.selectedIndex].text}`, 'var(--accent-primary)');
         }
         
         function startAutoTrading() {
@@ -3661,10 +4850,17 @@
             if (valueDiff > 0) {
                 gameState.tradeWins++;
                 updateQuestProgress('tradeWins', 1);
+                if (valueDiff > (gameState.biggestTradeWin || 0)) {
+                    gameState.biggestTradeWin = valueDiff;
+                }
                 showNotification(`Great trade! Gained $${formatNumber(valueDiff)} value! 📈`, 'var(--success)');
             } else if (valueDiff < 0) {
                 gameState.tradeLosses++;
-                showNotification(`Bad trade! Lost $${formatNumber(Math.abs(valueDiff))} value! 📉`, 'var(--danger)');
+                const loss = Math.abs(valueDiff);
+                if (loss > (gameState.biggestTradeLoss || 0)) {
+                    gameState.biggestTradeLoss = loss;
+                }
+                showNotification(`Bad trade! Lost $${formatNumber(loss)} value! 📉`, 'var(--danger)');
             } else {
                 showNotification('Fair trade! Same value 📊', 'var(--warning)');
             }
@@ -3828,6 +5024,7 @@
             }
             
             gameState.money -= price;
+            gameState.lifetimeMoneySpent = (gameState.lifetimeMoneySpent || 0) + price;
             
             const fullName = `${name} (${rarityName})`;
             if (gameState.inventory[fullName]) {
@@ -3945,6 +5142,7 @@
             }
             
             gameState.money -= cost;
+            gameState.lifetimeMoneySpent = (gameState.lifetimeMoneySpent || 0) + cost;
             gameState.upgrades[upgradeKey]++;
             
             // Apply upgrade effects
@@ -4272,6 +5470,12 @@
         function checkWeatherEvents() {
             const now = Date.now();
             
+            // Initialize lastWeatherEvent to now if it's 0 (first load)
+            if (gameState.lastWeatherEvent === 0) {
+                gameState.lastWeatherEvent = now;
+                return; // Don't trigger event on first load
+            }
+            
             // Check if current weather event has ended
             if (gameState.weatherEvent && gameState.weatherEventEnd && now >= gameState.weatherEventEnd) {
                 const eventEmojis = { cloudy: '☁️', rainy: '🌧️', storming: '⛈️' };
@@ -4425,6 +5629,351 @@
             updateInventory();
         }
         
+        // ===== DAILY LOGIN SYSTEM =====
+        function checkDailyLogin() {
+            const today = new Date().toDateString();
+            
+            if (!gameState.lastLoginDate || gameState.lastLoginDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toDateString();
+                
+                // Check if streak continues or breaks
+                if (gameState.lastLoginDate === yesterdayStr) {
+                    gameState.loginStreak++;
+                } else if (gameState.lastLoginDate) {
+                    gameState.loginStreak = 1; // Reset streak
+                } else {
+                    gameState.loginStreak = 1; // First login
+                }
+                
+                gameState.lastLoginDate = today;
+                gameState.totalLogins++;
+                
+                // Give rewards
+                giveDailyLoginReward();
+            }
+        }
+        
+        function giveDailyLoginReward() {
+            const day = gameState.loginStreak;
+            const rewards = [
+                { day: 1, money: 1000, desc: '$1,000' },
+                { day: 2, money: 2500, desc: '$2,500' },
+                { day: 3, money: 5000, xp: 100, desc: '$5,000 + 100 XP' },
+                { day: 4, money: 10000, desc: '$10,000' },
+                { day: 5, money: 25000, xp: 250, desc: '$25,000 + 250 XP' },
+                { day: 6, money: 50000, desc: '$50,000' },
+                { day: 7, money: 100000, xp: 500, item: 'Mythic', desc: '$100K + Mythic Item + 500 XP' }
+            ];
+            
+            const rewardIndex = Math.min(day, 7) - 1;
+            const reward = rewards[rewardIndex];
+            
+            if (reward.money) {
+                gameState.money += reward.money;
+                gameState.lifetimeMoneyEarned += reward.money;
+            }
+            if (reward.xp) {
+                gameState.battlePassXP += reward.xp;
+            }
+            if (reward.item) {
+                const rarity = rarities.find(r => r.name === reward.item);
+                if (rarity) {
+                    const itemName = generateItemName(rarity);
+                    addItemToInventory(itemName, rarity);
+                }
+            }
+            
+            showDailyLoginPopup(day, reward.desc);
+        }
+        
+        function showDailyLoginPopup(day, rewardDesc) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+                border: 3px solid var(--accent-gold);
+                border-radius: 15px;
+                padding: 40px;
+                z-index: 10000;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                text-align: center;
+                animation: slideInTop 0.5s ease-out;
+            `;
+            
+            popup.innerHTML = `
+                <h2 style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 20px;">🎁 Daily Login Reward!</h2>
+                <p style="color: var(--text-primary); font-size: 1.2rem; margin: 20px 0;">Day ${day} Streak!</p>
+                <p style="color: var(--accent-primary); font-size: 1.5rem; margin: 20px 0; font-weight: bold;">${rewardDesc}</p>
+                <button class="btn btn-accept" onclick="this.parentElement.remove()" style="margin-top: 20px; font-size: 1.1rem; padding: 12px 30px;">
+                    Claim Reward
+                </button>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (popup.parentElement) popup.remove();
+            }, 10000);
+        }
+        
+        // ===== FUSION SYSTEM =====
+        const fusionSlots = [null, null, null];
+        
+        function updateFusionInventory() {
+            const grid = document.getElementById('fusionInventoryGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            const sortedItems = Object.entries(gameState.inventory)
+                .filter(([key, item]) => item.count > 0)
+                .sort((a, b) => {
+                    const rarityA = rarities.findIndex(r => r.name === a[1].rarity);
+                    const rarityB = rarities.findIndex(r => r.name === b[1].rarity);
+                    return rarityB - rarityA;
+                });
+            
+            sortedItems.forEach(([key, item]) => {
+                // Don't show items beyond Ethereal (can't fuse to next tier)
+                const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                if (rarityIndex >= rarities.length - 1) return;
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+                itemDiv.style.borderColor = item.color;
+                itemDiv.style.cursor = 'pointer';
+                itemDiv.onclick = () => addToFusionSlot(key, item);
+                
+                itemDiv.innerHTML = `
+                    <div style="font-size: 1.5rem;">🔮</div>
+                    <div class="item-name" style="color: ${item.color};">${item.name}</div>
+                    <div style="font-size: 0.8rem; color: ${item.color};">${item.rarity}</div>
+                    <div class="item-value">x${item.count}</div>
+                `;
+                
+                grid.appendChild(itemDiv);
+            });
+        }
+        
+        function addToFusionSlot(itemKey, item) {
+            // Find first empty slot
+            const emptySlotIndex = fusionSlots.findIndex(slot => slot === null);
+            if (emptySlotIndex === -1) {
+                showNotification('All fusion slots are full! Clear slots first.', 'var(--warning)');
+                return;
+            }
+            
+            // Check if rarity matches (if other slots have items)
+            const existingRarity = fusionSlots.find(slot => slot !== null)?.rarity;
+            if (existingRarity && existingRarity !== item.rarity) {
+                showNotification(`Items must be same rarity! Slots have ${existingRarity} items.`, 'var(--danger)');
+                return;
+            }
+            
+            fusionSlots[emptySlotIndex] = { key: itemKey, ...item };
+            updateFusionSlots();
+        }
+        
+        function updateFusionSlots() {
+            const container = document.getElementById('fusionItemsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            fusionSlots.forEach((slot, index) => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'stat-card';
+                slotDiv.style.minHeight = '150px';
+                slotDiv.style.display = 'flex';
+                slotDiv.style.flexDirection = 'column';
+                slotDiv.style.alignItems = 'center';
+                slotDiv.style.justifyContent = 'center';
+                
+                if (slot) {
+                    slotDiv.style.borderColor = slot.color;
+                    slotDiv.style.cursor = 'pointer';
+                    slotDiv.onclick = () => {
+                        fusionSlots[index] = null;
+                        updateFusionSlots();
+                    };
+                    slotDiv.innerHTML = `
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🔮</div>
+                        <div style="color: ${slot.color}; font-weight: bold;">${slot.name}</div>
+                        <div style="color: ${slot.color}; font-size: 0.9rem; margin-top: 5px;">${slot.rarity}</div>
+                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 10px;">Click to remove</div>
+                    `;
+                } else {
+                    slotDiv.style.border = '2px dashed var(--accent-primary)';
+                    slotDiv.innerHTML = `<span style="color: var(--text-secondary);">Item Slot ${index + 1}</span>`;
+                }
+                
+                container.appendChild(slotDiv);
+            });
+            
+            // Update fusion button
+            const fusionButton = document.getElementById('fusionButton');
+            if (fusionButton) {
+                const canFuse = fusionSlots.every(slot => slot !== null);
+                fusionButton.disabled = !canFuse;
+                fusionButton.style.opacity = canFuse ? '1' : '0.5';
+                fusionButton.style.cursor = canFuse ? 'pointer' : 'not-allowed';
+            }
+        }
+        
+        function performFusion() {
+            if (fusionSlots.some(slot => slot === null)) {
+                showNotification('All 3 slots must be filled!', 'var(--danger)');
+                return;
+            }
+            
+            // Verify all same rarity
+            const rarity = fusionSlots[0].rarity;
+            if (!fusionSlots.every(slot => slot.rarity === rarity)) {
+                showNotification('All items must be the same rarity!', 'var(--danger)');
+                return;
+            }
+            
+            // Find next rarity tier
+            const currentRarityIndex = rarities.findIndex(r => r.name === rarity);
+            if (currentRarityIndex >= rarities.length - 1) {
+                showNotification('Cannot fuse items of this rarity!', 'var(--danger)');
+                return;
+            }
+            
+            const nextRarity = rarities[currentRarityIndex + 1];
+            
+            // Remove items from inventory
+            fusionSlots.forEach(slot => {
+                const item = gameState.inventory[slot.key];
+                if (item && item.count > 0) {
+                    item.count--;
+                    gameState.totalValue -= item.value;
+                    if (item.count === 0 && gameState.flexedItem === slot.key) {
+                        gameState.flexedItem = null;
+                    }
+                }
+            });
+            
+            // Create new item
+            const newItemName = generateItemName(nextRarity);
+            addItemToInventory(newItemName, nextRarity);
+            
+            gameState.fusionCount++;
+            showNotification(`⚗️ FUSION SUCCESS! Created ${newItemName}!`, nextRarity.color);
+            
+            // Clear slots
+            clearFusionSlots();
+            updateStats();
+            updateInventory();
+            updateFusionInventory();
+            updateStatistics();
+            checkAchievements();
+        }
+        
+        function clearFusionSlots() {
+            fusionSlots.fill(null);
+            updateFusionSlots();
+        }
+        
+        // ===== STATISTICS SYSTEM =====
+        function updateStatistics() {
+            // Update rarity counts
+            gameState.rarityCounts = {};
+            Object.values(gameState.inventory).forEach(item => {
+                if (item.count > 0) {
+                    gameState.rarityCounts[item.rarity] = (gameState.rarityCounts[item.rarity] || 0) + item.count;
+                }
+            });
+            
+            // General Stats
+            document.getElementById('statTotalSpins').textContent = formatNumber(gameState.totalSpins);
+            document.getElementById('statTotalLogins').textContent = formatNumber(gameState.totalLogins || 0);
+            document.getElementById('statLoginStreak').textContent = gameState.loginStreak || 0;
+            document.getElementById('statRebirths').textContent = gameState.rebirths;
+            document.getElementById('statQuestsCompleted').textContent = gameState.questsCompleted;
+            
+            // Money Stats
+            document.getElementById('statCurrentMoney').textContent = formatNumber(gameState.money);
+            document.getElementById('statTotalValue').textContent = formatNumber(gameState.totalValue);
+            document.getElementById('statLifetimeEarned').textContent = formatNumber(gameState.lifetimeMoneyEarned || 0);
+            document.getElementById('statLifetimeSpent').textContent = formatNumber(gameState.lifetimeMoneySpent || 0);
+            const netProfit = (gameState.lifetimeMoneyEarned || 0) - (gameState.lifetimeMoneySpent || 0);
+            document.getElementById('statNetProfit').textContent = formatNumber(netProfit);
+            
+            // Trading Stats
+            document.getElementById('statTradeWins').textContent = formatNumber(gameState.tradeWins);
+            document.getElementById('statTradeLosses').textContent = formatNumber(gameState.tradeLosses);
+            const winRate = gameState.tradeWins + gameState.tradeLosses > 0 
+                ? ((gameState.tradeWins / (gameState.tradeWins + gameState.tradeLosses)) * 100).toFixed(1) 
+                : 0;
+            document.getElementById('statWinRate').textContent = winRate;
+            document.getElementById('statBiggestWin').textContent = formatNumber(gameState.biggestTradeWin || 0);
+            document.getElementById('statBiggestLoss').textContent = formatNumber(gameState.biggestTradeLoss || 0);
+            
+            // Crafting Stats
+            document.getElementById('statCrafted').textContent = formatNumber(gameState.craftCount || 0);
+            document.getElementById('statEnchantSuccess').textContent = formatNumber(gameState.enchantSuccess || 0);
+            document.getElementById('statEnchantFails').textContent = formatNumber(gameState.enchantFails || 0);
+            const enchantTotal = (gameState.enchantSuccess || 0) + (gameState.enchantFails || 0);
+            const enchantRate = enchantTotal > 0 
+                ? (((gameState.enchantSuccess || 0) / enchantTotal) * 100).toFixed(1) 
+                : 0;
+            document.getElementById('statEnchantRate').textContent = enchantRate;
+            document.getElementById('statShopPurchases').textContent = formatNumber(gameState.shopPurchases);
+            
+            // Collection Stats
+            const uniqueItems = Object.keys(gameState.inventory).filter(k => gameState.inventory[k].count > 0).length;
+            const totalItems = Object.values(gameState.inventory).reduce((sum, item) => sum + item.count, 0);
+            document.getElementById('statUniqueItems').textContent = formatNumber(uniqueItems);
+            document.getElementById('statTotalItems').textContent = formatNumber(totalItems);
+            document.getElementById('statEventItems').textContent = formatNumber(gameState.itemsFromEvents || 0);
+            const achievementCount = Object.values(gameState.achievements).filter(a => a).length;
+            document.getElementById('statAchievements').textContent = `${achievementCount} / ${achievements.length}`;
+            document.getElementById('statBPTier').textContent = gameState.battlePassTier;
+            
+            // Pity Stats
+            const totalLuck = (gameState.luckMultiplier * gameState.permanentLuckBoost).toFixed(2);
+            document.getElementById('statCurrentLuck').textContent = totalLuck;
+            document.getElementById('statPityCounter').textContent = gameState.pityCounter || 0;
+            document.getElementById('statPityThreshold').textContent = gameState.pityThreshold;
+            document.getElementById('statPityTriggered').textContent = gameState.pityTriggered || 0;
+            const pityPercent = ((gameState.pityCounter / gameState.pityThreshold) * 100).toFixed(1);
+            document.getElementById('pityProgress').style.width = `${pityPercent}%`;
+            document.getElementById('pityProgress').textContent = `${pityPercent}%`;
+            
+            // Rarity Distribution
+            const rarityDist = document.getElementById('rarityDistribution');
+            if (rarityDist) {
+                rarityDist.innerHTML = '';
+                Object.entries(gameState.rarityCounts).forEach(([rarityName, count]) => {
+                    const rarity = rarities.find(r => r.name === rarityName);
+                    if (rarity) {
+                        const div = document.createElement('div');
+                        div.style.cssText = `
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 8px;
+                            margin: 5px 0;
+                            background: var(--bg-dark);
+                            border-left: 3px solid ${rarity.color};
+                            border-radius: 5px;
+                        `;
+                        div.innerHTML = `
+                            <span style="color: ${rarity.color}; font-weight: bold;">${rarityName}</span>
+                            <span style="color: var(--text-primary);">${formatNumber(count)}</span>
+                        `;
+                        rarityDist.appendChild(div);
+                    }
+                });
+            }
+        }
+        
         function saveGame(isAutoSave = false) {
             try {
                 const saveData = {
@@ -4511,6 +6060,32 @@
                 if (gameState.upgrades.questSpeed === undefined) gameState.upgrades.questSpeed = 0;
                 if (gameState.upgrades.mysteryBox === undefined) gameState.upgrades.mysteryBox = 0;
                 if (gameState.specialEventIsAdmin === undefined) gameState.specialEventIsAdmin = false;
+                
+                // Backwards compatibility for new features
+                if (gameState.pityCounter === undefined) gameState.pityCounter = 0;
+                if (gameState.pityThreshold === undefined) gameState.pityThreshold = 100;
+                if (gameState.pityTriggered === undefined) gameState.pityTriggered = 0;
+                if (gameState.lastLoginDate === undefined) gameState.lastLoginDate = null;
+                if (gameState.loginStreak === undefined) gameState.loginStreak = 0;
+                if (gameState.totalLogins === undefined) gameState.totalLogins = 0;
+                if (gameState.loginRewardsClaimed === undefined) gameState.loginRewardsClaimed = [];
+                if (gameState.lifetimeMoneyEarned === undefined) gameState.lifetimeMoneyEarned = 0;
+                if (gameState.lifetimeMoneySpent === undefined) gameState.lifetimeMoneySpent = 0;
+                if (gameState.biggestTradeWin === undefined) gameState.biggestTradeWin = 0;
+                if (gameState.biggestTradeLoss === undefined) gameState.biggestTradeLoss = 0;
+                if (gameState.rarityCounts === undefined) gameState.rarityCounts = {};
+                if (gameState.itemsFromEvents === undefined) gameState.itemsFromEvents = 0;
+                if (gameState.craftCount === undefined) gameState.craftCount = 0;
+                if (gameState.enchantSuccess === undefined) gameState.enchantSuccess = 0;
+                if (gameState.enchantFails === undefined) gameState.enchantFails = 0;
+                if (gameState.fusionCount === undefined) gameState.fusionCount = 0;
+                if (gameState.statisticsViewed === undefined) gameState.statisticsViewed = false;
+                if (gameState.collectionBonuses === undefined) gameState.collectionBonuses = {discoComplete:false,galacticComplete:false,glitchComplete:false,fullmoonComplete:false,bloodmoonComplete:false,weatherComplete:false,christmasComplete:false};
+                if (gameState.rarityMilestones === undefined) gameState.rarityMilestones = {};
+                if (gameState.upgrades.autoFusion === undefined) gameState.upgrades.autoFusion = 0;
+                if (gameState.notificationQueue === undefined) gameState.notificationQueue = [];
+                if (gameState.isShowingNotification === undefined) gameState.isShowingNotification = false;
+                
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
                 gameState.settings = data.settings || {
@@ -4856,6 +6431,24 @@
             if (message.includes('Achievement') && !gameState.settings.showAchievementNotifications) return;
             if (message.includes('Random Event') && !gameState.settings.showRandomEvents) return;
             
+            // Add to queue
+            gameState.notificationQueue.push({ message, color });
+            
+            // Process queue if not already processing
+            if (!gameState.isShowingNotification) {
+                processNotificationQueue();
+            }
+        }
+        
+        function processNotificationQueue() {
+            if (gameState.notificationQueue.length === 0) {
+                gameState.isShowingNotification = false;
+                return;
+            }
+            
+            gameState.isShowingNotification = true;
+            const { message, color } = gameState.notificationQueue.shift();
+            
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.style.borderColor = color;
@@ -4864,8 +6457,12 @@
             
             setTimeout(() => {
                 notification.style.animation = 'slideInRight 0.5s ease-out reverse';
-                setTimeout(() => notification.remove(), 500);
-            }, 3000);
+                setTimeout(() => {
+                    notification.remove();
+                    // Process next notification after a small delay
+                    setTimeout(() => processNotificationQueue(), 200);
+                }, 500);
+            }, 2000); // Reduced from 3000 to 2000 for faster queue processing
         }
         
         function unlockAdmin() {
@@ -4888,6 +6485,14 @@
             gameState.settings.showAchievementNotifications = document.getElementById('settingAchievementNotif').checked;
             gameState.settings.showRandomEvents = document.getElementById('settingEventNotif').checked;
             gameState.settings.showAutoSaveNotifications = document.getElementById('settingAutoSaveNotif').checked;
+            gameState.settings.showPityNotifications = document.getElementById('settingPityNotif').checked;
+            gameState.settings.showFusionNotifications = document.getElementById('settingFusionNotif').checked;
+            gameState.settings.showCollectionNotifications = document.getElementById('settingCollectionNotif').checked;
+            gameState.settings.confirmSell = document.getElementById('settingConfirmSell').checked;
+            gameState.settings.animations = document.getElementById('settingAnimations').checked;
+            gameState.settings.compactMode = document.getElementById('settingCompactMode').checked;
+            gameState.settings.showValue = document.getElementById('settingShowValue').checked;
+            gameState.settings.autoSaveInterval = parseInt(document.getElementById('settingAutoSaveInterval').value);
             showNotification('Settings saved!', 'var(--success)');
         }
         
@@ -5073,6 +6678,9 @@
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
             
+            // Close mobile menu when tab is selected
+            closeMobileMenu();
+            
             if (tabName === 'inventory') updateInventory();
             if (tabName === 'shop') initShop();
             if (tabName === 'upgrades') initUpgrades();
@@ -5089,6 +6697,18 @@
             if (tabName === 'quests') {
                 updateQuestDisplay();
             }
+            if (tabName === 'fusion') {
+                updateFusionInventory();
+                updateFusionSlots();
+            }
+            if (tabName === 'statistics') {
+                gameState.statisticsViewed = true;
+                updateStatistics();
+                checkAchievements();
+            }
+            if (tabName === 'collections') {
+                updateCollectionsDisplay();
+            }
             if (tabName === 'settings') {
                 // Load current settings
                 document.getElementById('settingTradeNotif').checked = gameState.settings.showTradeNotifications;
@@ -5097,6 +6717,14 @@
                 document.getElementById('settingAchievementNotif').checked = gameState.settings.showAchievementNotifications;
                 document.getElementById('settingEventNotif').checked = gameState.settings.showRandomEvents;
                 document.getElementById('settingAutoSaveNotif').checked = gameState.settings.showAutoSaveNotifications;
+                document.getElementById('settingPityNotif').checked = gameState.settings.showPityNotifications !== false;
+                document.getElementById('settingFusionNotif').checked = gameState.settings.showFusionNotifications !== false;
+                document.getElementById('settingCollectionNotif').checked = gameState.settings.showCollectionNotifications !== false;
+                document.getElementById('settingConfirmSell').checked = gameState.settings.confirmSell || false;
+                document.getElementById('settingAnimations').checked = gameState.settings.animations !== false;
+                document.getElementById('settingCompactMode').checked = gameState.settings.compactMode || false;
+                document.getElementById('settingShowValue').checked = gameState.settings.showValue !== false;
+                document.getElementById('settingAutoSaveInterval').value = gameState.settings.autoSaveInterval || 60;
             }
             if (tabName === 'rebirth') {
                 updateRebirthDisplay();
@@ -5111,6 +6739,103 @@
                 }
             }
         }
+        
+        // ===== MOBILE SUPPORT FUNCTIONS =====
+        
+        function toggleMobileMenu() {
+            const tabNav = document.getElementById('tabNav');
+            const btn = document.getElementById('mobileMenuBtn');
+            
+            if (tabNav.classList.contains('mobile-open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
+        
+        function openMobileMenu() {
+            const tabNav = document.getElementById('tabNav');
+            const btn = document.getElementById('mobileMenuBtn');
+            tabNav.classList.add('mobile-open');
+            btn.textContent = '✕';
+        }
+        
+        function closeMobileMenu() {
+            const tabNav = document.getElementById('tabNav');
+            const btn = document.getElementById('mobileMenuBtn');
+            tabNav.classList.remove('mobile-open');
+            btn.textContent = '☰';
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const tabNav = document.getElementById('tabNav');
+            const btn = document.getElementById('mobileMenuBtn');
+            
+            if (tabNav && btn && tabNav.classList.contains('mobile-open')) {
+                if (!tabNav.contains(e.target) && !btn.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            }
+        });
+        
+        // Swipe gestures for mobile navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 100; // Minimum distance for swipe
+            const tabNav = document.getElementById('tabNav');
+            
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swipe left - close menu
+                closeMobileMenu();
+            }
+            
+            if (touchEndX > touchStartX + swipeThreshold && touchStartX < 50) {
+                // Swipe right from left edge - open menu
+                openMobileMenu();
+            }
+        }
+        
+        // Detect mobile device
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   window.innerWidth <= 768;
+        }
+        
+        // Vibration feedback helper
+        function vibrate(duration = 10) {
+            if (navigator.vibrate) {
+                navigator.vibrate(duration);
+            }
+        }
+        
+        // Prevent zoom on double-tap for specific elements
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Adjust UI for mobile on load
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
         
         // Initialize game
         // Try to auto-load save file on startup
@@ -5154,6 +6879,31 @@
                 if (gameState.upgrades.mysteryBox === undefined) gameState.upgrades.mysteryBox = 0;
                 if (gameState.specialEventIsAdmin === undefined) gameState.specialEventIsAdmin = false;
                 
+                // Backwards compatibility for new features
+                if (gameState.pityCounter === undefined) gameState.pityCounter = 0;
+                if (gameState.pityThreshold === undefined) gameState.pityThreshold = 100;
+                if (gameState.pityTriggered === undefined) gameState.pityTriggered = 0;
+                if (gameState.lastLoginDate === undefined) gameState.lastLoginDate = null;
+                if (gameState.loginStreak === undefined) gameState.loginStreak = 0;
+                if (gameState.totalLogins === undefined) gameState.totalLogins = 0;
+                if (gameState.loginRewardsClaimed === undefined) gameState.loginRewardsClaimed = [];
+                if (gameState.lifetimeMoneyEarned === undefined) gameState.lifetimeMoneyEarned = 0;
+                if (gameState.lifetimeMoneySpent === undefined) gameState.lifetimeMoneySpent = 0;
+                if (gameState.biggestTradeWin === undefined) gameState.biggestTradeWin = 0;
+                if (gameState.biggestTradeLoss === undefined) gameState.biggestTradeLoss = 0;
+                if (gameState.rarityCounts === undefined) gameState.rarityCounts = {};
+                if (gameState.itemsFromEvents === undefined) gameState.itemsFromEvents = 0;
+                if (gameState.craftCount === undefined) gameState.craftCount = 0;
+                if (gameState.enchantSuccess === undefined) gameState.enchantSuccess = 0;
+                if (gameState.enchantFails === undefined) gameState.enchantFails = 0;
+                if (gameState.fusionCount === undefined) gameState.fusionCount = 0;
+                if (gameState.statisticsViewed === undefined) gameState.statisticsViewed = false;
+                if (gameState.collectionBonuses === undefined) gameState.collectionBonuses = {discoComplete:false,galacticComplete:false,glitchComplete:false,fullmoonComplete:false,bloodmoonComplete:false,weatherComplete:false,christmasComplete:false};
+                if (gameState.rarityMilestones === undefined) gameState.rarityMilestones = {};
+                if (gameState.upgrades.autoFusion === undefined) gameState.upgrades.autoFusion = 0;
+                if (gameState.notificationQueue === undefined) gameState.notificationQueue = [];
+                if (gameState.isShowingNotification === undefined) gameState.isShowingNotification = false;
+                
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
                 gameState.settings = data.settings || {
@@ -5193,6 +6943,16 @@
         updateRebirthDisplay();
         refreshQuests();
         updateQuestDisplay();
+        checkDailyLogin();
+        updateStatistics();
+        
+        // Mobile welcome message
+        if (isMobileDevice() && !localStorage.getItem('mobileWelcomeShown')) {
+            setTimeout(() => {
+                showNotification('📱 Mobile Controls: Tap to flex, Long-press to sell! Swipe from left edge to open menu.', 'var(--accent-primary)');
+                localStorage.setItem('mobileWelcomeShown', 'true');
+            }, 2000);
+        }
         
         // Start auto-spin if unlocked
         if (gameState.upgrades.autoSpin > 0) {
