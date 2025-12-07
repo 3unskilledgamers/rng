@@ -1070,11 +1070,34 @@
                 border-left: 2px solid var(--accent-primary);
                 z-index: 1000;
                 overflow-y: auto;
+                overflow-x: hidden;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
                 transition: right 0.3s ease;
-                padding: 80px 10px 20px 10px;
+                padding: 70px 10px 60px 10px; /* Adjusted for scroll hint */
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
+                overscroll-behavior: contain; /* Prevent scroll chaining */
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
+            }
+            
+            /* Scroll indicator gradient at bottom */
+            .tab-nav::after {
+                content: '⬇️ Scroll for more ⬇️';
+                position: sticky;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 50px;
+                background: linear-gradient(to top, var(--bg-dark) 0%, var(--bg-dark) 60%, transparent 100%);
+                pointer-events: none;
+                margin-top: auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.7rem;
+                color: var(--text-secondary);
+                text-align: center;
             }
             
             .tab-nav.mobile-open {
@@ -1088,6 +1111,7 @@
                 font-size: 1rem;
                 min-height: 50px;
                 border-radius: 8px;
+                flex-shrink: 0; /* Prevent buttons from shrinking */
             }
             
             /* Container adjustments */
@@ -1363,6 +1387,29 @@
             .mobile-menu-toggle {
                 display: none;
             }
+            
+            /* Reset tab-nav for desktop */
+            .tab-nav {
+                position: static;
+                width: auto;
+                height: auto;
+                overflow-y: visible;
+                padding: 0;
+                flex-direction: row;
+                flex-wrap: wrap;
+                background: transparent;
+                border: none;
+                box-shadow: none;
+            }
+            
+            /* Hide scroll indicators on desktop */
+            .tab-nav::after {
+                display: none;
+            }
+            
+            .tab-nav > div:first-child {
+                display: none;
+            }
         }
         
         /* Prevent zoom on double-tap */
@@ -1420,6 +1467,9 @@
         </div>
         
         <div class="tabs tab-nav" id="tabNav">
+            <div style="position: sticky; top: 0; background: var(--bg-dark); padding: 10px; margin: -10px -10px 10px -10px; border-bottom: 1px solid var(--accent-primary); z-index: 1; text-align: center; font-size: 0.7rem; color: var(--text-secondary);">
+                📱 Swipe to scroll ⬇️
+            </div>
             <button class="tab-button active" onclick="switchTab('spin')">🎰 Spin</button>
             <button class="tab-button" onclick="switchTab('inventory')">🎒 Inventory</button>
             <button class="tab-button" onclick="switchTab('shop')">🏪 Shop</button>
@@ -1435,6 +1485,10 @@
             <button class="tab-button" onclick="switchTab('battlepass')">🎫 Battle Pass</button>
             <button class="tab-button" onclick="switchTab('rebirth')">♻️ Rebirth</button>
             <button class="tab-button" onclick="switchTab('events')">🎄 Events</button>
+            <button class="tab-button" onclick="switchTab('dailies')">📅 Daily</button>
+            <button class="tab-button" onclick="switchTab('achievementshop')">🏪 A-Shop</button>
+            <button class="tab-button" onclick="switchTab('pets')">🐉 Pets</button>
+            <button class="tab-button" onclick="switchTab('prestige')">⭐ Prestige</button>
             <button class="tab-button" onclick="switchTab('settings')">⚙️ Settings</button>
             <button class="tab-button" onclick="switchTab('admin')">🔒 Admin</button>
         </div>
@@ -1509,7 +1563,12 @@
                         <option value="mythic">Mythic</option>
                         <option value="exotic">Exotic</option>
                         <option value="celestial">Celestial</option>
-                        <option value="divine">Divine+</option>
+                        <option value="divine">Divine</option>
+                        <option value="cosmic">Cosmic</option>
+                        <option value="infinite">Infinite</option>
+                        <option value="transcendent">Transcendent</option>
+                        <option value="ethereal">Ethereal</option>
+                        <option value="primordial">Primordial+</option>
                     </optgroup>
                     <optgroup label="By Type">
                         <option value="event">All Event Items</option>
@@ -1523,6 +1582,29 @@
                         <option value="battlepass">Battle Pass Items</option>
                     </optgroup>
                 </select>
+            </div>
+            
+            <!-- Bulk Actions -->
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; justify-content: center;">
+                <select id="bulkSellRarity" style="padding: 10px; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; cursor: pointer;">
+                    <option value="">Select Rarity to Sell...</option>
+                    <option value="Common">Common</option>
+                    <option value="Uncommon">Uncommon</option>
+                    <option value="Rare">Rare</option>
+                    <option value="Epic">Epic</option>
+                    <option value="Legendary">Legendary</option>
+                    <option value="Mythic">Mythic</option>
+                    <option value="Exotic">Exotic</option>
+                    <option value="Celestial">Celestial</option>
+                    <option value="Divine">Divine</option>
+                    <option value="Cosmic">Cosmic</option>
+                    <option value="Infinite">Infinite</option>
+                    <option value="Transcendent">Transcendent</option>
+                    <option value="Ethereal">Ethereal</option>
+                </select>
+                <button class="btn btn-decline" onclick="bulkSellByRarity()" style="padding: 10px 20px;">
+                    💰 Sell Selected Rarity
+                </button>
             </div>
             
             <button class="btn btn-decline" onclick="sellAllItems()" style="margin: 10px 0;">💰 Sell All Items (70% value)</button>
@@ -1842,6 +1924,96 @@
             </div>
         </div>
         
+        <!-- Daily Challenges Tab -->
+        <div id="dailies" class="tab-content">
+            <h2>📅 Daily Challenges</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Complete challenges for rewards! Resets daily at midnight.</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 1.2rem; color: var(--accent-primary);">
+                    🏆 Achievement Points: <span id="achievementPointsDisplay">0</span>
+                </div>
+            </div>
+            
+            <div id="dailyChallengesContainer" class="crafting-grid" style="margin-top: 20px;"></div>
+        </div>
+        
+        <!-- Achievement Shop Tab -->
+        <div id="achievementshop" class="tab-content">
+            <h2>🏪 Achievement Shop</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Spend Achievement Points on permanent upgrades!</p>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 1.5rem; color: var(--accent-gold);">
+                    💰 Points: <span id="achievementPointsShopDisplay">0</span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">
+                    Earn points by completing achievements!
+                </p>
+            </div>
+            
+            <div id="achievementShopContainer" class="crafting-grid" style="margin-top: 20px;"></div>
+        </div>
+        
+        <!-- Pets Tab -->
+        <div id="pets" class="tab-content">
+            <h2>🐉 Pet Collection</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Collect and level up pets for permanent bonuses!</p>
+            
+            <div style="text-align: center; margin: 20px 0; padding: 20px; background: var(--bg-light); border-radius: 12px;">
+                <h3 style="color: var(--accent-primary); margin-bottom: 15px;">Active Pet</h3>
+                <div id="activePetDisplay" style="font-size: 3rem; margin: 10px 0;">❓</div>
+                <div id="activePetName" style="font-size: 1.2rem; color: var(--accent-gold); margin: 10px 0;">No pet equipped</div>
+                <div id="activePetBonus" style="color: var(--text-secondary); font-size: 0.9rem;">Equip a pet to get bonuses!</div>
+                <div id="activePetLevel" style="color: var(--success); font-size: 0.9rem; margin-top: 5px;">Level: 0</div>
+            </div>
+            
+            <h3 style="margin: 20px 0;">🌟 Available Pets</h3>
+            <div id="petsContainer" class="crafting-grid"></div>
+        </div>
+        
+        <!-- Prestige Tab -->
+        <div id="prestige" class="tab-content">
+            <h2>⭐ Prestige System</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Reset everything for powerful permanent bonuses!</p>
+            
+            <div style="max-width: 600px; margin: 30px auto;">
+                <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, var(--bg-medium) 0%, var(--bg-light) 100%); border-radius: 15px; border: 2px solid var(--accent-gold);">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">⭐</div>
+                    <h3 style="color: var(--accent-gold); margin-bottom: 10px;">Current Prestige Level</h3>
+                    <div style="font-size: 3rem; color: var(--accent-gold); margin: 20px 0;" id="prestigeLevelDisplay">0</div>
+                    <div style="font-size: 1.2rem; color: var(--success); margin: 10px 0;">
+                        Prestige Points: <span id="prestigePointsDisplay">0</span>
+                    </div>
+                    
+                    <div style="margin: 30px 0; padding: 20px; background: var(--bg-dark); border-radius: 10px; text-align: left;">
+                        <h4 style="color: var(--accent-primary); margin-bottom: 15px;">Prestige Requirements:</h4>
+                        <div style="margin: 10px 0;">
+                            ✅ 10+ Rebirths: <span id="prestigeRebirthReq" style="color: var(--danger);">Not met</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            ✅ $1 Billion: <span id="prestigeMoneyReq" style="color: var(--danger);">Not met</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            ✅ 1 Primordial+ Item: <span id="prestigeItemReq" style="color: var(--danger);">Not met</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-accept" onclick="performPrestige()" id="prestigeButton" disabled style="width: 100%; padding: 20px; font-size: 1.2rem; opacity: 0.5; cursor: not-allowed;">
+                        ⭐ PRESTIGE NOW ⭐
+                    </button>
+                    
+                    <div style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem;">
+                        <p style="margin: 5px 0;">💎 You keep: Prestige Points, Prestige Shop, Pets</p>
+                        <p style="margin: 5px 0; color: var(--danger);">❌ You lose: EVERYTHING ELSE</p>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 30px 0; text-align: center;">🏪 Prestige Shop</h3>
+                <div id="prestigeShopContainer" class="crafting-grid"></div>
+            </div>
+        </div>
+        
         <!-- Settings Tab -->
         <div id="settings" class="tab-content">
             <h2>⚙️ Settings</h2>
@@ -1909,6 +2081,18 @@
                             <input type="checkbox" id="settingShowValue" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
                             <span>Show Item Values in Inventory</span>
                         </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingAutoClaimQuests" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Auto-Claim Completed Quests</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingConfirmRebirth" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Confirm Rebirth Action</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingConfirmPrestige" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Confirm Prestige Action</span>
+                        </label>
                     </div>
                 </div>
                 
@@ -1925,6 +2109,44 @@
                                 <option value="0">Disabled</option>
                             </select>
                         </label>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h3 style="color: var(--accent-primary);">Visual Preferences</h3>
+                    <div style="margin: 15px 0;">
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingShowRarityColors" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Colorful Rarity Names</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingShowItemCount" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Show Item Counts</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingReduceMotion" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Reduce Motion (Accessibility)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingLargeText" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>Large Text Mode</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h3 style="color: var(--accent-primary);">💾 Save Management</h3>
+                    <div style="margin: 15px 0;">
+                        <button class="btn btn-accept" onclick="exportSaveData()" style="width: 100%; margin-bottom: 10px;">
+                            📤 Export Save Code
+                        </button>
+                        <button class="btn btn-accept" onclick="resetTutorial()" style="width: 100%; margin-bottom: 10px; background: linear-gradient(135deg, var(--accent-primary), var(--success));">
+                            📚 Restart Tutorial
+                        </button>
+                        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 10px;">
+                            Export to backup your progress or share with friends!<br>
+                            <strong>Import is in Admin Panel for safety.</strong>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -2106,6 +2328,14 @@
                     </div>
                     
                     <div class="recipe-card">
+                        <h3 style="color: var(--accent-primary);">📥 Import Save</h3>
+                        <div style="margin: 15px 0;">
+                            <button class="btn btn-accept" onclick="showImportDialog()" style="width: 100%;">Import Save Code</button>
+                            <p style="color: var(--warning); margin-top: 10px; font-size: 0.9rem;">⚠️ Will overwrite current progress!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-card">
                         <h3 style="color: var(--danger);">Danger Zone</h3>
                         <div style="margin: 15px 0;">
                             <button class="btn btn-decline" onclick="adminResetGame()">Reset Everything</button>
@@ -2223,7 +2453,28 @@
                 autoSaveInterval: 60
             },
             inventorySort: 'rarity',
-            inventoryFilter: 'all'
+            inventoryFilter: 'all',
+            favoriteItems: [], // Protected from selling
+            // Tutorial System
+            tutorialStep: 0,
+            tutorialComplete: false,
+            tutorialSkipped: false,
+            // Daily Challenges
+            dailyChallenges: [],
+            dailyChallengesCompleted: [],
+            lastDailyChallengeReset: 0,
+            // Achievement Shop
+            achievementPoints: 0,
+            achievementShopPurchases: {},
+            // Pet System
+            pets: [],
+            activePet: null,
+            petLevels: {},
+            petXP: {},
+            // Prestige System
+            prestigeLevel: 0,
+            prestigePoints: 0,
+            prestigeShopPurchases: {}
         };
         
         const ADMIN_PASSWORD = "admin123"; // Change this to your desired password
@@ -2383,12 +2634,12 @@
             { name: 'Infinite', chance: 1/2048, color: '#ffffff', minValue: 25001, maxValue: 65000 },
             { name: 'Transcendent', chance: 1/4096, color: '#00fff2', minValue: 65001, maxValue: 150000 },
             { name: 'Ethereal', chance: 1/8192, color: '#b19cd9', minValue: 150001, maxValue: 350000 },
-            { name: 'Primordial', chance: 1/16384, color: '#ff6b35', minValue: 350001, maxValue: 800000 },
-            { name: 'Omega', chance: 1/32768, color: '#4ecdc4', minValue: 800001, maxValue: 2000000 },
-            { name: 'Supreme', chance: 1/65536, color: '#ffe66d', minValue: 2000001, maxValue: 5000000 },
-            { name: 'Godlike', chance: 1/131072, color: '#ff00ff', minValue: 5000001, maxValue: 12000000 },
-            { name: 'Universal', chance: 1/262144, color: '#00ffaa', minValue: 12000001, maxValue: 30000000 },
-            { name: 'Multiversal', chance: 1/524288, color: '#ff3399', minValue: 30000001, maxValue: 75000000 },
+            { name: 'Primordial', chance: 1/65536, color: '#ff6b35', minValue: 350001, maxValue: 800000 }, // Made 4x rarer
+            { name: 'Omega', chance: 1/262144, color: '#4ecdc4', minValue: 800001, maxValue: 2000000 }, // Made 8x rarer
+            { name: 'Supreme', chance: 1/1048576, color: '#ffe66d', minValue: 2000001, maxValue: 5000000 }, // Made 16x rarer
+            { name: 'Godlike', chance: 1/4194304, color: '#ff00ff', minValue: 5000001, maxValue: 12000000 }, // Made 32x rarer
+            { name: 'Universal', chance: 1/16777216, color: '#00ffaa', minValue: 12000001, maxValue: 30000000 }, // Made 64x rarer
+            { name: 'Multiversal', chance: 1/67108864, color: '#ff3399', minValue: 30000001, maxValue: 75000000 }, // Made 128x rarer
             { name: 'Omnipotent', chance: 1/1048576, color: '#ffcc00', minValue: 75000001, maxValue: 200000000 },
             { name: 'Infinite Absolute', chance: 1/2097152, color: '#ff99ff', minValue: 200000001, maxValue: 500000000 },
             { name: 'Eternal', chance: 1/4194304, color: '#66ffff', minValue: 500000001, maxValue: 1000000000 },
@@ -2945,7 +3196,32 @@
             { tier: 22, xpRequired: 80000, reward: 'Ultimate Power' },
             { tier: 23, xpRequired: 90000, reward: 'Perfect Essence' },
             { tier: 24, xpRequired: 100000, reward: 'True Divinity' },
-            { tier: 25, xpRequired: 125000, reward: 'Eternal Glory' }
+            { tier: 25, xpRequired: 125000, reward: 'Eternal Glory' },
+            { tier: 26, xpRequired: 150000, reward: 'Immortal Spark' },
+            { tier: 27, xpRequired: 175000, reward: 'Ascended Flame' },
+            { tier: 28, xpRequired: 200000, reward: 'Boundless Power' },
+            { tier: 29, xpRequired: 225000, reward: 'Limitless Crate' },
+            { tier: 30, xpRequired: 250000, reward: 'Zenith Crown' },
+            { tier: 31, xpRequired: 275000, reward: 'Apex Medallion' },
+            { tier: 32, xpRequired: 300000, reward: 'Peak Fragment' },
+            { tier: 33, xpRequired: 330000, reward: 'Summit Crate' },
+            { tier: 34, xpRequired: 360000, reward: 'Pinnacle Orb' },
+            { tier: 35, xpRequired: 390000, reward: 'Utmost Relic' },
+            { tier: 36, xpRequired: 420000, reward: 'Maximum Core' },
+            { tier: 37, xpRequired: 450000, reward: 'Superlative Shard' },
+            { tier: 38, xpRequired: 480000, reward: 'Paramount Essence' },
+            { tier: 39, xpRequired: 510000, reward: 'Sovereign Crate' },
+            { tier: 40, xpRequired: 550000, reward: 'Emperor Crown' },
+            { tier: 41, xpRequired: 590000, reward: 'Tyrant Seal' },
+            { tier: 42, xpRequired: 630000, reward: 'Overlord Token' },
+            { tier: 43, xpRequired: 670000, reward: 'Monarch Fragment' },
+            { tier: 44, xpRequired: 710000, reward: 'Ruler Crate' },
+            { tier: 45, xpRequired: 750000, reward: 'Dominator Badge' },
+            { tier: 46, xpRequired: 800000, reward: 'Master Key' },
+            { tier: 47, xpRequired: 850000, reward: 'Champion Relic' },
+            { tier: 48, xpRequired: 900000, reward: 'Victor Essence' },
+            { tier: 49, xpRequired: 950000, reward: 'Conqueror Crate' },
+            { tier: 50, xpRequired: 1000000, reward: 'Legend Incarnate' }
         ];
         
         // Quest System
@@ -3354,6 +3630,9 @@
                     showNotification(`⚡ Chaotics Thoughts! ${spinMultiplier}x spin count!`, 'var(--accent-gold)');
                 }
                 
+                // Update daily challenges
+                updateDailyChallengeProgress('spins', spinMultiplier);
+                
                 // Apply XP boost upgrade
                 let baseXP = 10;
                 if (gameState.upgrades.xpBoost > 0) {
@@ -3375,10 +3654,14 @@
                 // Update quests
                 updateQuestProgress('spins', spinMultiplier);
                 
-                // Track rare pulls for quests
+                // Track rare pulls for quests and daily challenges
                 const rarityIndex = rarities.findIndex(r => r.name === selectedRarity.name);
                 if (rarityIndex >= 4) { // Legendary or higher
                     updateQuestProgress('rarePulls', 1);
+                    updateDailyChallengeProgress('legendaryItems', 1);
+                }
+                if (rarityIndex >= 2) { // Rare+
+                    updateDailyChallengeProgress('rareItems', 1);
                 }
                 
                 updateStats();
@@ -3564,15 +3847,20 @@
         
         // Rarity Milestone System
         const rarityMilestoneData = [
-            { rarity: 'Common', milestones: [500, 2500, 10000], bonuses: [0.005, 0.01, 0.02] },
-            { rarity: 'Uncommon', milestones: [250, 1000, 5000], bonuses: [0.005, 0.015, 0.025] },
-            { rarity: 'Rare', milestones: [100, 500, 2000], bonuses: [0.01, 0.02, 0.04] },
-            { rarity: 'Epic', milestones: [50, 200, 1000], bonuses: [0.015, 0.03, 0.06] },
-            { rarity: 'Legendary', milestones: [25, 100, 500], bonuses: [0.02, 0.05, 0.10] },
-            { rarity: 'Mythic', milestones: [10, 50, 250], bonuses: [0.03, 0.07, 0.15] },
-            { rarity: 'Exotic', milestones: [5, 25, 100], bonuses: [0.05, 0.10, 0.20] },
-            { rarity: 'Celestial', milestones: [3, 10, 50], bonuses: [0.07, 0.15, 0.30] },
-            { rarity: 'Divine', milestones: [2, 5, 25], bonuses: [0.10, 0.20, 0.40] }
+            { rarity: 'Common', milestones: [1000, 5000, 25000], bonuses: [0.005, 0.01, 0.02] }, // 2x, 2x, 2.5x harder
+            { rarity: 'Uncommon', milestones: [500, 2500, 10000], bonuses: [0.005, 0.015, 0.025] }, // 2x, 2.5x, 2x harder
+            { rarity: 'Rare', milestones: [250, 1000, 5000], bonuses: [0.01, 0.02, 0.04] }, // 2.5x, 2x, 2.5x harder
+            { rarity: 'Epic', milestones: [100, 500, 2500], bonuses: [0.015, 0.03, 0.06] }, // 2x, 2.5x, 2.5x harder
+            { rarity: 'Legendary', milestones: [50, 250, 1000], bonuses: [0.02, 0.05, 0.10] }, // 2x, 2.5x, 2x harder
+            { rarity: 'Mythic', milestones: [25, 100, 500], bonuses: [0.03, 0.07, 0.15] }, // 2.5x, 2x, 2x harder
+            { rarity: 'Exotic', milestones: [10, 50, 250], bonuses: [0.05, 0.10, 0.20] }, // 2x, 2x, 2.5x harder
+            { rarity: 'Celestial', milestones: [5, 25, 100], bonuses: [0.07, 0.15, 0.30] }, // 1.67x, 2.5x, 2x harder
+            { rarity: 'Divine', milestones: [3, 10, 50], bonuses: [0.10, 0.20, 0.40] }, // 1.5x, 2x, 2x harder
+            { rarity: 'Cosmic', milestones: [2, 5, 25], bonuses: [0.15, 0.30, 0.60] }, // NEW!
+            { rarity: 'Infinite', milestones: [1, 3, 15], bonuses: [0.20, 0.40, 0.80] }, // NEW!
+            { rarity: 'Transcendent', milestones: [1, 2, 10], bonuses: [0.25, 0.50, 1.00] }, // NEW!
+            { rarity: 'Ethereal', milestones: [1, 2, 5], bonuses: [0.30, 0.60, 1.20] }, // NEW!
+            { rarity: 'Primordial', milestones: [1, 2, 3], bonuses: [0.50, 1.00, 2.00] } // NEW! Massive bonuses
         ];
         
         function checkRarityMilestones() {
@@ -4417,10 +4705,15 @@
                     if (filterType === 'mythic') return item.rarity === 'Mythic';
                     if (filterType === 'exotic') return item.rarity === 'Exotic';
                     if (filterType === 'celestial') return item.rarity === 'Celestial';
-                    if (filterType === 'divine') {
-                        // Divine+ includes Divine and all higher rarities
+                    if (filterType === 'divine') return item.rarity === 'Divine';
+                    if (filterType === 'cosmic') return item.rarity === 'Cosmic';
+                    if (filterType === 'infinite') return item.rarity === 'Infinite';
+                    if (filterType === 'transcendent') return item.rarity === 'Transcendent';
+                    if (filterType === 'ethereal') return item.rarity === 'Ethereal';
+                    if (filterType === 'primordial') {
+                        // Primordial+ includes Primordial and all higher rarities
                         const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
-                        return rarityIndex >= 8; // Divine is index 8
+                        return rarityIndex >= 13; // Primordial is index 13
                     }
                     
                     // Type filters
@@ -4520,8 +4813,15 @@
                     enchantDisplay = `<div style="font-size: 0.65rem; margin-top: 3px;">${enchantList}</div>`;
                 }
                 
+                const isFavorited = gameState.favoriteItems && gameState.favoriteItems.includes(key);
+                
                 itemDiv.innerHTML = `
                     ${item.count > 1 ? `<div class="item-count">${item.count}</div>` : ''}
+                    <button onclick="event.stopPropagation(); toggleFavorite('${key}')" 
+                            style="position: absolute; top: 5px; right: 5px; background: none; border: none; font-size: 1.3rem; cursor: pointer; padding: 5px; z-index: 10;"
+                            title="${isFavorited ? 'Unfavorite' : 'Favorite (protect from selling)'}">
+                        ${isFavorited ? '⭐' : '☆'}
+                    </button>
                     <div style="font-size: 2rem;">💎</div>
                     <div class="item-name" style="color: ${item.color};">${item.name}</div>
                     <div style="font-size: 0.8rem; color: ${item.color};">${item.rarity}</div>
@@ -4536,6 +4836,20 @@
         function sellItem(itemKey) {
             const item = gameState.inventory[itemKey];
             if (!item || item.count === 0) return;
+            
+            // Check if favorited
+            if (gameState.favoriteItems && gameState.favoriteItems.includes(itemKey)) {
+                showNotification('⭐ Item is favorited! Unfavorite to sell.', 'var(--warning)');
+                return;
+            }
+            
+            // Confirmation for high-rarity items (Mythic and above)
+            const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+            if (rarityIndex >= 5 && gameState.settings && gameState.settings.confirmSell !== false) { // Mythic is index 5
+                if (!confirm(`Sell ${item.name} (${item.rarity}) for $${Math.floor(item.value * 0.7)}?`)) {
+                    return;
+                }
+            }
             
             let sellMultiplier = 0.7; // Base 70% sell value
             let hasEventStarter = false;
@@ -4564,8 +4878,9 @@
             gameState.totalValue -= item.value;
             item.count--;
             
-            // Track money earned for quests
+            // Track money earned for quests and challenges
             updateQuestProgress('moneyEarned', sellPrice);
+            updateDailyChallengeProgress('moneyEarned', sellPrice);
             
             if (gameState.flexedItem === itemKey && item.count === 0) {
                 gameState.flexedItem = null;
@@ -4850,6 +5165,7 @@
             if (valueDiff > 0) {
                 gameState.tradeWins++;
                 updateQuestProgress('tradeWins', 1);
+                updateDailyChallengeProgress('tradeWins', 1);
                 if (valueDiff > (gameState.biggestTradeWin || 0)) {
                     gameState.biggestTradeWin = valueDiff;
                 }
@@ -4906,17 +5222,24 @@
                         <div style="color: var(--accent-gold);">Creates: ${recipe.result}</div>
                         <div style="color: var(--success);">Value: $${formatNumber(recipe.value)}</div>
                     </div>
-                    <button class="btn btn-accept" ${!canCraft ? 'disabled' : ''} 
-                            onclick="craftItem('${recipe.name}')" 
-                            style="${!canCraft ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
-                        Craft
-                    </button>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn btn-accept" ${!canCraft ? 'disabled' : ''} 
+                                onclick="craftItem('${recipe.name}')" 
+                                style="flex: 1; ${!canCraft ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                            Craft 1x
+                        </button>
+                        <button class="btn btn-accept" ${!canCraft ? 'disabled' : ''} 
+                                onclick="craftMax('${recipe.name}')" 
+                                style="flex: 1; background: linear-gradient(135deg, var(--accent-gold), var(--warning)); ${!canCraft ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                            Craft Max
+                        </button>
+                    </div>
                 `;
                 grid.appendChild(recipeDiv);
             });
         }
         
-        function craftItem(recipeName) {
+        function craftItem(recipeName, silent = false) {
             const recipe = recipes.find(r => r.name === recipeName);
             if (!recipe) return;
             
@@ -4950,7 +5273,7 @@
             const rarity = rarities.find(r => r.name === recipe.result);
             
             if (!rarity) {
-                showNotification('Error: Invalid recipe rarity!', 'var(--danger)');
+                if (!silent) showNotification('Error: Invalid recipe rarity!', 'var(--danger)');
                 return;
             }
             
@@ -4967,7 +5290,7 @@
             // Try to duplicate with Crafting Merger
             if (craftDupeChance > 0 && Math.random() < craftDupeChance) {
                 addItemToInventory(recipe.name, { ...rarity, minValue: craftValue, maxValue: craftValue });
-                showNotification(`🔨 Crafting Merger! Duplicated craft!`, 'var(--accent-gold)');
+                if (!silent) showNotification(`🔨 Crafting Merger! Duplicated craft!`, 'var(--accent-gold)');
             }
             
             gameState.craftCount = (gameState.craftCount || 0) + 1;
@@ -4976,9 +5299,14 @@
             // Update quests
             updateQuestProgress('crafts', 1);
             
-            showNotification(`Crafted: ${recipe.name}!`, rarity.color);
-            updateStats();
-            updateInventory();
+            // Update daily challenges
+            updateDailyChallengeProgress('crafts', 1);
+            
+            if (!silent) {
+                showNotification(`Crafted: ${recipe.name}!`, rarity.color);
+                updateStats();
+                updateInventory();
+            }
             updateBattlePass();
             checkAchievements();
             
@@ -5347,6 +5675,10 @@
                 const unlocked = gameState.achievements[achievement.id] || achievement.check();
                 if (unlocked && !gameState.achievements[achievement.id]) {
                     gameState.achievements[achievement.id] = true;
+                    
+                    // Award achievement points
+                    awardAchievementPoints(achievement.id);
+                    
                     // Grant rewards
                     if (achievement.id === 'first_spin') {
                         gameState.luckMultiplier += 0.1;
@@ -6729,6 +7061,21 @@
             if (tabName === 'rebirth') {
                 updateRebirthDisplay();
             }
+            if (tabName === 'dailies') {
+                generateDailyChallenges();
+                updateDailyChallengesDisplay();
+                updateAchievementPointsDisplay();
+            }
+            if (tabName === 'achievementshop') {
+                updateAchievementShopDisplay();
+                updateAchievementPointsDisplay();
+            }
+            if (tabName === 'pets') {
+                updatePetsDisplay();
+            }
+            if (tabName === 'prestige') {
+                updatePrestigeDisplay();
+            }
             if (tabName === 'admin') {
                 if (gameState.adminUnlocked) {
                     document.getElementById('adminLogin').style.display = 'none';
@@ -6837,6 +7184,910 @@
             }
         });
         
+        // ===== TUTORIAL SYSTEM =====
+        
+        const tutorialSteps = [
+            {
+                title: "Welcome to RNG Trader!",
+                message: "Click the 🎰 Spin button to get your first item!",
+                tab: "spin",
+                highlight: null
+            },
+            {
+                title: "Check Your Inventory",
+                message: "Great! Now go to the 🎒 Inventory tab to see your items.",
+                tab: "inventory",
+                highlight: null
+            },
+            {
+                title: "Visit the Shop",
+                message: "You can buy items with money in the 🏪 Shop tab!",
+                tab: "shop",
+                highlight: null
+            },
+            {
+                title: "Upgrade Your Game",
+                message: "Permanent upgrades are in the ⬆️ Upgrades tab!",
+                tab: "upgrades",
+                highlight: null
+            },
+            {
+                title: "You're Ready!",
+                message: "Explore trading, crafting, achievements, and more! Have fun! 🎉",
+                tab: null,
+                highlight: null
+            }
+        ];
+        
+        function startTutorial() {
+            if (gameState.tutorialComplete || gameState.tutorialSkipped) return;
+            gameState.tutorialStep = 0;
+            showTutorialStep();
+        }
+        
+        function showTutorialStep() {
+            if (gameState.tutorialStep >= tutorialSteps.length) {
+                gameState.tutorialComplete = true;
+                closeTutorialModal();
+                showNotification('🎉 Tutorial Complete! Enjoy the game!', 'var(--success)');
+                return;
+            }
+            
+            const step = tutorialSteps[gameState.tutorialStep];
+            const modal = document.createElement('div');
+            modal.id = 'tutorialModal';
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 10001; display: flex; align-items: center; justify-content: center; padding: 20px;';
+            modal.innerHTML = `
+                <div style="background: var(--bg-medium); padding: 30px; border-radius: 15px; max-width: 500px; width: 100%; border: 3px solid var(--accent-primary); box-shadow: 0 0 30px var(--accent-primary);">
+                    <h2 style="color: var(--accent-primary); margin-bottom: 15px;">📚 Tutorial (${gameState.tutorialStep + 1}/${tutorialSteps.length})</h2>
+                    <h3 style="color: var(--accent-gold); margin-bottom: 15px;">${step.title}</h3>
+                    <p style="color: var(--text-primary); font-size: 1.1rem; margin: 20px 0; line-height: 1.6;">${step.message}</p>
+                    <div style="display: flex; gap: 10px; margin-top: 30px;">
+                        <button onclick="nextTutorialStep()" class="btn btn-accept" style="flex: 1; padding: 15px; font-size: 1.1rem;">
+                            ${gameState.tutorialStep === tutorialSteps.length - 1 ? '🎉 Finish' : 'Next ➡️'}
+                        </button>
+                        <button onclick="skipTutorial()" class="btn btn-decline" style="padding: 15px;">Skip</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Auto-switch to relevant tab
+            if (step.tab) {
+                setTimeout(() => switchTab(step.tab), 500);
+            }
+        }
+        
+        function nextTutorialStep() {
+            gameState.tutorialStep++;
+            closeTutorialModal();
+            setTimeout(showTutorialStep, 300);
+        }
+        
+        function skipTutorial() {
+            gameState.tutorialSkipped = true;
+            closeTutorialModal();
+            showNotification('Tutorial skipped. You can restart it in Settings!', 'var(--text-secondary)');
+        }
+        
+        function closeTutorialModal() {
+            const modal = document.getElementById('tutorialModal');
+            if (modal) modal.remove();
+        }
+        
+        function resetTutorial() {
+            gameState.tutorialStep = 0;
+            gameState.tutorialComplete = false;
+            gameState.tutorialSkipped = false;
+            startTutorial();
+        }
+        
+        // ===== DAILY CHALLENGES SYSTEM =====
+        
+        const dailyChallengeTemplates = [
+            { id: 'spin50', name: 'Spin Master', desc: 'Spin 50 items', goal: 50, type: 'spins', reward: { money: 25000, points: 3 } },
+            { id: 'spin100', name: 'Spin Grinder', desc: 'Spin 100 items', goal: 100, type: 'spins', reward: { money: 60000, points: 5 } },
+            { id: 'trade10', name: 'Trader', desc: 'Win 10 trades', goal: 10, type: 'tradeWins', reward: { money: 20000, points: 4 } },
+            { id: 'trade25', name: 'Trade Expert', desc: 'Win 25 trades', goal: 25, type: 'tradeWins', reward: { money: 50000, points: 7 } },
+            { id: 'craft5', name: 'Crafter', desc: 'Craft 5 items', goal: 5, type: 'crafts', reward: { money: 15000, points: 3 } },
+            { id: 'craft15', name: 'Master Crafter', desc: 'Craft 15 items', goal: 15, type: 'crafts', reward: { money: 40000, points: 6 } },
+            { id: 'money100k', name: 'Money Maker', desc: 'Earn $100,000', goal: 100000, type: 'moneyEarned', reward: { money: 30000, points: 4 } },
+            { id: 'money500k', name: 'Big Earner', desc: 'Earn $500,000', goal: 500000, type: 'moneyEarned', reward: { money: 100000, points: 8 } },
+            { id: 'legendary3', name: 'Legend Hunter', desc: 'Get 3 Legendary+ items', goal: 3, type: 'legendaryItems', reward: { money: 50000, points: 10 } },
+            { id: 'rare20', name: 'Rare Collector', desc: 'Get 20 Rare+ items', goal: 20, type: 'rareItems', reward: { money: 35000, points: 5 } }
+        ];
+        
+        function generateDailyChallenges() {
+            // Check if need to reset (daily at midnight)
+            const now = Date.now();
+            const lastReset = gameState.lastDailyChallengeReset || 0;
+            const dayInMs = 86400000;
+            
+            if (now - lastReset < dayInMs && gameState.dailyChallenges.length > 0) {
+                return; // Not time to reset yet
+            }
+            
+            // Generate 3 random challenges
+            const shuffled = [...dailyChallengeTemplates].sort(() => Math.random() - 0.5);
+            gameState.dailyChallenges = shuffled.slice(0, 3).map(template => ({
+                ...template,
+                progress: 0,
+                completed: false
+            }));
+            
+            gameState.dailyChallengesCompleted = [];
+            gameState.lastDailyChallengeReset = now;
+            
+            showNotification('📅 New Daily Challenges available!', 'var(--accent-primary)');
+        }
+        
+        function updateDailyChallengeProgress(type, amount = 1) {
+            if (!gameState.dailyChallenges) return;
+            
+            for (let challenge of gameState.dailyChallenges) {
+                if (challenge.type === type && !challenge.completed) {
+                    challenge.progress += amount;
+                    
+                    if (challenge.progress >= challenge.goal) {
+                        challenge.progress = challenge.goal;
+                        // Will be claimed manually
+                    }
+                }
+            }
+        }
+        
+        function claimDailyChallenge(index) {
+            const challenge = gameState.dailyChallenges[index];
+            if (!challenge || challenge.completed || challenge.progress < challenge.goal) {
+                showNotification('❌ Challenge not complete!', 'var(--danger)');
+                return;
+            }
+            
+            challenge.completed = true;
+            gameState.money += challenge.reward.money;
+            gameState.achievementPoints += challenge.reward.points;
+            
+            showNotification(`✅ ${challenge.name} Complete! +$${formatNumber(challenge.reward.money)} +${challenge.reward.points} Points!`, 'var(--success)');
+            updateDailyChallengesDisplay();
+            updateAchievementPointsDisplay();
+        }
+        
+        function updateDailyChallengesDisplay() {
+            const container = document.getElementById('dailyChallengesContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            if (!gameState.dailyChallenges || gameState.dailyChallenges.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Generating challenges...</p>';
+                generateDailyChallenges();
+                setTimeout(updateDailyChallengesDisplay, 100);
+                return;
+            }
+            
+            gameState.dailyChallenges.forEach((challenge, index) => {
+                const progress = Math.min(challenge.progress, challenge.goal);
+                const percent = (progress / challenge.goal * 100).toFixed(0);
+                const isComplete = challenge.progress >= challenge.goal;
+                const isClaimed = challenge.completed;
+                
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.style.border = isClaimed ? '2px solid var(--success)' : isComplete ? '2px solid var(--accent-gold)' : '';
+                card.innerHTML = `
+                    <h3 style="color: var(--accent-primary);">${challenge.name}</h3>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">${challenge.desc}</p>
+                    <div class="progress-bar" style="margin: 15px 0;">
+                        <div class="progress-fill" style="width: ${percent}%; background: ${isClaimed ? 'var(--success)' : 'var(--accent-gold)'};">
+                            ${progress} / ${challenge.goal}
+                        </div>
+                    </div>
+                    <div style="margin: 10px 0; color: var(--accent-gold);">
+                        Rewards: $${formatNumber(challenge.reward.money)} + ${challenge.reward.points} Points
+                    </div>
+                    <button class="btn ${isClaimed ? 'btn-decline' : isComplete ? 'btn-accept' : 'btn-decline'}" 
+                            onclick="claimDailyChallenge(${index})" 
+                            ${isClaimed || !isComplete ? 'disabled' : ''}
+                            style="${isClaimed || !isComplete ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                        ${isClaimed ? '✅ Claimed' : isComplete ? '🎁 Claim Reward' : '🔒 Incomplete'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // ===== ACHIEVEMENT SHOP SYSTEM =====
+        
+        const achievementShopItems = [
+            { id: 'perm_luck_1', name: 'Lucky Charm I', desc: '+5% Permanent Luck', cost: 10, bonus: { type: 'luck', value: 0.05 } },
+            { id: 'perm_luck_2', name: 'Lucky Charm II', desc: '+10% Permanent Luck', cost: 25, bonus: { type: 'luck', value: 0.10 }, requires: 'perm_luck_1' },
+            { id: 'perm_luck_3', name: 'Lucky Charm III', desc: '+20% Permanent Luck', cost: 50, bonus: { type: 'luck', value: 0.20 }, requires: 'perm_luck_2' },
+            { id: 'auto_spin_boost', name: 'Speed Boost', desc: '2x Auto-Spin Speed', cost: 30, bonus: { type: 'autoSpinSpeed', value: 2 } },
+            { id: 'pity_reduction', name: 'Pity Helper', desc: 'Pity at 80 instead of 100', cost: 40, bonus: { type: 'pityReduction', value: 20 } },
+            { id: 'starting_money', name: 'Rich Start', desc: 'Start with $50k on Rebirth', cost: 20, bonus: { type: 'startMoney', value: 50000 } },
+            { id: 'xp_boost', name: 'XP Boost', desc: '+50% Battle Pass XP', cost: 35, bonus: { type: 'xpBoost', value: 0.5 } },
+            { id: 'pet_slot_1', name: 'Pet Slot', desc: 'Unlock pet system', cost: 15, bonus: { type: 'petSlot', value: 1 } }
+        ];
+        
+        function updateAchievementShopDisplay() {
+            const container = document.getElementById('achievementShopContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            achievementShopItems.forEach(item => {
+                const owned = gameState.achievementShopPurchases[item.id] || false;
+                const canAfford = gameState.achievementPoints >= item.cost;
+                const meetsRequirement = !item.requires || gameState.achievementShopPurchases[item.requires];
+                const canBuy = !owned && canAfford && meetsRequirement;
+                
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.style.border = owned ? '2px solid var(--success)' : '';
+                card.innerHTML = `
+                    <h3 style="color: ${owned ? 'var(--success)' : 'var(--accent-gold)'};">${item.name}</h3>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">${item.desc}</p>
+                    ${item.requires && !owned ? `<p style="color: var(--warning); font-size: 0.85rem;">Requires: ${achievementShopItems.find(i => i.id === item.requires)?.name}</p>` : ''}
+                    <div style="margin: 15px 0; font-size: 1.2rem; color: var(--accent-gold);">
+                        💰 ${item.cost} Points
+                    </div>
+                    <button class="btn ${owned ? 'btn-decline' : canBuy ? 'btn-accept' : 'btn-decline'}" 
+                            onclick="purchaseAchievementShopItem('${item.id}')" 
+                            ${!canBuy ? 'disabled' : ''}
+                            style="${!canBuy ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                        ${owned ? '✅ Owned' : !meetsRequirement ? '🔒 Locked' : !canAfford ? '❌ Too Expensive' : '💳 Purchase'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function purchaseAchievementShopItem(itemId) {
+            const item = achievementShopItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            if (gameState.achievementShopPurchases[itemId]) {
+                showNotification('Already owned!', 'var(--warning)');
+                return;
+            }
+            
+            if (item.requires && !gameState.achievementShopPurchases[item.requires]) {
+                showNotification('Missing requirement!', 'var(--danger)');
+                return;
+            }
+            
+            if (gameState.achievementPoints < item.cost) {
+                showNotification('Not enough points!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.achievementPoints -= item.cost;
+            gameState.achievementShopPurchases[itemId] = true;
+            
+            // Apply bonus
+            applyAchievementShopBonus(item);
+            
+            showNotification(`✅ Purchased ${item.name}!`, 'var(--success)');
+            updateAchievementShopDisplay();
+            updateAchievementPointsDisplay();
+        }
+        
+        function applyAchievementShopBonus(item) {
+            if (item.bonus.type === 'luck') {
+                gameState.luckMultiplier += item.bonus.value;
+            } else if (item.bonus.type === 'pityReduction') {
+                gameState.pityThreshold = 80;
+            }
+            // Other bonuses applied when checked
+            updateStats();
+        }
+        
+        function updateAchievementPointsDisplay() {
+            const displays = [
+                document.getElementById('achievementPointsDisplay'),
+                document.getElementById('achievementPointsShopDisplay')
+            ];
+            displays.forEach(display => {
+                if (display) display.textContent = gameState.achievementPoints || 0;
+            });
+        }
+        
+        // Award achievement points when achievements are unlocked
+        function awardAchievementPoints(achievementId) {
+            // Award 2 points per achievement
+            gameState.achievementPoints = (gameState.achievementPoints || 0) + 2;
+            updateAchievementPointsDisplay();
+        }
+        
+        // ===== PET SYSTEM =====
+        
+        const availablePets = [
+            { id: 'lucky_dragon', name: '🐉 Lucky Dragon', rarity: 'Legendary', bonus: { type: 'luck', value: 0.10 }, cost: 100000 },
+            { id: 'trade_cat', name: '🐱 Trade Cat', rarity: 'Rare', bonus: { type: 'tradeBonus', value: 0.15 }, cost: 50000 },
+            { id: 'wise_owl', name: '🦉 Wise Owl', rarity: 'Epic', bonus: { type: 'craftDiscount', value: 0.05 }, cost: 75000 },
+            { id: 'loyal_dog', name: '🐕 Loyal Dog', rarity: 'Common', bonus: { type: 'allStats', value: 0.05 }, cost: 25000 },
+            { id: 'rainbow_unicorn', name: '🦄 Rainbow Unicorn', rarity: 'Mythic', bonus: { type: 'rareChance', value: 2 }, cost: 150000 },
+            { id: 'ancient_turtle', name: '🐢 Ancient Turtle', rarity: 'Epic', bonus: { type: 'pityBoost', value: 0.20 }, cost: 80000 },
+            { id: 'mystic_fox', name: '🦊 Mystic Fox', rarity: 'Legendary', bonus: { type: 'fusionLuck', value: 2 }, cost: 120000 },
+            { id: 'golden_phoenix', name: '🦅 Golden Phoenix', rarity: 'Exotic', bonus: { type: 'luck', value: 0.15 }, cost: 200000 },
+            { id: 'space_monkey', name: '🐒 Space Monkey', rarity: 'Rare', bonus: { type: 'xpBoost', value: 0.25 }, cost: 60000 },
+            { id: 'crystal_butterfly', name: '🦋 Crystal Butterfly', rarity: 'Epic', bonus: { type: 'valueBoost', value: 0.10 }, cost: 90000 },
+            { id: 'shadow_wolf', name: '🐺 Shadow Wolf', rarity: 'Mythic', bonus: { type: 'enchantPower', value: 0.20 }, cost: 175000 },
+            { id: 'cosmic_squid', name: '🦑 Cosmic Squid', rarity: 'Celestial', bonus: { type: 'multiSpin', value: 0.10 }, cost: 250000 },
+            { id: 'thunder_lion', name: '🦁 Thunder Lion', rarity: 'Divine', bonus: { type: 'allStats', value: 0.10 }, cost: 300000 },
+            { id: 'void_raven', name: '🦅 Void Raven', rarity: 'Cosmic', bonus: { type: 'luck', value: 0.25 }, cost: 500000 },
+            { id: 'eternal_serpent', name: '🐍 Eternal Serpent', rarity: 'Infinite', bonus: { type: 'allStats', value: 0.15 }, cost: 750000 }
+        ];
+        
+        function updatePetsDisplay() {
+            const container = document.getElementById('petsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            availablePets.forEach(pet => {
+                const owned = gameState.pets.includes(pet.id);
+                const isActive = gameState.activePet === pet.id;
+                const level = gameState.petLevels[pet.id] || 1;
+                const canBuy = !owned && gameState.money >= pet.cost;
+                
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.style.border = isActive ? '3px solid var(--accent-gold)' : owned ? '2px solid var(--success)' : '';
+                card.innerHTML = `
+                    <div style="font-size: 3rem; margin: 10px 0;">${pet.name.split(' ')[0]}</div>
+                    <h3 style="color: ${isActive ? 'var(--accent-gold)' : 'var(--accent-primary)'};">${pet.name.split(' ').slice(1).join(' ')}</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">${pet.rarity}</p>
+                    <div style="margin: 10px 0; color: var(--success);">
+                        ${getBonusDescription(pet.bonus)}
+                    </div>
+                    ${owned ? `<p style="color: var(--accent-gold);">Level ${level}</p>` : ''}
+                    <div style="margin: 10px 0;">
+                        ${owned ? 
+                            `<button class="btn ${isActive ? 'btn-decline' : 'btn-accept'}" onclick="equipPet('${pet.id}')" style="width: 100%; margin-bottom: 5px;">
+                                ${isActive ? '✅ Equipped' : '🔄 Equip'}
+                            </button>` :
+                            `<button class="btn btn-accept" onclick="buyPet('${pet.id}')" ${!canBuy ? 'disabled' : ''} style="width: 100%; ${!canBuy ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                💰 Buy ($${formatNumber(pet.cost)})
+                            </button>`
+                        }
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            
+            updateActivePetDisplay();
+        }
+        
+        function getBonusDescription(bonus) {
+            switch (bonus.type) {
+                case 'luck': return `+${(bonus.value * 100).toFixed(0)}% Luck`;
+                case 'tradeBonus': return `+${(bonus.value * 100).toFixed(0)}% Trade Win Chance`;
+                case 'craftDiscount': return `-${(bonus.value * 100).toFixed(0)}% Craft Cost`;
+                case 'allStats': return `+${(bonus.value * 100).toFixed(0)}% All Stats`;
+                case 'rareChance': return `${bonus.value}x Rare Item Chance`;
+                case 'pityBoost': return `+${(bonus.value * 100).toFixed(0)}% Pity Progress`;
+                case 'fusionLuck': return `${bonus.value}x Fusion Luck`;
+                default: return 'Special Bonus';
+            }
+        }
+        
+        function buyPet(petId) {
+            const pet = availablePets.find(p => p.id === petId);
+            if (!pet) return;
+            
+            if (gameState.pets.includes(petId)) {
+                showNotification('Already owned!', 'var(--warning)');
+                return;
+            }
+            
+            if (gameState.money < pet.cost) {
+                showNotification('Not enough money!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.money -= pet.cost;
+            gameState.pets.push(petId);
+            gameState.petLevels[petId] = 1;
+            gameState.petXP[petId] = 0;
+            
+            // Auto-equip if first pet
+            if (!gameState.activePet) {
+                gameState.activePet = petId;
+                applyPetBonus(pet);
+            }
+            
+            showNotification(`🎉 Pet acquired: ${pet.name}!`, 'var(--success)');
+            updatePetsDisplay();
+            updateStats();
+        }
+        
+        function equipPet(petId) {
+            const pet = availablePets.find(p => p.id === petId);
+            if (!pet || !gameState.pets.includes(petId)) return;
+            
+            // Remove old pet bonus
+            if (gameState.activePet) {
+                const oldPet = availablePets.find(p => p.id === gameState.activePet);
+                if (oldPet) removePetBonus(oldPet);
+            }
+            
+            // Equip new pet
+            gameState.activePet = petId;
+            applyPetBonus(pet);
+            
+            showNotification(`${pet.name} equipped!`, 'var(--success)');
+            updatePetsDisplay();
+            updateStats();
+        }
+        
+        function applyPetBonus(pet) {
+            if (pet.bonus.type === 'luck') {
+                gameState.luckMultiplier += pet.bonus.value;
+            }
+            // Other bonuses checked when needed
+        }
+        
+        function removePetBonus(pet) {
+            if (pet.bonus.type === 'luck') {
+                gameState.luckMultiplier -= pet.bonus.value;
+            }
+        }
+        
+        function updateActivePetDisplay() {
+            const activePet = gameState.activePet ? availablePets.find(p => p.id === gameState.activePet) : null;
+            
+            const displays = {
+                icon: document.getElementById('activePetDisplay'),
+                name: document.getElementById('activePetName'),
+                bonus: document.getElementById('activePetBonus'),
+                level: document.getElementById('activePetLevel')
+            };
+            
+            if (activePet) {
+                if (displays.icon) displays.icon.textContent = activePet.name.split(' ')[0];
+                if (displays.name) displays.name.textContent = activePet.name.split(' ').slice(1).join(' ');
+                if (displays.bonus) displays.bonus.textContent = getBonusDescription(activePet.bonus);
+                if (displays.level) displays.level.textContent = `Level ${gameState.petLevels[activePet.id] || 1}`;
+            } else {
+                if (displays.icon) displays.icon.textContent = '❓';
+                if (displays.name) displays.name.textContent = 'No pet equipped';
+                if (displays.bonus) displays.bonus.textContent = 'Buy a pet to get bonuses!';
+                if (displays.level) displays.level.textContent = 'Level: 0';
+            }
+        }
+        
+        // ===== PRESTIGE SYSTEM =====
+        
+        const prestigeShopItems = [
+            { id: 'start_2x_luck', name: 'Lucky Start', desc: 'Start with 2x Luck', cost: 5 },
+            { id: 'start_autospin', name: 'Auto Start', desc: 'Start with Auto-Spin', cost: 10 },
+            { id: 'start_100k', name: 'Rich Start', desc: 'Start with $100,000', cost: 8 },
+            { id: 'keep_pets', name: 'Pet Keeper', desc: 'Keep all pets on Prestige', cost: 15 },
+            { id: 'double_points', name: 'Point Doubler', desc: '2x Achievement Points', cost: 20 }
+        ];
+        
+        function updatePrestigeDisplay() {
+            if (!document.getElementById('prestigeLevelDisplay')) return;
+            
+            document.getElementById('prestigeLevelDisplay').textContent = gameState.prestigeLevel || 0;
+            document.getElementById('prestigePointsDisplay').textContent = gameState.prestigePoints || 0;
+            
+            // Check requirements
+            const hasRebirths = (gameState.rebirths || 0) >= 10;
+            const hasMoney = gameState.money >= 1000000000; // 1 billion
+            const hasPrimordial = Object.values(gameState.inventory).some(item => {
+                const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                return rarityIndex >= 13 && item.count > 0; // Primordial is index 13
+            });
+            
+            document.getElementById('prestigeRebirthReq').textContent = hasRebirths ? '✅ Met' : '❌ Not met';
+            document.getElementById('prestigeRebirthReq').style.color = hasRebirths ? 'var(--success)' : 'var(--danger)';
+            
+            document.getElementById('prestigeMoneyReq').textContent = hasMoney ? '✅ Met' : '❌ Not met';
+            document.getElementById('prestigeMoneyReq').style.color = hasMoney ? 'var(--success)' : 'var(--danger)';
+            
+            document.getElementById('prestigeItemReq').textContent = hasPrimordial ? '✅ Met' : '❌ Not met';
+            document.getElementById('prestigeItemReq').style.color = hasPrimordial ? 'var(--success)' : 'var(--danger)';
+            
+            const canPrestige = hasRebirths && hasMoney && hasPrimordial;
+            const button = document.getElementById('prestigeButton');
+            button.disabled = !canPrestige;
+            button.style.opacity = canPrestige ? '1' : '0.5';
+            button.style.cursor = canPrestige ? 'pointer' : 'not-allowed';
+            
+            updatePrestigeShopDisplay();
+        }
+        
+        function updatePrestigeShopDisplay() {
+            const container = document.getElementById('prestigeShopContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            prestigeShopItems.forEach(item => {
+                const owned = gameState.prestigeShopPurchases[item.id] || false;
+                const canBuy = !owned && (gameState.prestigePoints >= item.cost);
+                
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.style.border = owned ? '2px solid var(--accent-gold)' : '';
+                card.innerHTML = `
+                    <h3 style="color: var(--accent-gold);">${item.name}</h3>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">${item.desc}</p>
+                    <div style="margin: 15px 0; font-size: 1.2rem; color: var(--accent-primary);">
+                        ⭐ ${item.cost} Points
+                    </div>
+                    <button class="btn ${owned ? 'btn-decline' : canBuy ? 'btn-accept' : 'btn-decline'}" 
+                            onclick="buyPrestigeItem('${item.id}')" 
+                            ${!canBuy ? 'disabled' : ''}
+                            style="${!canBuy ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                        ${owned ? '✅ Owned' : canBuy ? '💳 Purchase' : '🔒 Locked'}
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        function buyPrestigeItem(itemId) {
+            const item = prestigeShopItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            if (gameState.prestigeShopPurchases[itemId]) {
+                showNotification('Already owned!', 'var(--warning)');
+                return;
+            }
+            
+            if (gameState.prestigePoints < item.cost) {
+                showNotification('Not enough prestige points!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.prestigePoints -= item.cost;
+            gameState.prestigeShopPurchases[itemId] = true;
+            
+            showNotification(`⭐ Purchased: ${item.name}!`, 'var(--success)');
+            updatePrestigeDisplay();
+        }
+        
+        function performPrestige() {
+            const hasRebirths = (gameState.rebirths || 0) >= 10;
+            const hasMoney = gameState.money >= 1000000000;
+            const hasPrimordial = Object.values(gameState.inventory).some(item => {
+                const rarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                return rarityIndex >= 13 && item.count > 0; // Primordial is index 13
+            });
+            
+            if (!hasRebirths || !hasMoney || !hasPrimordial) {
+                showNotification('❌ Requirements not met!', 'var(--danger)');
+                return;
+            }
+            
+            if (!confirm(`⭐ PRESTIGE ⭐\n\nThis will reset EVERYTHING except:\n- Prestige Points\n- Prestige Shop\n- Pets (if you bought Pet Keeper)\n\nYou will gain ${5 + (gameState.prestigeLevel || 0)} Prestige Points.\n\nContinue?`)) {
+                return;
+            }
+            
+            // Calculate prestige points
+            const pointsGained = 5 + (gameState.prestigeLevel || 0);
+            
+            // Save what we keep
+            const keepPets = gameState.prestigeShopPurchases.keep_pets;
+            const savedPets = keepPets ? [...gameState.pets] : [];
+            const savedActivePet = keepPets ? gameState.activePet : null;
+            const savedPetLevels = keepPets ? {...gameState.petLevels} : {};
+            const savedPrestigePoints = (gameState.prestigePoints || 0) + pointsGained;
+            const savedPrestigeLevel = (gameState.prestigeLevel || 0) + 1;
+            const savedPrestigeShop = {...gameState.prestigeShopPurchases};
+            
+            // Reset most of game state
+            Object.assign(gameState, {
+                inventory: {},
+                totalValue: 0,
+                money: gameState.prestigeShopPurchases.start_100k ? 100000 : 0,
+                totalSpins: 0,
+                luckMultiplier: gameState.prestigeShopPurchases.start_2x_luck ? 2.0 : 1.0,
+                tradeWins: 0,
+                tradeLosses: 0,
+                battlePassXP: 0,
+                battlePassTier: 0,
+                achievements: {},
+                upgrades: {
+                    spinSpeed: 0,
+                    popularity: 0,
+                    luckBoost: 0,
+                    autoSpin: gameState.prestigeShopPurchases.start_autospin ? 1 : 0,
+                    tradeInsight: 0,
+                    valueBoost: 0,
+                    craftingMastery: 0,
+                    enchantPower: 0,
+                    multiSpin: 0,
+                    shopDiscount: 0,
+                    rarityBoost: 0,
+                    eventLuck: 0,
+                    xpBoost: 0,
+                    sellPrice: 0,
+                    questSpeed: 0,
+                    mysteryBox: 0,
+                    autoFusion: 0
+                },
+                rebirths: 0,
+                permanentLuckBoost: 1.0,
+                craftCount: 0,
+                enchantSuccess: 0,
+                enchantFails: 0,
+                fusionCount: 0,
+                itemsFromEvents: 0,
+                lifetimeMoneyEarned: 0,
+                lifetimeMoneySpent: 0,
+                biggestTradeWin: 0,
+                biggestTradeLoss: 0,
+                rarityCounts: {},
+                pityCounter: 0,
+                collectionBonuses: {
+                    discoComplete: false,
+                    galacticComplete: false,
+                    glitchComplete: false,
+                    fullmoonComplete: false,
+                    bloodmoonComplete: false,
+                    weatherComplete: false,
+                    christmasComplete: false
+                },
+                rarityMilestones: {},
+                achievementPoints: 0,
+                achievementShopPurchases: {},
+                dailyChallenges: [],
+                dailyChallengesCompleted: [],
+                favoriteItems: [],
+                pets: savedPets,
+                activePet: savedActivePet,
+                petLevels: savedPetLevels,
+                prestigeLevel: savedPrestigeLevel,
+                prestigePoints: savedPrestigePoints,
+                prestigeShopPurchases: savedPrestigeShop
+            });
+            
+            showNotification(`⭐ PRESTIGE COMPLETE! Level ${savedPrestigeLevel}! +${pointsGained} Points!`, 'var(--success)');
+            
+            // Refresh everything
+            updateStats();
+            updateInventory();
+            initAchievements();
+            updatePrestigeDisplay();
+            updatePetsDisplay();
+            switchTab('prestige');
+            saveGame();
+        }
+        
+        // ===== FEATURE 1: EXPORT/IMPORT SAVES =====
+        
+        function exportSaveData() {
+            try {
+                const saveData = JSON.stringify(gameState);
+                const encoded = btoa(saveData);
+                
+                // Create a modal to show the code
+                const modal = document.createElement('div');
+                modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;';
+                modal.innerHTML = `
+                    <div style="background: var(--bg-medium); padding: 30px; border-radius: 15px; max-width: 600px; width: 100%; border: 2px solid var(--accent-primary);">
+                        <h2 style="color: var(--accent-primary); margin-bottom: 20px;">📤 Export Save Code</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Copy this code to backup your progress:</p>
+                        <textarea id="saveCodeExport" readonly style="width: 100%; height: 150px; padding: 15px; background: var(--bg-dark); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; font-family: monospace; font-size: 0.85rem; resize: none;">${encoded}</textarea>
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button onclick="copyExportCode()" class="btn btn-accept" style="flex: 1;">📋 Copy to Clipboard</button>
+                            <button onclick="closeModal()" class="btn btn-decline" style="flex: 1;">Close</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+                window.currentModal = modal;
+                
+                // Auto-select text
+                setTimeout(() => {
+                    document.getElementById('saveCodeExport').select();
+                }, 100);
+            } catch (error) {
+                showNotification('❌ Error exporting save!', 'var(--danger)');
+                console.error('Export error:', error);
+            }
+        }
+        
+        function showImportDialog() {
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;';
+            modal.innerHTML = `
+                <div style="background: var(--bg-medium); padding: 30px; border-radius: 15px; max-width: 600px; width: 100%; border: 2px solid var(--accent-primary);">
+                    <h2 style="color: var(--accent-primary); margin-bottom: 20px;">📥 Import Save Code</h2>
+                    <p style="color: var(--warning); margin-bottom: 15px;">⚠️ This will OVERWRITE your current progress!</p>
+                    <textarea id="saveCodeImport" placeholder="Paste your save code here..." style="width: 100%; height: 150px; padding: 15px; background: var(--bg-dark); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; font-family: monospace; font-size: 0.85rem; resize: none;"></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button onclick="importSaveData()" class="btn btn-accept" style="flex: 1;">✅ Import</button>
+                        <button onclick="closeModal()" class="btn btn-decline" style="flex: 1;">Cancel</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+            window.currentModal = modal;
+        }
+        
+        function importSaveData() {
+            const code = document.getElementById('saveCodeImport').value.trim();
+            if (!code) {
+                showNotification('❌ Please paste a save code!', 'var(--danger)');
+                return;
+            }
+            
+            try {
+                const decoded = atob(code);
+                const loadedState = JSON.parse(decoded);
+                
+                // Validate it's actually a save file
+                if (!loadedState.inventory || !loadedState.money === undefined) {
+                    showNotification('❌ Invalid save code!', 'var(--danger)');
+                    return;
+                }
+                
+                // Load the save
+                Object.assign(gameState, loadedState);
+                
+                // Ensure backward compatibility
+                if (gameState.favoriteItems === undefined) gameState.favoriteItems = [];
+                
+                closeModal();
+                showNotification('✅ Save imported successfully!', 'var(--success)');
+                
+                // Refresh display
+                updateStats();
+                updateInventory();
+                initAchievements();
+                updateRebirthDisplay();
+                
+                // Auto-save the imported state
+                saveGame();
+            } catch (error) {
+                showNotification('❌ Error importing save!', 'var(--danger)');
+                console.error('Import error:', error);
+            }
+        }
+        
+        function copyExportCode() {
+            const textarea = document.getElementById('saveCodeExport');
+            textarea.select();
+            document.execCommand('copy');
+            showNotification('📋 Copied to clipboard!', 'var(--success)');
+        }
+        
+        function closeModal() {
+            if (window.currentModal) {
+                window.currentModal.remove();
+                window.currentModal = null;
+            }
+        }
+        
+        // ===== FEATURE 2: BULK SELL BY RARITY =====
+        
+        function bulkSellByRarity() {
+            const raritySelect = document.getElementById('bulkSellRarity');
+            const selectedRarity = raritySelect.value;
+            
+            if (!selectedRarity) {
+                showNotification('❌ Please select a rarity!', 'var(--danger)');
+                return;
+            }
+            
+            // Get confirmation
+            if (!gameState.settings || gameState.settings.confirmSell !== false) {
+                if (!confirm(`Sell ALL ${selectedRarity} items for 70% value?`)) {
+                    return;
+                }
+            }
+            
+            let soldCount = 0;
+            let totalMoney = 0;
+            
+            // Sell all items of this rarity (except favorited)
+            for (const [key, item] of Object.entries(gameState.inventory)) {
+                if (item.rarity === selectedRarity && item.count > 0) {
+                    // Skip if favorited
+                    if (gameState.favoriteItems && gameState.favoriteItems.includes(key)) {
+                        continue;
+                    }
+                    
+                    let sellMultiplier = 0.7;
+                    
+                    // Check for Money Multi enchantment
+                    if (item.enchantments && item.enchantments.includes('Money Multi')) {
+                        sellMultiplier += 0.2;
+                    }
+                    
+                    const sellPrice = Math.floor(item.value * sellMultiplier * item.count);
+                    gameState.money += sellPrice;
+                    gameState.lifetimeMoneyEarned += sellPrice;
+                    gameState.totalValue -= item.value * item.count;
+                    totalMoney += sellPrice;
+                    soldCount += item.count;
+                    item.count = 0;
+                }
+            }
+            
+            if (soldCount > 0) {
+                showNotification(`💰 Sold ${soldCount} ${selectedRarity} items for $${formatNumber(totalMoney)}!`, 'var(--success)');
+                updateStats();
+                updateInventory();
+            } else {
+                showNotification(`No ${selectedRarity} items to sell!`, 'var(--text-secondary)');
+            }
+            
+            // Reset selector
+            raritySelect.value = '';
+        }
+        
+        // ===== FEATURE 3: CRAFT MAX =====
+        
+        function craftMax(recipeName) {
+            const recipe = recipes.find(r => r.name === recipeName);
+            if (!recipe) return;
+            
+            // Calculate max possible crafts
+            let maxCrafts = Infinity;
+            
+            for (const [rarity, requiredCount] of Object.entries(recipe.requires)) {
+                const availableItems = Object.values(gameState.inventory).filter(item => 
+                    item.rarity === rarity && item.count > 0
+                );
+                const availableCount = availableItems.reduce((sum, item) => sum + item.count, 0);
+                const possibleCrafts = Math.floor(availableCount / requiredCount);
+                maxCrafts = Math.min(maxCrafts, possibleCrafts);
+            }
+            
+            if (maxCrafts === 0 || maxCrafts === Infinity) {
+                showNotification('❌ Not enough materials!', 'var(--danger)');
+                return;
+            }
+            
+            // Confirm if crafting more than 10
+            if (maxCrafts > 10) {
+                if (!confirm(`Craft ${maxCrafts}x ${recipeName}?`)) {
+                    return;
+                }
+            }
+            
+            // Perform crafts
+            for (let i = 0; i < maxCrafts; i++) {
+                craftItem(recipeName, true); // Pass true to skip notifications
+            }
+            
+            showNotification(`🔨 Crafted ${maxCrafts}x ${recipeName}!`, 'var(--success)');
+            updateStats();
+            updateInventory();
+            
+            // Refresh crafting grid
+            document.getElementById('craftingGrid').innerHTML = '';
+            initCrafting();
+        }
+        
+        // ===== FEATURE 4: FAVORITE ITEMS =====
+        
+        function toggleFavorite(itemKey) {
+            if (!gameState.favoriteItems) gameState.favoriteItems = [];
+            
+            const index = gameState.favoriteItems.indexOf(itemKey);
+            if (index === -1) {
+                gameState.favoriteItems.push(itemKey);
+                showNotification(`⭐ ${itemKey} favorited (protected from selling)`, 'var(--accent-gold)');
+            } else {
+                gameState.favoriteItems.splice(index, 1);
+                showNotification(`Unfavorited ${itemKey}`, 'var(--text-secondary)');
+            }
+            
+            updateInventory();
+        }
+        
+        // ===== FEATURE 5: CONFIRMATION DIALOGS =====
+        // This is integrated into existing functions via checks
+        
         // Initialize game
         // Try to auto-load save file on startup
         const hasSaveFile = localStorage.getItem('rngTraderSave');
@@ -6935,6 +8186,26 @@
             }
         }
         
+        // Ensure new features exist (backward compatibility)
+        if (gameState.favoriteItems === undefined) gameState.favoriteItems = [];
+        if (gameState.inventorySort === undefined) gameState.inventorySort = 'rarity';
+        if (gameState.inventoryFilter === undefined) gameState.inventoryFilter = 'all';
+        if (gameState.tutorialStep === undefined) gameState.tutorialStep = 0;
+        if (gameState.tutorialComplete === undefined) gameState.tutorialComplete = false;
+        if (gameState.tutorialSkipped === undefined) gameState.tutorialSkipped = false;
+        if (gameState.dailyChallenges === undefined) gameState.dailyChallenges = [];
+        if (gameState.dailyChallengesCompleted === undefined) gameState.dailyChallengesCompleted = [];
+        if (gameState.lastDailyChallengeReset === undefined) gameState.lastDailyChallengeReset = 0;
+        if (gameState.achievementPoints === undefined) gameState.achievementPoints = 0;
+        if (gameState.achievementShopPurchases === undefined) gameState.achievementShopPurchases = {};
+        if (gameState.pets === undefined) gameState.pets = [];
+        if (gameState.activePet === undefined) gameState.activePet = null;
+        if (gameState.petLevels === undefined) gameState.petLevels = {};
+        if (gameState.petXP === undefined) gameState.petXP = {};
+        if (gameState.prestigeLevel === undefined) gameState.prestigeLevel = 0;
+        if (gameState.prestigePoints === undefined) gameState.prestigePoints = 0;
+        if (gameState.prestigeShopPurchases === undefined) gameState.prestigeShopPurchases = {};
+        
         updateStats();
         initAchievements();
         initBattlePass();
@@ -6945,6 +8216,15 @@
         updateQuestDisplay();
         checkDailyLogin();
         updateStatistics();
+        
+        // Initialize new systems
+        generateDailyChallenges();
+        updateAchievementPointsDisplay();
+        
+        // Start tutorial for new players
+        if (!gameState.tutorialComplete && !gameState.tutorialSkipped && gameState.totalSpins === 0) {
+            setTimeout(() => startTutorial(), 1000);
+        }
         
         // Mobile welcome message
         if (isMobileDevice() && !localStorage.getItem('mobileWelcomeShown')) {
