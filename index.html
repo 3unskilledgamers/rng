@@ -1427,6 +1427,43 @@
             transform: scale(0.98);
             transition: transform 0.1s;
         }
+        
+        @keyframes boss-float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes screen-shake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-10px, 0); }
+            20%, 40%, 60%, 80% { transform: translate(10px, 0); }
+        }
+        
+        @keyframes fire-particle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(random() * 200px - 100px), calc(random() * 200px - 100px)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes primordial-explosion {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1485,6 +1522,8 @@
             <button class="tab-button" onclick="switchTab('battlepass')">🎫 Battle Pass</button>
             <button class="tab-button" onclick="switchTab('rebirth')">♻️ Rebirth</button>
             <button class="tab-button" onclick="switchTab('events')">🎄 Events</button>
+            <button class="tab-button" onclick="switchTab('bosses')">👹 Bosses</button>
+            <button class="tab-button" onclick="switchTab('artifacts')">💎 Artifacts</button>
             <button class="tab-button" onclick="switchTab('dailies')">📅 Daily</button>
             <button class="tab-button" onclick="switchTab('achievementshop')">🏪 A-Shop</button>
             <button class="tab-button" onclick="switchTab('pets')">🐉 Pets</button>
@@ -1607,7 +1646,13 @@
                 </button>
             </div>
             
-            <button class="btn btn-decline" onclick="sellAllItems()" style="margin: 10px 0;">💰 Sell All Items (70% value)</button>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; justify-content: center;">
+                <button class="btn btn-decline" onclick="sellAllItems()" style="padding: 10px 20px;">💰 Sell All (70% value)</button>
+                <button class="btn btn-decline" onclick="sellAllNonFavorited()" style="padding: 10px 20px;">💰 Sell Non-Favorited</button>
+                <button class="btn btn-warning" onclick="favoriteAllByRarity()" style="padding: 10px 20px;">⭐ Favorite by Rarity</button>
+                <button class="btn btn-warning" onclick="unfavoriteAll()" style="padding: 10px 20px;">✖️ Unfavorite All</button>
+            </div>
+            
             <div class="inventory-grid" id="inventoryGrid"></div>
         </div>
         
@@ -1713,7 +1758,8 @@
                     <h3 style="color: var(--accent-primary); margin-bottom: 15px;">How Fusion Works</h3>
                     <p style="margin: 10px 0;">• Select 3 items of the <strong>same rarity</strong></p>
                     <p style="margin: 10px 0;">• Items will be consumed in the fusion process</p>
-                    <p style="margin: 10px 0;">• You'll receive 1 item of the <strong>next rarity tier</strong></p>
+                    <p style="margin: 10px 0;">• You'll receive 1 <strong>random item of the SAME rarity</strong></p>
+                    <p style="margin: 10px 0; color: var(--accent-primary);">✨ Great for re-rolling bad items!</p>
                     <p style="margin: 10px 0; color: var(--warning);">⚠️ This process cannot be undone!</p>
                 </div>
                 
@@ -1924,6 +1970,66 @@
             </div>
         </div>
         
+        <!-- Boss Battles Tab -->
+        <div id="bosses" class="tab-content">
+            <h2>👹 Boss Battles</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Fight powerful bosses for legendary rewards!</p>
+            
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <!-- Boss Statistics -->
+                <div class="stat-card" style="margin-bottom: 20px; background: linear-gradient(135deg, var(--bg-medium), var(--bg-dark));">
+                    <h3 style="color: var(--accent-primary);">📊 Your Boss Stats</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Bosses Defeated</div>
+                            <div style="color: var(--accent-gold); font-size: 1.5rem; font-weight: bold;" id="totalBossesDefeated">0</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Total Damage Dealt</div>
+                            <div style="color: var(--danger); font-size: 1.5rem; font-weight: bold;" id="totalBossDamage">0</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Best Rewards</div>
+                            <div style="color: var(--success); font-size: 1.5rem; font-weight: bold;" id="bestBossReward">$0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Boss List -->
+                <div id="bossesContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+                    <!-- Bosses will be rendered here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Artifacts Tab -->
+        <div id="artifacts" class="tab-content">
+            <h2>💎 Legendary Artifacts</h2>
+            <p style="margin: 10px 0; color: var(--text-secondary);">Collect powerful artifacts for permanent bonuses!</p>
+            
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <!-- Artifact Collection Stats -->
+                <div class="stat-card" style="margin-bottom: 20px; background: linear-gradient(135deg, var(--bg-medium), var(--bg-dark));">
+                    <h3 style="color: var(--accent-gold);">🏆 Collection Progress</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Artifacts Owned</div>
+                            <div style="color: var(--accent-gold); font-size: 1.8rem; font-weight: bold;"><span id="artifactsOwned">0</span> / 15</div>
+                        </div>
+                        <div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">Total Power</div>
+                            <div style="color: var(--accent-primary); font-size: 1.8rem; font-weight: bold;" id="totalArtifactPower">0%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Artifact List by Tier -->
+                <div id="artifactsContainer">
+                    <!-- Artifacts will be rendered here by tier -->
+                </div>
+            </div>
+        </div>
+        
         <!-- Daily Challenges Tab -->
         <div id="dailies" class="tab-content">
             <h2>📅 Daily Challenges</h2>
@@ -2023,6 +2129,10 @@
                 <div class="recipe-card">
                     <h3 style="color: var(--accent-primary);">Notifications</h3>
                     <div style="margin: 15px 0;">
+                        <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
+                            <input type="checkbox" id="settingSoundEffects" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
+                            <span>🔊 Sound Effects</span>
+                        </label>
                         <label style="display: flex; align-items: center; margin: 10px 0; cursor: pointer;">
                             <input type="checkbox" id="settingTradeNotif" onchange="updateSettings()" checked style="width: 20px; height: 20px; margin-right: 10px;">
                             <span>Show Trade Notifications</span>
@@ -2131,6 +2241,23 @@
                             <input type="checkbox" id="settingLargeText" onchange="updateSettings()" style="width: 20px; height: 20px; margin-right: 10px;">
                             <span>Large Text Mode</span>
                         </label>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <h3 style="color: var(--accent-primary);">⌨️ Keyboard Shortcuts</h3>
+                    <div style="margin: 15px 0; line-height: 2;">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 10px; color: var(--text-secondary); font-size: 0.9rem;">
+                            <span style="color: var(--accent-gold); font-weight: bold;">SPACE</span><span>Spin the wheel</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">1-9</span><span>Switch tabs (1=Inventory, 2=Shop, etc.)</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">S</span><span>Shop tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">I</span><span>Inventory tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">B</span><span>Bosses tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">A</span><span>Artifacts tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">P</span><span>Prestige tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">R</span><span>Rebirth tab</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">ESC</span><span>Close modals</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -2437,6 +2564,7 @@
             notificationQueue: [],
             isShowingNotification: false,
             settings: {
+                soundEffects: true,
                 showTradeNotifications: true,
                 showExpiredNotifications: true,
                 showSpinResults: true,
@@ -4031,17 +4159,37 @@
                     overlay.appendChild(wisp);
                 }
             } else if (rarityName === 'Primordial') {
-                // Fire explosion
+                // ENHANCED Fire explosion with screen shake
                 const explosion = document.createElement('div');
                 explosion.style.position = 'absolute';
-                explosion.style.width = '100px';
-                explosion.style.height = '100px';
+                explosion.style.width = '200px';
+                explosion.style.height = '200px';
                 explosion.style.left = '50%';
                 explosion.style.top = '50%';
                 explosion.style.transform = 'translate(-50%, -50%)';
-                explosion.style.background = 'radial-gradient(circle, rgba(255,107,53,0.8), rgba(255,0,0,0.4), transparent)';
-                explosion.style.animation = 'primordial-explosion 2s ease-out';
+                explosion.style.background = 'radial-gradient(circle, rgba(255,200,0,1), rgba(255,107,53,0.9), rgba(255,0,0,0.6), transparent)';
+                explosion.style.animation = 'primordial-explosion 3s ease-out';
+                explosion.style.boxShadow = '0 0 100px 50px rgba(255,107,53,0.8)';
                 overlay.appendChild(explosion);
+                
+                // Fire particles
+                for (let i = 0; i < 80; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'absolute';
+                    particle.style.width = '8px';
+                    particle.style.height = '8px';
+                    particle.style.borderRadius = '50%';
+                    particle.style.background = i % 2 === 0 ? '#ff6b35' : '#ff0000';
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.animation = 'fire-particle 2s ease-out';
+                    particle.style.animationDelay = (Math.random() * 0.3) + 's';
+                    overlay.appendChild(particle);
+                }
+                
+                // Screen shake
+                document.body.style.animation = 'screen-shake 0.5s ease-out';
+                setTimeout(() => { document.body.style.animation = ''; }, 500);
             } else if (rarityName === 'Omega') {
                 // Black hole vortex
                 const vortex = document.createElement('div');
@@ -4632,6 +4780,11 @@
             const rarityIndex = rarities.findIndex(r => r.name === rarity.name);
             if (rarityIndex >= 9) { // Index 9 is Cosmic
                 triggerUltraRareAnimation(rarity.name, rarity.color, name, value);
+                playSound('ultra_rare');
+            } else if (rarityIndex >= 4) { // Legendary+
+                playSound('rare');
+            } else {
+                playSound('spin');
             }
             
             // Display result
@@ -4659,6 +4812,18 @@
             document.getElementById('luckMultiplier').textContent = combinedLuck.toFixed(1) + 'x';
             document.getElementById('tradeWins').textContent = formatNumber(gameState.tradeWins);
             updatePityDisplay();
+            
+            // Update boss display if on bosses tab (so buttons update when money changes)
+            const bossesTab = document.getElementById('bosses');
+            if (bossesTab && bossesTab.classList.contains('active')) {
+                updateBossesDisplay();
+            }
+            
+            // Update artifacts display if on artifacts tab
+            const artifactsTab = document.getElementById('artifacts');
+            if (artifactsTab && artifactsTab.classList.contains('active')) {
+                updateArtifactsDisplay();
+            }
         }
         
         function updatePityDisplay() {
@@ -4874,6 +5039,7 @@
             
             const sellPrice = Math.floor(item.value * sellMultiplier);
             gameState.money += sellPrice;
+            playSound('coin');
             gameState.lifetimeMoneyEarned = (gameState.lifetimeMoneyEarned || 0) + sellPrice;
             gameState.totalValue -= item.value;
             item.count--;
@@ -5695,6 +5861,7 @@
                     // Show achievement notification if enabled
                     if (gameState.settings.showAchievementNotifications) {
                         showNotification(`🏆 Achievement Unlocked: ${achievement.name}!`, 'var(--accent-gold)');
+                        playSound('achievement');
                     }
                 }
                 
@@ -6094,6 +6261,15 @@
         }
         
         function addToFusionSlot(itemKey, item) {
+            // Check how many of this item are already in fusion slots
+            const alreadyInSlots = fusionSlots.filter(slot => slot && slot.key === itemKey).length;
+            
+            // Check if we have enough of this item
+            if (alreadyInSlots >= item.count) {
+                showNotification(`You only have ${item.count} of this item! Can't add more to fusion.`, 'var(--danger)');
+                return;
+            }
+            
             // Find first empty slot
             const emptySlotIndex = fusionSlots.findIndex(slot => slot === null);
             if (emptySlotIndex === -1) {
@@ -6171,14 +6347,9 @@
                 return;
             }
             
-            // Find next rarity tier
+            // Get the current rarity (NOT next rarity - we stay at same rarity!)
             const currentRarityIndex = rarities.findIndex(r => r.name === rarity);
-            if (currentRarityIndex >= rarities.length - 1) {
-                showNotification('Cannot fuse items of this rarity!', 'var(--danger)');
-                return;
-            }
-            
-            const nextRarity = rarities[currentRarityIndex + 1];
+            const currentRarity = rarities[currentRarityIndex];
             
             // Remove items from inventory
             fusionSlots.forEach(slot => {
@@ -6192,12 +6363,13 @@
                 }
             });
             
-            // Create new item
-            const newItemName = generateItemName(nextRarity);
-            addItemToInventory(newItemName, nextRarity);
+            // Create new RANDOM item of SAME rarity (not next tier!)
+            const newItemName = generateItemName(currentRarity);
+            addItemToInventory(newItemName, currentRarity);
             
             gameState.fusionCount++;
-            showNotification(`⚗️ FUSION SUCCESS! Created ${newItemName}!`, nextRarity.color);
+            playSound('fusion');
+            showNotification(`⚗️ FUSION SUCCESS! Created ${newItemName} (${rarity})!`, currentRarity.color);
             
             // Clear slots
             clearFusionSlots();
@@ -6421,6 +6593,7 @@
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
                 gameState.settings = data.settings || {
+                    soundEffects: true,
                     showTradeNotifications: true,
                     showExpiredNotifications: true,
                     showSpinResults: true,
@@ -6429,6 +6602,9 @@
                     showAutoSaveNotifications: false
                 };
                 // Ensure new setting exists in old saves
+                if (gameState.settings.soundEffects === undefined) {
+                    gameState.settings.soundEffects = true;
+                }
                 if (gameState.settings.showAutoSaveNotifications === undefined) {
                     gameState.settings.showAutoSaveNotifications = false;
                 }
@@ -6452,6 +6628,8 @@
                 updateRebirthDisplay();
                 refreshQuests();
                 updateQuestDisplay();
+                updateBossesDisplay();
+                updateArtifactsDisplay();
                 checkAchievements();
                 
                 const saveDate = data.saveDate ? new Date(data.saveDate) : 'Unknown';
@@ -6811,6 +6989,7 @@
         }
         
         function updateSettings() {
+            gameState.settings.soundEffects = document.getElementById('settingSoundEffects').checked;
             gameState.settings.showTradeNotifications = document.getElementById('settingTradeNotif').checked;
             gameState.settings.showExpiredNotifications = document.getElementById('settingExpiredNotif').checked;
             gameState.settings.showSpinResults = document.getElementById('settingSpinNotif').checked;
@@ -7043,6 +7222,7 @@
             }
             if (tabName === 'settings') {
                 // Load current settings
+                document.getElementById('settingSoundEffects').checked = gameState.settings.soundEffects !== false;
                 document.getElementById('settingTradeNotif').checked = gameState.settings.showTradeNotifications;
                 document.getElementById('settingExpiredNotif').checked = gameState.settings.showExpiredNotifications;
                 document.getElementById('settingSpinNotif').checked = gameState.settings.showSpinResults;
@@ -7075,6 +7255,12 @@
             }
             if (tabName === 'prestige') {
                 updatePrestigeDisplay();
+            }
+            if (tabName === 'bosses') {
+                updateBossesDisplay();
+            }
+            if (tabName === 'artifacts') {
+                updateArtifactsDisplay();
             }
             if (tabName === 'admin') {
                 if (gameState.adminUnlocked) {
@@ -8014,14 +8200,110 @@
             
             if (soldCount > 0) {
                 showNotification(`💰 Sold ${soldCount} ${selectedRarity} items for $${formatNumber(totalMoney)}!`, 'var(--success)');
+                playSound('coin');
                 updateStats();
                 updateInventory();
             } else {
                 showNotification(`No ${selectedRarity} items to sell!`, 'var(--text-secondary)');
             }
+        }
+        
+        function sellAllNonFavorited() {
+            // Get confirmation
+            if (!gameState.settings || gameState.settings.confirmSell !== false) {
+                if (!confirm('Sell ALL non-favorited items for 70% value?')) {
+                    return;
+                }
+            }
             
-            // Reset selector
-            raritySelect.value = '';
+            let soldCount = 0;
+            let totalMoney = 0;
+            
+            // Sell all items that are NOT favorited
+            for (const [key, item] of Object.entries(gameState.inventory)) {
+                if (item.count > 0) {
+                    // Skip if favorited
+                    if (gameState.favoriteItems && gameState.favoriteItems.includes(key)) {
+                        continue;
+                    }
+                    
+                    let sellMultiplier = 0.7;
+                    
+                    // Check for Money Multi enchantment
+                    if (item.enchantments && item.enchantments.includes('Money Multi')) {
+                        sellMultiplier += 0.2;
+                    }
+                    
+                    const sellPrice = Math.floor(item.value * sellMultiplier * item.count);
+                    gameState.money += sellPrice;
+                    gameState.lifetimeMoneyEarned += sellPrice;
+                    gameState.totalValue -= item.value * item.count;
+                    totalMoney += sellPrice;
+                    soldCount += item.count;
+                    item.count = 0;
+                }
+            }
+            
+            if (soldCount > 0) {
+                showNotification(`💰 Sold ${soldCount} non-favorited items for $${formatNumber(totalMoney)}!`, 'var(--success)');
+                playSound('coin');
+                updateStats();
+                updateInventory();
+            } else {
+                showNotification('No non-favorited items to sell!', 'var(--text-secondary)');
+            }
+        }
+        
+        function favoriteAllByRarity() {
+            const minRarity = prompt('Favorite all items of which rarity and above?\n\nOptions:\n0 = Common\n1 = Uncommon\n2 = Rare\n3 = Epic\n4 = Legendary\n5 = Mythic\n6 = Exotic\n7 = Celestial\n8 = Divine\n9 = Cosmic\n10 = Infinite\n11 = Transcendent\n12 = Ethereal\n13 = Primordial+', '4');
+            
+            if (minRarity === null) return;
+            
+            const minIndex = parseInt(minRarity);
+            if (isNaN(minIndex) || minIndex < 0 || minIndex >= rarities.length) {
+                showNotification('❌ Invalid rarity index!', 'var(--danger)');
+                return;
+            }
+            
+            if (!gameState.favoriteItems) gameState.favoriteItems = [];
+            
+            let favoritedCount = 0;
+            
+            for (const [key, item] of Object.entries(gameState.inventory)) {
+                if (item.count > 0) {
+                    const itemRarityIndex = rarities.findIndex(r => r.name === item.rarity);
+                    if (itemRarityIndex >= minIndex && !gameState.favoriteItems.includes(key)) {
+                        gameState.favoriteItems.push(key);
+                        favoritedCount++;
+                    }
+                }
+            }
+            
+            if (favoritedCount > 0) {
+                showNotification(`⭐ Favorited ${favoritedCount} items (${rarities[minIndex].name}+)!`, 'var(--accent-gold)');
+                playSound('success');
+                updateInventory();
+            } else {
+                showNotification('No new items to favorite!', 'var(--text-secondary)');
+            }
+        }
+        
+        function unfavoriteAll() {
+            if (!gameState.favoriteItems || gameState.favoriteItems.length === 0) {
+                showNotification('No favorited items!', 'var(--text-secondary)');
+                return;
+            }
+            
+            if (!confirm('Remove all favorites?')) {
+                return;
+            }
+            
+            const count = gameState.favoriteItems.length;
+            gameState.favoriteItems = [];
+            
+            showNotification(`✖️ Removed ${count} favorites!`, 'var(--warning)');
+            playSound('button');
+            updateInventory();
         }
         
         // ===== FEATURE 3: CRAFT MAX =====
@@ -8158,6 +8440,7 @@
                 gameState.rebirths = data.rebirths || 0;
                 gameState.permanentLuckBoost = data.permanentLuckBoost || 1.0;
                 gameState.settings = data.settings || {
+                    soundEffects: true,
                     showTradeNotifications: true,
                     showExpiredNotifications: true,
                     showSpinResults: true,
@@ -8166,6 +8449,9 @@
                     showAutoSaveNotifications: false
                 };
                 // Ensure new setting exists in old saves
+                if (gameState.settings.soundEffects === undefined) {
+                    gameState.settings.soundEffects = true;
+                }
                 if (gameState.settings.showAutoSaveNotifications === undefined) {
                     gameState.settings.showAutoSaveNotifications = false;
                 }
@@ -8262,6 +8548,940 @@
         setInterval(() => {
             refreshQuests();
         }, 60000);
+        
+        // ===== BOSS BATTLES SYSTEM =====
+        
+        const bossesData = [
+            {
+                id: 'money_goblin',
+                name: '💰 Money Goblin',
+                emoji: '💰',
+                description: 'A greedy goblin hoarding gold',
+                difficulty: 'Beginner',
+                cost: 100000,
+                maxHP: 1000,
+                rewards: {
+                    moneyMin: 500000,
+                    moneyMax: 1000000,
+                    items: ['Rare', 'Epic']
+                },
+                color: '#ffd700'
+            },
+            {
+                id: 'slot_demon',
+                name: '🎰 Slot Demon',
+                emoji: '🎰',
+                description: 'Corrupted luck incarnate',
+                difficulty: 'Easy',
+                cost: 500000,
+                maxHP: 2500,
+                rewards: {
+                    moneyMin: 1000000,
+                    moneyMax: 2500000,
+                    items: ['Legendary'],
+                    crates: 3
+                },
+                color: '#ff1493'
+            },
+            {
+                id: 'rarity_dragon',
+                name: '🔮 Rarity Dragon',
+                emoji: '🔮',
+                description: 'Guardian of rare treasures',
+                difficulty: 'Medium',
+                cost: 1000000,
+                maxHP: 5000,
+                rewards: {
+                    moneyMin: 3000000,
+                    moneyMax: 7000000,
+                    items: ['Divine'],
+                    guaranteed: 'Divine'
+                },
+                color: '#ffd700'
+            },
+            {
+                id: 'xp_phantom',
+                name: '👻 XP Phantom',
+                emoji: '👻',
+                description: 'Spirit of endless grinding',
+                difficulty: 'Medium',
+                cost: 2000000,
+                maxHP: 7500,
+                rewards: {
+                    moneyMin: 5000000,
+                    moneyMax: 10000000,
+                    battlePassTiers: 10
+                },
+                color: '#9370db'
+            },
+            {
+                id: 'pet_master',
+                name: '🐉 Pet Master',
+                emoji: '🐉',
+                description: 'Tamer of legendary beasts',
+                difficulty: 'Hard',
+                cost: 5000000,
+                maxHP: 10000,
+                rewards: {
+                    moneyMin: 10000000,
+                    moneyMax: 20000000,
+                    randomPet: true
+                },
+                color: '#ff4500'
+            },
+            {
+                id: 'time_keeper',
+                name: '⏰ Time Keeper',
+                emoji: '⏰',
+                description: 'Master of temporal power',
+                difficulty: 'Hard',
+                cost: 10000000,
+                maxHP: 15000,
+                rewards: {
+                    moneyMin: 20000000,
+                    moneyMax: 40000000,
+                    speedBoost: 3600
+                },
+                color: '#00ced1'
+            },
+            {
+                id: 'artifact_guardian',
+                name: '💎 Artifact Guardian',
+                emoji: '💎',
+                description: 'Protector of ancient relics',
+                difficulty: 'Very Hard',
+                cost: 25000000,
+                maxHP: 25000,
+                rewards: {
+                    moneyMin: 50000000,
+                    moneyMax: 100000000,
+                    randomArtifact: true
+                },
+                color: '#ff1493'
+            },
+            {
+                id: 'cosmic_horror',
+                name: '🌌 Cosmic Horror',
+                emoji: '🌌',
+                description: 'Being from beyond reality',
+                difficulty: 'Extreme',
+                cost: 50000000,
+                maxHP: 50000,
+                rewards: {
+                    moneyMin: 100000000,
+                    moneyMax: 250000000,
+                    items: ['Cosmic', 'Infinite'],
+                    guaranteed: 'Cosmic'
+                },
+                color: '#4b0082'
+            },
+            {
+                id: 'prestige_king',
+                name: '👑 Prestige King',
+                emoji: '👑',
+                description: 'Ruler of the prestiged realm',
+                difficulty: 'Extreme',
+                cost: 100000000,
+                maxHP: 100000,
+                rewards: {
+                    moneyMin: 250000000,
+                    moneyMax: 500000000,
+                    prestigePoints: 5
+                },
+                color: '#ffd700'
+            },
+            {
+                id: 'primordial_titan',
+                name: '🔥 Primordial Titan',
+                emoji: '🔥',
+                description: 'Ancient force of creation',
+                difficulty: 'IMPOSSIBLE',
+                cost: 500000000,
+                maxHP: 500000,
+                rewards: {
+                    moneyMin: 1000000000,
+                    moneyMax: 2000000000,
+                    items: ['Primordial', 'Omega'],
+                    guaranteed: 'Primordial',
+                    randomArtifact: true
+                },
+                color: '#ff0000'
+            }
+        ];
+        
+        function initializeBossState() {
+            if (!gameState.bosses) {
+                gameState.bosses = {};
+                bossesData.forEach(boss => {
+                    gameState.bosses[boss.id] = {
+                        defeated: 0,
+                        lastFought: 0,
+                        currentHP: boss.maxHP,
+                        inBattle: false
+                    };
+                });
+            }
+            if (!gameState.bossStats) {
+                gameState.bossStats = {
+                    totalDefeated: 0,
+                    totalDamage: 0,
+                    bestReward: 0
+                };
+            }
+        }
+        
+        function updateBossesDisplay() {
+            initializeBossState();
+            
+            const container = document.getElementById('bossesContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Update stats
+            document.getElementById('totalBossesDefeated').textContent = gameState.bossStats.totalDefeated || 0;
+            document.getElementById('totalBossDamage').textContent = formatNumber(gameState.bossStats.totalDamage || 0);
+            document.getElementById('bestBossReward').textContent = '$' + formatNumber(gameState.bossStats.bestReward || 0);
+            
+            bossesData.forEach(boss => {
+                const bossState = gameState.bosses[boss.id];
+                const canFight = gameState.money >= boss.cost;
+                const onCooldown = bossState.lastFought > 0 && (Date.now() - bossState.lastFought) < 86400000; // 24 hours
+                
+                const card = document.createElement('div');
+                card.className = 'recipe-card';
+                card.style.border = `3px solid ${boss.color}`;
+                card.style.background = `linear-gradient(135deg, var(--bg-medium), ${boss.color}22)`;
+                
+                card.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 10px;">${boss.emoji}</div>
+                        <h3 style="color: ${boss.color}; margin: 10px 0;">${boss.name}</h3>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">${boss.description}</div>
+                        <div style="display: inline-block; padding: 4px 12px; background: ${boss.color}33; border-radius: 12px; font-size: 0.85rem; font-weight: bold; color: ${boss.color}; margin: 5px 0;">
+                            ${boss.difficulty}
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0; padding: 15px; background: var(--bg-dark); border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="color: var(--text-secondary);">💪 HP:</span>
+                            <span style="color: var(--danger); font-weight: bold;">${formatNumber(boss.maxHP)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="color: var(--text-secondary);">💰 Entry Cost:</span>
+                            <span style="color: var(--accent-gold); font-weight: bold;">$${formatNumber(boss.cost)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-secondary);">🏆 Defeated:</span>
+                            <span style="color: var(--success); font-weight: bold;">${bossState.defeated}x</span>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--bg-dark); padding: 12px; border-radius: 8px; margin: 15px 0;">
+                        <div style="color: var(--accent-gold); font-weight: bold; margin-bottom: 8px;">🎁 Rewards:</div>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6;">
+                            ${boss.rewards.moneyMin ? `💰 $${formatNumber(boss.rewards.moneyMin)} - $${formatNumber(boss.rewards.moneyMax)}<br>` : ''}
+                            ${boss.rewards.guaranteed ? `✨ Guaranteed ${boss.rewards.guaranteed} item<br>` : ''}
+                            ${boss.rewards.battlePassTiers ? `📊 +${boss.rewards.battlePassTiers} Battle Pass Tiers<br>` : ''}
+                            ${boss.rewards.randomPet ? `🐉 Random Pet<br>` : ''}
+                            ${boss.rewards.randomArtifact ? `💎 Random Artifact<br>` : ''}
+                            ${boss.rewards.prestigePoints ? `⭐ +${boss.rewards.prestigePoints} Prestige Points<br>` : ''}
+                            ${boss.rewards.crates ? `📦 ${boss.rewards.crates} Legendary Crates<br>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${onCooldown ? `
+                        <div style="text-align: center; padding: 10px; background: var(--warning)33; border-radius: 8px; color: var(--warning); margin-bottom: 10px;">
+                            ⏰ On Cooldown - Wait 24h
+                        </div>
+                    ` : ''}
+                    
+                    <button class="btn ${canFight && !onCooldown ? 'btn-accept' : 'btn-decline'}" 
+                            onclick="startBossFight('${boss.id}')" 
+                            ${!canFight || onCooldown ? 'disabled' : ''}
+                            style="width: 100%; padding: 15px; font-size: 1.1rem; ${!canFight || onCooldown ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                        ${!canFight ? '❌ Not Enough Money' : onCooldown ? '⏰ On Cooldown' : '⚔️ FIGHT BOSS'}
+                    </button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function startBossFight(bossId) {
+            initializeBossState();
+            const boss = bossesData.find(b => b.id === bossId);
+            if (!boss) return;
+            
+            const bossState = gameState.bosses[bossId];
+            
+            // Check cooldown
+            if (bossState.lastFought > 0 && (Date.now() - bossState.lastFought) < 86400000) {
+                showNotification('⏰ This boss is on cooldown! Wait 24 hours.', 'var(--warning)');
+                return;
+            }
+            
+            // Check cost
+            if (gameState.money < boss.cost) {
+                showNotification(`❌ Need $${formatNumber(boss.cost)} to fight this boss!`, 'var(--danger)');
+                return;
+            }
+            
+            // Pay cost
+            gameState.money -= boss.cost;
+            playSound('coin');
+            
+            // Reset boss HP
+            bossState.currentHP = boss.maxHP;
+            bossState.inBattle = true;
+            
+            playSound('boss_appear');
+            showNotification(`👹 ${boss.name} appears! Click to attack!`, boss.color);
+            
+            // Create boss fight modal
+            const modal = document.createElement('div');
+            modal.id = 'bossFightModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.95);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: var(--bg-dark);
+                padding: 30px;
+                border-radius: 15px;
+                border: 3px solid ${boss.color};
+                max-width: 600px;
+                width: 90%;
+                text-align: center;
+            `;
+            
+            content.innerHTML = `
+                <div style="font-size: 6rem; margin-bottom: 20px; animation: boss-float 2s ease-in-out infinite;" id="bossEmoji">${boss.emoji}</div>
+                <h2 style="color: ${boss.color}; margin-bottom: 10px;">${boss.name}</h2>
+                <div style="color: var(--text-secondary); margin-bottom: 20px;">${boss.difficulty} - ${boss.description}</div>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="color: var(--text-secondary);">HP:</span>
+                        <span style="color: var(--danger); font-weight: bold;" id="bossHPText">${formatNumber(bossState.currentHP)} / ${formatNumber(boss.maxHP)}</span>
+                    </div>
+                    <div class="progress-bar" style="height: 30px;">
+                        <div class="progress-fill" id="bossHPBar" style="width: 100%; background: linear-gradient(90deg, var(--danger), var(--warning)); transition: width 0.3s;">
+                            <span style="font-weight: bold;">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-accept" onclick="attackBoss('${bossId}')" id="attackButton" style="width: 100%; padding: 20px; font-size: 1.3rem; margin-top: 20px;">
+                    ⚔️ ATTACK!
+                </button>
+                
+                <div style="margin-top: 15px; color: var(--text-secondary); font-size: 0.9rem;">
+                    Click to deal damage!
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+        }
+        
+        function attackBoss(bossId) {
+            const boss = bossesData.find(b => b.id === bossId);
+            const bossState = gameState.bosses[bossId];
+            
+            if (!bossState.inBattle) return;
+            
+            // Calculate damage (random between 50-200)
+            const damage = Math.floor(Math.random() * 151) + 50;
+            bossState.currentHP = Math.max(0, bossState.currentHP - damage);
+            
+            gameState.bossStats.totalDamage = (gameState.bossStats.totalDamage || 0) + damage;
+            
+            playSound('boss_hit');
+            
+            // Update HP bar
+            const hpPercent = (bossState.currentHP / boss.maxHP) * 100;
+            document.getElementById('bossHPBar').style.width = hpPercent + '%';
+            document.getElementById('bossHPBar').innerHTML = `<span style="font-weight: bold;">${hpPercent.toFixed(0)}%</span>`;
+            document.getElementById('bossHPText').textContent = `${formatNumber(bossState.currentHP)} / ${formatNumber(boss.maxHP)}`;
+            
+            // Screen shake on hit
+            const emoji = document.getElementById('bossEmoji');
+            emoji.style.animation = 'none';
+            setTimeout(() => { emoji.style.animation = 'boss-float 2s ease-in-out infinite'; }, 10);
+            
+            // Check if defeated
+            if (bossState.currentHP <= 0) {
+                defeatBoss(bossId);
+            }
+        }
+        
+        function defeatBoss(bossId) {
+            const boss = bossesData.find(b => b.id === bossId);
+            const bossState = gameState.bosses[bossId];
+            
+            bossState.inBattle = false;
+            bossState.defeated++;
+            bossState.lastFought = Date.now();
+            
+            gameState.bossStats.totalDefeated++;
+            
+            playSound('boss_defeated');
+            
+            // Calculate rewards
+            const moneyReward = Math.floor(Math.random() * (boss.rewards.moneyMax - boss.rewards.moneyMin + 1)) + boss.rewards.moneyMin;
+            gameState.money += moneyReward;
+            
+            if (moneyReward > gameState.bossStats.bestReward) {
+                gameState.bossStats.bestReward = moneyReward;
+            }
+            
+            let rewardText = `💰 $${formatNumber(moneyReward)}`;
+            
+            // Give item rewards
+            if (boss.rewards.guaranteed) {
+                const guaranteedRarity = rarities.find(r => r.name === boss.rewards.guaranteed);
+                const itemName = generateItemName(guaranteedRarity);
+                addItemToInventory(itemName, guaranteedRarity);
+                rewardText += `<br>✨ ${itemName} (${boss.rewards.guaranteed})`;
+            }
+            
+            // Battle pass tiers
+            if (boss.rewards.battlePassTiers) {
+                gameState.battlePassTier = Math.min(50, (gameState.battlePassTier || 0) + boss.rewards.battlePassTiers);
+                rewardText += `<br>📊 +${boss.rewards.battlePassTiers} Battle Pass Tiers`;
+            }
+            
+            // Random pet
+            if (boss.rewards.randomPet) {
+                const availablePetsNotOwned = availablePets.filter(p => !gameState.pets.includes(p.id));
+                if (availablePetsNotOwned.length > 0) {
+                    const randomPet = availablePetsNotOwned[Math.floor(Math.random() * availablePetsNotOwned.length)];
+                    gameState.pets.push(randomPet.id);
+                    gameState.petLevels[randomPet.id] = 1;
+                    rewardText += `<br>🐉 ${randomPet.name}`;
+                }
+            }
+            
+            // Prestige points
+            if (boss.rewards.prestigePoints) {
+                gameState.prestigePoints = (gameState.prestigePoints || 0) + boss.rewards.prestigePoints;
+                rewardText += `<br>⭐ +${boss.rewards.prestigePoints} Prestige Points`;
+            }
+            
+            // Random artifact
+            if (boss.rewards.randomArtifact) {
+                const unownedArtifacts = artifactsData.filter(a => !gameState.artifacts || !gameState.artifacts.includes(a.id));
+                if (unownedArtifacts.length > 0) {
+                    const randomArtifact = unownedArtifacts[Math.floor(Math.random() * unownedArtifacts.length)];
+                    if (!gameState.artifacts) gameState.artifacts = [];
+                    gameState.artifacts.push(randomArtifact.id);
+                    rewardText += `<br>💎 ${randomArtifact.name}`;
+                    playSound('artifact');
+                }
+            }
+            
+            // Close modal and show rewards
+            const modal = document.getElementById('bossFightModal');
+            if (modal) {
+                modal.innerHTML = `
+                    <div style="background: var(--bg-dark); padding: 40px; border-radius: 15px; border: 3px solid var(--accent-gold); max-width: 600px; width: 90%; text-align: center; margin: auto;">
+                        <div style="font-size: 8rem; margin-bottom: 20px;">🏆</div>
+                        <h2 style="color: var(--accent-gold); margin-bottom: 20px;">VICTORY!</h2>
+                        <div style="font-size: 1.2rem; color: var(--text-primary); margin-bottom: 30px;">
+                            You defeated ${boss.name}!
+                        </div>
+                        <div style="background: var(--bg-medium); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                            <div style="color: var(--accent-gold); font-weight: bold; margin-bottom: 15px; font-size: 1.1rem;">🎁 Rewards:</div>
+                            <div style="color: var(--text-primary); line-height: 2; font-size: 1.1rem;">${rewardText}</div>
+                        </div>
+                        <button class="btn btn-accept" onclick="closeBossFight()" style="width: 100%; padding: 15px; font-size: 1.2rem;">
+                            ✨ CLAIM REWARDS
+                        </button>
+                    </div>
+                `;
+            }
+            
+            updateStats();
+            updateBossesDisplay();
+            checkAchievements();
+        }
+        
+        function closeBossFight() {
+            const modal = document.getElementById('bossFightModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        // ===== ARTIFACTS SYSTEM =====
+        
+        const artifactsData = [
+            // Tier 1 - Common ($1M)
+            { id: 'lucky_coin', name: '🪙 Lucky Coin', tier: 1, cost: 1000000, bonus: { type: 'luck', value: 0.10 }, description: '+10% permanent luck' },
+            { id: 'time_crystal', name: '⏱️ Time Crystal', tier: 1, cost: 1000000, bonus: { type: 'autoSpinSpeed', value: 1.5 }, description: 'Auto-spin 1.5x faster' },
+            { id: 'extra_pouch', name: '📦 Extra Pouch', tier: 1, cost: 1000000, bonus: { type: 'inventorySlots', value: 25 }, description: '+25 inventory slots' },
+            
+            // Tier 2 - Rare ($5M)
+            { id: 'loaded_dice', name: '🎲 Loaded Dice', tier: 2, cost: 5000000, bonus: { type: 'doubleSpin', value: 0.05 }, description: '5% chance for double spin' },
+            { id: 'golden_goose', name: '💰 Golden Goose', tier: 2, cost: 5000000, bonus: { type: 'sellValue', value: 2 }, description: '2x sell value' },
+            { id: 'skill_tome', name: '📚 Skill Tome', tier: 2, cost: 5000000, bonus: { type: 'xpGain', value: 2 }, description: '2x XP gain' },
+            
+            // Tier 3 - Epic ($25M)
+            { id: 'royal_crown', name: '👑 Royal Crown', tier: 3, cost: 25000000, bonus: { type: 'allStats', value: 0.25 }, description: '+25% all stats' },
+            { id: 'crystal_ball', name: '🔮 Crystal Ball', tier: 3, cost: 25000000, bonus: { type: 'seeNext', value: 1 }, description: 'See next spin rarity' },
+            { id: 'philosophers_stone', name: '⚗️ Philosopher\'s Stone', tier: 3, cost: 25000000, bonus: { type: 'freeCrafting', value: 1 }, description: 'Free crafting forever' },
+            
+            // Tier 4 - Legendary ($100M)
+            { id: 'wishing_star', name: '🌟 Wishing Star', tier: 4, cost: 100000000, bonus: { type: 'reSpinDaily', value: 1 }, description: 'Re-spin once per day' },
+            { id: 'hourglass_ages', name: '⏳ Hourglass of Ages', tier: 4, cost: 100000000, bonus: { type: 'timeFreeze', value: 0.05 }, description: '5% chance for 10 free spins' },
+            { id: 'eternal_diamond', name: '💎 Eternal Diamond', tier: 4, cost: 100000000, bonus: { type: 'noValueDecay', value: 1 }, description: 'Items never lose value' },
+            
+            // Tier 5 - Mythic (Boss Drops)
+            { id: 'dragons_hoard', name: '🐉 Dragon\'s Hoard', tier: 5, cost: 0, bonus: { type: 'moneyMultiplier', value: 3 }, description: '3x money from all sources', bossOnly: true },
+            { id: 'mask_of_fate', name: '🎭 Mask of Fate', tier: 5, cost: 0, bonus: { type: 'guaranteeNextTier', value: 1 }, description: 'Guarantee next rarity tier', bossOnly: true },
+            { id: 'infinity_stone', name: '♾️ Infinity Stone', tier: 5, cost: 0, bonus: { type: 'bonusMultiplier', value: 0.50 }, description: 'All bonuses +50%', bossOnly: true }
+        ];
+        
+        function initializeArtifactsState() {
+            if (!gameState.artifacts) {
+                gameState.artifacts = [];
+            }
+        }
+        
+        function updateArtifactsDisplay() {
+            initializeArtifactsState();
+            
+            const container = document.getElementById('artifactsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Update stats
+            document.getElementById('artifactsOwned').textContent = gameState.artifacts.length;
+            const totalPower = calculateTotalArtifactPower();
+            document.getElementById('totalArtifactPower').textContent = totalPower.toFixed(0) + '%';
+            
+            // Group by tier
+            const tiers = [
+                { name: 'Tier 1 - Common Artifacts', tier: 1, color: 'var(--rarity-common)' },
+                { name: 'Tier 2 - Rare Artifacts', tier: 2, color: 'var(--rarity-rare)' },
+                { name: 'Tier 3 - Epic Artifacts', tier: 3, color: 'var(--rarity-epic)' },
+                { name: 'Tier 4 - Legendary Artifacts', tier: 4, color: 'var(--rarity-legendary)' },
+                { name: 'Tier 5 - Mythic Artifacts (Boss Drops)', tier: 5, color: 'var(--rarity-mythic)' }
+            ];
+            
+            tiers.forEach(tierInfo => {
+                const tierArtifacts = artifactsData.filter(a => a.tier === tierInfo.tier);
+                
+                const tierSection = document.createElement('div');
+                tierSection.style.marginBottom = '30px';
+                
+                const tierHeader = document.createElement('h3');
+                tierHeader.style.color = tierInfo.color;
+                tierHeader.style.marginBottom = '15px';
+                tierHeader.textContent = tierInfo.name;
+                tierSection.appendChild(tierHeader);
+                
+                const tierGrid = document.createElement('div');
+                tierGrid.style.display = 'grid';
+                tierGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(300px, 1fr))';
+                tierGrid.style.gap = '15px';
+                
+                tierArtifacts.forEach(artifact => {
+                    const owned = gameState.artifacts.includes(artifact.id);
+                    const canBuy = !artifact.bossOnly && gameState.money >= artifact.cost && !owned;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'recipe-card';
+                    card.style.border = owned ? `3px solid ${tierInfo.color}` : '2px solid var(--bg-medium)';
+                    card.style.opacity = owned ? '1' : '0.7';
+                    
+                    card.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                            <div style="font-size: 3rem;">${artifact.name.split(' ')[0]}</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: ${tierInfo.color}; margin: 0 0 5px 0;">${artifact.name.substring(3)}</h4>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">${artifact.description}</div>
+                            </div>
+                        </div>
+                        
+                        ${!artifact.bossOnly ? `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-dark); border-radius: 8px; margin-bottom: 15px;">
+                                <span style="color: var(--text-secondary);">Cost:</span>
+                                <span style="color: var(--accent-gold); font-weight: bold; font-size: 1.1rem;">$${formatNumber(artifact.cost)}</span>
+                            </div>
+                        ` : `
+                            <div style="padding: 12px; background: var(--danger)33; border-radius: 8px; margin-bottom: 15px; text-align: center; color: var(--danger);">
+                                🏆 Boss Drop Only
+                            </div>
+                        `}
+                        
+                        ${owned ? `
+                            <div style="text-align: center; padding: 15px; background: ${tierInfo.color}33; border-radius: 8px; color: ${tierInfo.color}; font-weight: bold;">
+                                ✅ OWNED - Bonus Active!
+                            </div>
+                        ` : artifact.bossOnly ? `
+                            <div style="text-align: center; padding: 15px; background: var(--bg-dark); border-radius: 8px; color: var(--text-secondary);">
+                                Defeat bosses to unlock
+                            </div>
+                        ` : `
+                            <button class="btn ${canBuy ? 'btn-accept' : 'btn-decline'}" 
+                                    onclick="buyArtifact('${artifact.id}')" 
+                                    ${!canBuy ? 'disabled' : ''}
+                                    style="width: 100%; padding: 12px; ${!canBuy ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                ${!canBuy ? '🔒 Locked' : '💎 Purchase'}
+                            </button>
+                        `}
+                    `;
+                    
+                    tierGrid.appendChild(card);
+                });
+                
+                tierSection.appendChild(tierGrid);
+                container.appendChild(tierSection);
+            });
+        }
+        
+        function buyArtifact(artifactId) {
+            initializeArtifactsState();
+            
+            const artifact = artifactsData.find(a => a.id === artifactId);
+            if (!artifact) return;
+            
+            if (artifact.bossOnly) {
+                showNotification('❌ This artifact can only be obtained from boss drops!', 'var(--danger)');
+                return;
+            }
+            
+            if (gameState.artifacts.includes(artifactId)) {
+                showNotification('✅ You already own this artifact!', 'var(--warning)');
+                return;
+            }
+            
+            if (gameState.money < artifact.cost) {
+                showNotification(`❌ Need $${formatNumber(artifact.cost)} to purchase this artifact!`, 'var(--danger)');
+                return;
+            }
+            
+            // Purchase artifact
+            gameState.money -= artifact.cost;
+            gameState.artifacts.push(artifactId);
+            
+            playSound('artifact');
+            showNotification(`💎 Artifact Acquired: ${artifact.name}!`, 'var(--accent-gold)');
+            
+            updateStats();
+            updateArtifactsDisplay();
+            checkAchievements();
+        }
+        
+        function calculateTotalArtifactPower() {
+            if (!gameState.artifacts || gameState.artifacts.length === 0) return 0;
+            
+            let totalPower = 0;
+            gameState.artifacts.forEach(artifactId => {
+                const artifact = artifactsData.find(a => a.id === artifactId);
+                if (artifact) {
+                    // Calculate "power" as a percentage
+                    if (artifact.bonus.type === 'luck') totalPower += artifact.bonus.value * 100;
+                    if (artifact.bonus.type === 'allStats') totalPower += artifact.bonus.value * 100;
+                    if (artifact.bonus.type === 'sellValue') totalPower += (artifact.bonus.value - 1) * 100;
+                    if (artifact.bonus.type === 'xpGain') totalPower += (artifact.bonus.value - 1) * 100;
+                    if (artifact.bonus.type === 'moneyMultiplier') totalPower += (artifact.bonus.value - 1) * 100;
+                    if (artifact.bonus.type === 'bonusMultiplier') totalPower += artifact.bonus.value * 100;
+                    if (artifact.bonus.type === 'doubleSpin') totalPower += artifact.bonus.value * 100;
+                    if (artifact.bonus.type === 'autoSpinSpeed') totalPower += (artifact.bonus.value - 1) * 50;
+                    // Special artifacts count as 25 power
+                    if (['seeNext', 'freeCrafting', 'reSpinDaily', 'guaranteeNextTier', 'noValueDecay', 'timeFreeze'].includes(artifact.bonus.type)) {
+                        totalPower += 25;
+                    }
+                }
+            });
+            
+            return totalPower;
+        }
+        
+        function getArtifactBonus(bonusType) {
+            if (!gameState.artifacts) return 0;
+            
+            let total = 0;
+            gameState.artifacts.forEach(artifactId => {
+                const artifact = artifactsData.find(a => a.id === artifactId);
+                if (artifact && artifact.bonus.type === bonusType) {
+                    total += artifact.bonus.value;
+                }
+            });
+            
+            return total;
+        }
+        
+        function hasArtifact(artifactId) {
+            return gameState.artifacts && gameState.artifacts.includes(artifactId);
+        }
+        
+        // ===== SOUND EFFECTS SYSTEM =====
+        
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const soundEffects = {
+            coin: { frequency: 800, duration: 0.1, type: 'sine' },
+            spin: { frequency: 400, duration: 0.15, type: 'sawtooth' },
+            rare: { frequency: 600, duration: 0.3, type: 'square', slide: 900 },
+            ultra_rare: { frequency: 400, duration: 0.5, type: 'sine', slide: 1200 },
+            achievement: { frequency: 523.25, duration: 0.4, type: 'sine', chord: [659.25, 783.99] },
+            success: { frequency: 650, duration: 0.2, type: 'sine' },
+            error: { frequency: 200, duration: 0.2, type: 'sawtooth' },
+            button: { frequency: 300, duration: 0.05, type: 'sine' },
+            fusion: { frequency: 500, duration: 0.4, type: 'triangle', slide: 800 },
+            boss_appear: { frequency: 150, duration: 0.6, type: 'sawtooth', slide: 300 },
+            boss_hit: { frequency: 100, duration: 0.2, type: 'square' },
+            boss_defeated: { frequency: 400, duration: 0.6, type: 'sine', chord: [500, 600, 800] },
+            artifact: { frequency: 800, duration: 0.8, type: 'sine', chord: [1000, 1200, 1600] }
+        };
+        
+        function playSound(soundName) {
+            if (!gameState.settings || gameState.settings.soundEffects === false) return;
+            
+            try {
+                const sound = soundEffects[soundName];
+                if (!sound) return;
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = sound.type;
+                oscillator.frequency.value = sound.frequency;
+                
+                // Frequency slide for special effects
+                if (sound.slide) {
+                    oscillator.frequency.exponentialRampToValueAtTime(
+                        sound.slide,
+                        audioContext.currentTime + sound.duration
+                    );
+                }
+                
+                // Volume envelope
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + sound.duration);
+                
+                // Play chord if specified
+                if (sound.chord) {
+                    sound.chord.forEach((freq, i) => {
+                        setTimeout(() => {
+                            const chordOsc = audioContext.createOscillator();
+                            const chordGain = audioContext.createGain();
+                            
+                            chordOsc.connect(chordGain);
+                            chordGain.connect(audioContext.destination);
+                            
+                            chordOsc.type = 'sine';
+                            chordOsc.frequency.value = freq;
+                            
+                            chordGain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                            chordGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + sound.duration * 0.8);
+                            
+                            chordOsc.start(audioContext.currentTime);
+                            chordOsc.stop(audioContext.currentTime + sound.duration * 0.8);
+                        }, i * 50);
+                    });
+                }
+            } catch (e) {
+                console.log('Sound playback failed:', e);
+            }
+        }
+        
+        // ===== KEYBOARD SHORTCUTS =====
+        
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger shortcuts when typing in input fields
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            // Prevent default for shortcuts we're using
+            const shortcutKeys = ['Space', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 's', 'S', 'i', 'I', 'b', 'B', 'a', 'A', 'p', 'P', 'r', 'R', 'Escape'];
+            if (shortcutKeys.includes(e.key)) {
+                e.preventDefault();
+            }
+            
+            switch(e.key) {
+                // Space - Spin
+                case ' ':
+                case 'Space':
+                    spinItem();
+                    break;
+                
+                // Number keys - Switch tabs
+                case '1':
+                    switchTab('inventory');
+                    break;
+                case '2':
+                    switchTab('shop');
+                    break;
+                case '3':
+                    switchTab('trades');
+                    break;
+                case '4':
+                    switchTab('craft');
+                    break;
+                case '5':
+                    switchTab('enchant');
+                    break;
+                case '6':
+                    switchTab('fusion');
+                    break;
+                case '7':
+                    switchTab('collections');
+                    break;
+                case '8':
+                    switchTab('quests');
+                    break;
+                case '9':
+                    switchTab('achievements');
+                    break;
+                case '0':
+                    switchTab('settings');
+                    break;
+                
+                // Letter shortcuts
+                case 's':
+                case 'S':
+                    switchTab('shop');
+                    break;
+                case 'i':
+                case 'I':
+                    switchTab('inventory');
+                    break;
+                case 'b':
+                case 'B':
+                    switchTab('bosses');
+                    break;
+                case 'a':
+                case 'A':
+                    switchTab('artifacts');
+                    break;
+                case 'p':
+                case 'P':
+                    switchTab('prestige');
+                    break;
+                case 'r':
+                case 'R':
+                    switchTab('rebirth');
+                    break;
+                
+                // Escape - Close modals
+                case 'Escape':
+                    closeBossFight();
+                    break;
+            }
+        });
+        
+        // ===== TIMED SPECIAL EVENTS SYSTEM =====
+        
+        const timedEvents = [
+            { time: '10:59', action: 'message', message: 'Early bird in a minute' },
+            { time: '11:00', action: 'event', eventType: 'disco', message: '🪩 DISCO EVENT STARTED!' },
+            { time: '11:40', action: 'event', eventType: 'disco', message: '🪩 DISCO EVENT STARTED!' },
+            { time: '11:41', action: 'message', message: 'Real ones will know what they want' },
+            { time: '11:42', action: 'givePrimordial', message: '🎁 FREE PRIMORDIAL ITEM!' },
+            { time: '11:43', action: 'message', message: 'Enjoy' },
+            { time: '11:44', action: 'message', message: 'first admin abuse hows it going' },
+            { time: '11:45', action: 'event', eventType: 'galactic', message: '🌌 GALAXY EVENT STARTED!' },
+            { time: '11:46', action: 'message', message: 'this is just to test' },
+            { time: '11:47', action: 'giveMoney', amount: 50000, message: '💰 FREE $50,000!' },
+            { time: '11:48', action: 'message', message: 'Guys stop spamming me to give you guys beyond infinity im not going to' },
+            { time: '11:49', action: 'message', message: 'Hope yalls enjoy next event will be longer and better' },
+            { time: '11:50', action: 'event', eventType: 'bloodmoon', message: '🔴 BLOOD MOON EVENT STARTED!' },
+            { time: '11:51', action: 'message', message: 'Next admin abuse is on wendsday its going to be better' },
+            { time: '11:52', action: 'message', message: 'Cya and have a nice day' }
+        ];
+        
+        // Track which events have been triggered today
+        if (!gameState.triggeredTimedEvents) {
+            gameState.triggeredTimedEvents = {};
+        }
+        
+        function checkTimedEvents() {
+            const now = new Date();
+            const currentTime = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const todayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+            
+            // Reset triggered events at midnight
+            if (!gameState.triggeredTimedEvents[todayKey]) {
+                gameState.triggeredTimedEvents = { [todayKey]: [] };
+            }
+            
+            timedEvents.forEach(event => {
+                const eventKey = `${todayKey}-${event.time}`;
+                
+                // Check if current time matches event time and hasn't been triggered yet
+                if (currentTime === event.time && !gameState.triggeredTimedEvents[todayKey].includes(event.time)) {
+                    // Mark as triggered
+                    gameState.triggeredTimedEvents[todayKey].push(event.time);
+                    
+                    // Execute the event action
+                    switch(event.action) {
+                        case 'event':
+                            startSpecialEvent(event.eventType);
+                            showNotification(event.message, 'var(--accent-gold)');
+                            playSound('achievement');
+                            break;
+                            
+                        case 'message':
+                            showNotification(`📢 ${event.message}`, 'var(--accent-primary)');
+                            playSound('button');
+                            break;
+                            
+                        case 'givePrimordial':
+                            const primordialRarity = rarities.find(r => r.name === 'Primordial');
+                            if (primordialRarity) {
+                                const itemName = generateItemName(primordialRarity);
+                                addItemToInventory(itemName, primordialRarity);
+                                showNotification(event.message + ` You got ${itemName}!`, primordialRarity.color);
+                                playSound('ultra_rare');
+                                updateInventory();
+                            }
+                            break;
+                            
+                        case 'giveMoney':
+                            gameState.money += event.amount;
+                            showNotification(event.message, 'var(--accent-gold)');
+                            playSound('coin');
+                            updateStats();
+                            break;
+                    }
+                }
+            });
+        }
+        
+        // Check timed events every minute
+        setInterval(checkTimedEvents, 60000);
+        // Also check immediately on load
+        checkTimedEvents();
+        
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeBossState();
+            initializeArtifactsState();
+            updateBossesDisplay();
+            updateArtifactsDisplay();
+        });
         
         // Auto-save every 30 seconds
         setInterval(() => {
