@@ -1601,6 +1601,12 @@
             <button class="tab-button" onclick="switchTab('achievementshop')">🏪 A-Shop</button>
             <button class="tab-button" onclick="switchTab('pets')">🐉 Pets</button>
             <button class="tab-button" onclick="switchTab('potions')">🧪 Potions</button>
+            <button class="tab-button" onclick="switchTab('skills')">⚡ Skills</button>
+            <button class="tab-button" onclick="switchTab('leaderboard')">🏆 Board</button>
+            <button class="tab-button" onclick="switchTab('guild')">🤝 Guild</button>
+            <button class="tab-button" onclick="switchTab('gacha')">🎲 Gacha</button>
+            <button class="tab-button" onclick="switchTab('themes')">🎨 Themes</button>
+            <button class="tab-button" onclick="switchTab('titles')">🏅 Titles</button>
             <button class="tab-button" onclick="switchTab('prestige')">⭐ Prestige</button>
             <button class="tab-button" onclick="switchTab('settings')">⚙️ Settings</button>
             <button class="tab-button" onclick="switchTab('admin')">🎁 Codes</button>
@@ -2452,12 +2458,18 @@
         
         <!-- Codes Redemption -->
         <div id="admin" class="tab-content">
+            <!-- Toggle Buttons -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <button id="showCodesBtn" class="btn btn-accept" onclick="showCodesPanel()" style="margin: 0 10px; padding: 12px 30px; font-size: 1.1rem;">🎁 Codes</button>
+                <button id="showAdminBtn" class="btn btn-decline" onclick="showAdminPanel()" style="margin: 0 10px; padding: 12px 30px; font-size: 1.1rem; display: none;">⚙️ Admin Panel</button>
+            </div>
+            
             <div id="codesPanel" style="display: block;">
                 <h2>🎁 Redeem Codes</h2>
                 <p style="margin: 20px 0; color: var(--text-secondary);">Enter special codes to unlock exclusive rewards!</p>
                 <div style="max-width: 500px; margin: 0 auto;">
                     <input type="text" id="codeInput" placeholder="Enter code here..." 
-                           style="width: 100%; padding: 15px; margin: 20px 0; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; font-size: 1.1rem; text-align: center; text-transform: uppercase;">
+                           style="width: 100%; padding: 15px; margin: 20px 0; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px; font-size: 1.1rem; text-align: center;">
                     <button class="btn btn-accept" onclick="redeemCode()" style="width: 100%; padding: 15px; font-size: 1.1rem;">✨ REDEEM CODE</button>
                     
                     <div style="margin-top: 40px; padding: 20px; background: var(--bg-dark); border-radius: 10px; border: 2px solid var(--accent-primary);">
@@ -2521,42 +2533,50 @@
                                 <option value="19">Omnipotent</option>
                                 <option value="20">Infinite Absolute</option>
                                 <option value="21">Eternal</option>
-                                <option value="22">Immortal</option>
-                                <option value="23">Ascended</option>
-                                <option value="24">Transcendental</option>
-                                <option value="25">Boundless</option>
-                                <option value="26">Limitless</option>
-                                <option value="27">Admin ⚡</option>
-                                <option value="28">Absolute</option>
-                                <option value="29">Beyond</option>
-                                <option value="30">Incomprehensible</option>
-                                <option value="31">Unimaginable</option>
-                                <option value="32">Impossible</option>
-                                <option value="33">Paradox</option>
-                                <option value="34">Singularity</option>
-                                <option value="35">Void</option>
-                                <option value="36">Nothingness</option>
-                                <option value="37">Everything</option>
-                                <option value="38">The End</option>
-                                <option value="39">The Beginning</option>
-                                <option value="40">Alpha Omega</option>
-                                <option value="41">True Infinity</option>
-                                <option value="42">The One</option>
-                                <option value="43">Primeval</option>
-                                <option value="44">Celestial Prime</option>
-                                <option value="45">Quantum</option>
-                                <option value="46">Dimensional</option>
-                                <option value="47">Hyperversal</option>
-                                <option value="48">Outerversal</option>
-                                <option value="49">Boundaryless</option>
-                                <option value="50">Formless</option>
-                                <option value="51">Abstract</option>
-                                <option value="52">Conceptual</option>
-                                <option value="53">Metaphysical</option>
-                                <option value="54">The Source</option>
-                                <option value="55">The Eternal</option>
-                                <option value="56">The Absolute Infinity</option>
-                                <option value="57">Beyond Infinity</option>
+                                <option value="22">Shaw ⭐</option>
+                                <option value="23">Immortal</option>
+                                <option value="24">Ascended</option>
+                                <option value="25">Transcendental</option>
+                                <option value="26">Boundless</option>
+                                <option value="27">Limitless</option>
+                                <option value="28">Admin ⚡</option>
+                                <option value="29">Absolute</option>
+                                <option value="30">Beyond</option>
+                                <option value="31">Incomprehensible</option>
+                                <option value="32">Unimaginable</option>
+                                <option value="33">Impossible</option>
+                                <option value="34">Paradox</option>
+                                <option value="35">Singularity</option>
+                                <option value="36">Void</option>
+                                <option value="37">Nothingness</option>
+                                <option value="38">Everything</option>
+                                <option value="39">The End</option>
+                                <option value="40">The Beginning</option>
+                                <option value="41">Alpha Omega</option>
+                                <option value="42">True Infinity</option>
+                                <option value="43">The One</option>
+                                <option value="44">Primeval</option>
+                                <option value="45">Celestial Prime</option>
+                                <option value="46">Quantum</option>
+                                <option value="47">Dimensional</option>
+                                <option value="48">Hyperversal</option>
+                                <option value="49">Outerversal</option>
+                                <option value="50">Boundaryless</option>
+                                <option value="51">Formless</option>
+                                <option value="52">Abstract</option>
+                                <option value="53">Conceptual</option>
+                                <option value="54">Metaphysical</option>
+                                <option value="55">The Source</option>
+                                <option value="56">The Eternal</option>
+                                <option value="57">The Absolute Infinity</option>
+                                <option value="58">Beyond Infinity</option>
+                                <option value="59">Infinite Beyond</option>
+                                <option value="60">Transcendent Infinity</option>
+                                <option value="61">Omniversal</option>
+                                <option value="62">Absolute Beyond</option>
+                                <option value="63">The Totality</option>
+                                <option value="64">The Omnipotent</option>
+                                <option value="65">Reality Itself 🌌</option>
                             </select>
                             <input type="number" id="adminItemCount" placeholder="Amount (1-100)" min="1" max="100" value="1" style="width: 100%; padding: 10px; margin-bottom: 10px; background: var(--bg-medium); color: var(--text-primary); border: 2px solid var(--accent-primary); border-radius: 8px;">
                             <button class="btn btn-accept" onclick="adminSpawnItem()">Spawn Item(s)</button>
@@ -2595,6 +2615,16 @@
                         <div style="margin: 15px 0;">
                             <button class="btn btn-accept" onclick="adminUnlockPotions()">Unlock Potions Early</button>
                             <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem;">Unlocks potions before Dec 12 (for testing)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recipe-card">
+                        <h3 style="color: var(--accent-primary);">🌟 New Systems (Dec 12)</h3>
+                        <div style="margin: 15px 0;">
+                            <button class="btn btn-accept" onclick="adminUnlockAllNewSystems()" style="width: 100%;">Unlock ALL New Systems</button>
+                            <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem;">Unlocks Skills, Leaderboard, Guild, Gacha, Themes & Titles</p>
+                            <button class="btn btn-accept" onclick="adminGiveSkillPoints(10)" style="width: 100%; margin-top: 10px;">+10 Skill Points</button>
+                            <button class="btn btn-accept" onclick="adminGiveGems(1000)" style="width: 100%; margin-top: 10px;">+1000 Gems</button>
                         </div>
                     </div>
                     
@@ -2678,6 +2708,114 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Skills Tab -->
+        <div id="skills" class="tab-content">
+            <div id="skillsLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>⚡ SKILLS SYSTEM</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="skillsCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="skillsContent" style="display: none;">
+                <h2>⚡ Skill Trees</h2>
+                <p style="margin: 20px 0;">Spend skill points to unlock permanent passive bonuses!</p>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: var(--bg-dark); border-radius: 10px;">
+                    <h3>Available Skill Points: <span id="skillPointsDisplay" style="color: var(--accent-gold);">0</span></h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Earn skill points by leveling up and prestiging!</p>
+                </div>
+                <div id="skillTreesContainer" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Leaderboard Tab -->
+        <div id="leaderboard" class="tab-content">
+            <div id="leaderboardLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>🏆 LEADERBOARDS</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="leaderboardCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="leaderboardContent" style="display: none;">
+                <h2>🏆 Leaderboards</h2>
+                <p style="margin: 20px 0;">Compete with players worldwide!</p>
+                <div style="margin: 20px 0;">
+                    <button class="btn btn-accept" onclick="switchLeaderboardCategory('money')" style="margin: 5px;">💰 Richest</button>
+                    <button class="btn btn-accept" onclick="switchLeaderboardCategory('luck')" style="margin: 5px;">🍀 Luckiest</button>
+                    <button class="btn btn-accept" onclick="switchLeaderboardCategory('items')" style="margin: 5px;">🎁 Most Items</button>
+                    <button class="btn btn-accept" onclick="switchLeaderboardCategory('prestige')" style="margin: 5px;">⭐ Highest Prestige</button>
+                </div>
+                <div id="leaderboardDisplay" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Guild Tab -->
+        <div id="guild" class="tab-content">
+            <div id="guildLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>🤝 GUILDS & CLANS</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="guildCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="guildContent" style="display: none;">
+                <div id="noGuildPanel">
+                    <h2>🤝 Guilds</h2>
+                    <p style="margin: 20px 0;">Join a guild to receive powerful passive bonuses!</p>
+                    <div id="availableGuildsContainer" style="margin-top: 20px;"></div>
+                </div>
+                <div id="inGuildPanel" style="display: none;">
+                    <h2 id="guildNameDisplay">Guild Name</h2>
+                    <div id="guildStatsContainer" style="margin: 20px 0;"></div>
+                    <button class="btn btn-decline" onclick="leaveGuild()" style="margin-top: 20px;">Leave Guild</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gacha Tab -->
+        <div id="gacha" class="tab-content">
+            <div id="gachaLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>🎲 GACHA BANNERS</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="gachaCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="gachaContent" style="display: none;">
+                <h2>🎲 Gacha Banners</h2>
+                <p style="margin: 20px 0;">Use gems to pull for featured items!</p>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: var(--bg-dark); border-radius: 10px;">
+                    <h3>💎 Gems: <span id="gemsDisplay" style="color: var(--accent-primary);">0</span></h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Earn gems through quests, achievements, and daily login!</p>
+                </div>
+                <div id="currentBannerContainer" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Themes Tab -->
+        <div id="themes" class="tab-content">
+            <div id="themesLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>🎨 THEMES & SKINS</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="themesCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="themesContent" style="display: none;">
+                <h2>🎨 Themes & Cosmetics</h2>
+                <p style="margin: 20px 0;">Customize your game's appearance!</p>
+                <div id="themesContainer" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <!-- Titles Tab -->
+        <div id="titles" class="tab-content">
+            <div id="titlesLockedMessage" style="display: none; text-align: center; padding: 50px;">
+                <h2>🏅 TITLES & BADGES</h2>
+                <p style="font-size: 1.2rem; margin: 20px 0;">🔒 Unlocks on December 12, 2025</p>
+                <p id="titlesCountdown" style="font-size: 1.5rem; color: var(--accent-gold); font-weight: bold;">⏰ Calculating...</p>
+            </div>
+            <div id="titlesContent" style="display: none;">
+                <h2>🏅 Titles & Badges</h2>
+                <p style="margin: 20px 0;">Earn titles by completing challenges and show them off!</p>
+                <div style="text-align: center; margin: 20px 0; padding: 20px; background: var(--bg-dark); border-radius: 10px;">
+                    <h3>Current Title: <span id="currentTitleDisplay" style="color: var(--accent-gold);">None</span></h3>
+                </div>
+                <div id="titlesListContainer" style="margin-top: 20px;"></div>
             </div>
         </div>
     </div>
@@ -2832,7 +2970,29 @@
                 active: false,
                 multiplier: 1,
                 endTime: 0
-            }
+            },
+            // NEW SYSTEMS - Time-locked until 12/12/25
+            skillsUnlocked: undefined,
+            leaderboardUnlocked: undefined,
+            guildUnlocked: undefined,
+            gachaUnlocked: undefined,
+            themesUnlocked: undefined,
+            titlesUnlocked: undefined,
+            // Skills System
+            skillPoints: 0,
+            skillsPurchased: {},
+            // Guild System
+            currentGuild: null,
+            // Gacha System
+            gems: 0,
+            gachaPulls: 0,
+            gachaPity: 0,
+            // Themes System
+            currentTheme: 'default',
+            unlockedThemes: ['default'],
+            // Titles System
+            currentTitle: null,
+            unlockedTitles: []
         };
         
         const ADMIN_PASSWORD = "admin123"; // Change this to your desired password
@@ -3001,6 +3161,7 @@
             { name: 'Omnipotent', chance: 1/1048576, color: '#ffcc00', minValue: 75000001, maxValue: 200000000 },
             { name: 'Infinite Absolute', chance: 1/2097152, color: '#ff99ff', minValue: 200000001, maxValue: 500000000 },
             { name: 'Eternal', chance: 1/4194304, color: '#66ffff', minValue: 500000001, maxValue: 1000000000 },
+            { name: 'Shaw', chance: 0, color: '#ff1493', minValue: 750000001, maxValue: 1750000000 }, // EXCLUSIVE CODE-ONLY - NOT SPINNABLE!
             { name: 'Immortal', chance: 1/8388608, color: '#ffff66', minValue: 1000000001, maxValue: 2500000000 },
             { name: 'Ascended', chance: 1/16777216, color: '#ff6666', minValue: 2500000001, maxValue: 5000000000 },
             { name: 'Transcendental', chance: 1/33554432, color: '#66ff66', minValue: 5000000001, maxValue: 10000000000 },
@@ -3036,7 +3197,14 @@
             { name: 'The Source', chance: 1/18014398509481984, color: '#ffd700', minValue: 500000000000000000000001, maxValue: 1000000000000000000000000 },
             { name: 'The Eternal', chance: 1/36028797018963968, color: '#00bfff', minValue: 1000000000000000000000001, maxValue: 5000000000000000000000000 },
             { name: 'The Absolute Infinity', chance: 1/72057594037927936, color: '#ff00ff', minValue: 5000000000000000000000001, maxValue: 10000000000000000000000000 },
-            { name: 'Beyond Infinity', chance: 1/1000000000000000000000, color: '#ffffff', minValue: 10000000000000000000000001, maxValue: 100000000000000000000000000 }
+            { name: 'Beyond Infinity', chance: 1/144115188075855872, color: '#ffffff', minValue: 10000000000000000000000001, maxValue: 50000000000000000000000000 },
+            { name: 'Infinite Beyond', chance: 1/288230376151711744, color: '#00ffff', minValue: 50000000000000000000000001, maxValue: 100000000000000000000000000 },
+            { name: 'Transcendent Infinity', chance: 1/576460752303423488, color: '#ff69b4', minValue: 100000000000000000000000001, maxValue: 500000000000000000000000000 },
+            { name: 'Omniversal', chance: 1/1152921504606846976, color: '#9400d3', minValue: 500000000000000000000000001, maxValue: 1000000000000000000000000000 },
+            { name: 'Absolute Beyond', chance: 1/1000000000000000000000, color: '#ffd700', minValue: 1000000000000000000000000001, maxValue: 5000000000000000000000000000 }, // 1 Sextillion
+            { name: 'The Totality', chance: 1/10000000000000000000000, color: '#ff1493', minValue: 5000000000000000000000000001, maxValue: 10000000000000000000000000000 },
+            { name: 'The Omnipotent', chance: 1/100000000000000000000000, color: '#00ff00', minValue: 10000000000000000000000000001, maxValue: 50000000000000000000000000000 },
+            { name: 'Reality Itself', chance: 1/1000000000000000000000000, color: '#ffffff', minValue: 50000000000000000000000000001, maxValue: 100000000000000000000000000000 } // 1 SEPTILLION!
         ];
         
         // Item name pools by rarity
@@ -3148,6 +3316,10 @@
             'Eternal': {
                 prefixes: ['Forever', 'Always', 'Constantly', 'Continuously', 'Ceaselessly', 'Perpetually', 'Endlessly', 'Infinitely', 'Boundlessly', 'Limitlessly'],
                 items: ['Moment', 'Instant', 'Second', 'Eternity', 'Infinity', 'Forever', 'Always', 'Evermore', 'Perpetuity', 'Timelessness']
+            },
+            'Shaw': {
+                prefixes: ['Legendary', 'Epic', 'Mythical', 'Fabled', 'Renowned', 'Celebrated', 'Illustrious', 'Distinguished', 'Prestigious', 'Glorious'],
+                items: ['Legacy', 'Heritage', 'Dynasty', 'Legend', 'Myth', 'Tale', 'Story', 'Chronicle', 'Saga', 'Epic']
             },
             'Immortal': {
                 prefixes: ['Undead', 'Undying', 'Deathless', 'Imperishable', 'Indestructible', 'Invincible', 'Unconquerable', 'Invulnerable', 'Impregnable', 'Unassailable'],
@@ -5218,16 +5390,141 @@
                 orb.style.boxShadow = `0 0 150px 75px ${colors[rarityName]}`;
                 orb.style.animation = 'divine-presence 3s ease-out';
                 overlay.appendChild(orb);
+            } else if (rarityName === 'Shaw') {
+                // SHAW - EXCLUSIVE CODE-ONLY RARITY!
+                document.body.style.animation = 'screen-shake 2s ease-out';
+                setTimeout(() => { document.body.style.animation = ''; }, 2000);
+                
+                // Pink explosion effect
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'absolute';
+                    particle.style.width = '30px';
+                    particle.style.height = '30px';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.background = 'radial-gradient(circle, #ff1493, transparent)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.animation = 'fade-pulse 2s ease-out';
+                    particle.style.animationDelay = (Math.random() * 0.5) + 's';
+                    overlay.appendChild(particle);
+                }
+                
+                // Shaw text
+                const text = document.createElement('div');
+                text.style.position = 'absolute';
+                text.style.width = '100%';
+                text.style.top = '50%';
+                text.style.transform = 'translateY(-50%)';
+                text.style.textAlign = 'center';
+                text.style.fontSize = '4rem';
+                text.style.fontWeight = 'bold';
+                text.style.color = '#ff1493';
+                text.style.textShadow = '0 0 30px #ff1493';
+                text.style.animation = 'divine-presence 2s ease-out';
+                text.textContent = '⭐ SHAW ⭐';
+                overlay.appendChild(text);
+            } else if (rarityName === 'Infinite Beyond' || rarityName === 'Transcendent Infinity') {
+                // NEW ULTRA-HIGH RARITIES
+                const colors = { 'Infinite Beyond': '#00ffff', 'Transcendent Infinity': '#ff69b4' };
+                for (let i = 0; i < 40; i++) {
+                    const star = document.createElement('div');
+                    star.style.position = 'absolute';
+                    star.style.width = '25px';
+                    star.style.height = '25px';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.background = `radial-gradient(circle, ${colors[rarityName]}, transparent)`;
+                    star.style.borderRadius = '50%';
+                    star.style.boxShadow = `0 0 40px 20px ${colors[rarityName]}`;
+                    star.style.animation = 'beyond-infinity-explosion 5s ease-out';
+                    star.style.animationDelay = (Math.random() * 2) + 's';
+                    overlay.appendChild(star);
+                }
+            } else if (rarityName === 'Omniversal' || rarityName === 'Absolute Beyond') {
+                // OMNIVERSAL / ABSOLUTE BEYOND
+                const colors = { 'Omniversal': '#9400d3', 'Absolute Beyond': '#ffd700' };
+                const bigOrb = document.createElement('div');
+                bigOrb.style.position = 'absolute';
+                bigOrb.style.width = '300px';
+                bigOrb.style.height = '300px';
+                bigOrb.style.left = '50%';
+                bigOrb.style.top = '50%';
+                bigOrb.style.transform = 'translate(-50%, -50%)';
+                bigOrb.style.background = `radial-gradient(circle, ${colors[rarityName]}, transparent)`;
+                bigOrb.style.borderRadius = '50%';
+                bigOrb.style.boxShadow = `0 0 200px 100px ${colors[rarityName]}`;
+                bigOrb.style.animation = 'theone-existence 5s ease-out';
+                overlay.appendChild(bigOrb);
+            } else if (rarityName === 'The Totality' || rarityName === 'The Omnipotent') {
+                // THE TOTALITY / THE OMNIPOTENT - NEAR ULTIMATE
+                const colors = { 'The Totality': '#ff1493', 'The Omnipotent': '#00ff00' };
+                document.body.style.animation = 'omnipotent-shake 5s ease-out';
+                setTimeout(() => { document.body.style.animation = ''; }, 5000);
+                
+                for (let i = 0; i < 50; i++) {
+                    const sphere = document.createElement('div');
+                    sphere.style.position = 'absolute';
+                    sphere.style.width = '35px';
+                    sphere.style.height = '35px';
+                    sphere.style.left = Math.random() * 100 + '%';
+                    sphere.style.top = Math.random() * 100 + '%';
+                    sphere.style.background = `radial-gradient(circle, ${colors[rarityName]}, transparent)`;
+                    sphere.style.borderRadius = '50%';
+                    sphere.style.boxShadow = `0 0 60px 30px ${colors[rarityName]}`;
+                    sphere.style.animation = 'everything-create 5s ease-out';
+                    sphere.style.animationDelay = (Math.random() * 2) + 's';
+                    overlay.appendChild(sphere);
+                }
+            } else if (rarityName === 'Reality Itself') {
+                // REALITY ITSELF - 1 IN 1 SEPTILLION!!! THE ULTIMATE!
+                document.body.style.animation = 'omnipotent-shake 5s ease-out';
+                setTimeout(() => { document.body.style.animation = ''; }, 5000);
+                
+                // White explosion
+                const core = document.createElement('div');
+                core.style.position = 'absolute';
+                core.style.width = '150px';
+                core.style.height = '150px';
+                core.style.left = '50%';
+                core.style.top = '50%';
+                core.style.transform = 'translate(-50%, -50%)';
+                core.style.background = 'radial-gradient(circle, white, rgba(255,255,255,0))';
+                core.style.borderRadius = '50%';
+                core.style.boxShadow = '0 0 300px 150px white';
+                core.style.animation = 'theone-existence 5s ease-out';
+                overlay.appendChild(core);
+                
+                // Reality particles - 60 of them
+                for (let i = 0; i < 60; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'absolute';
+                    particle.style.width = '40px';
+                    particle.style.height = '40px';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    particle.style.borderRadius = '50%';
+                    particle.style.boxShadow = `0 0 80px 40px hsl(${Math.random() * 360}, 100%, 50%)`;
+                    particle.style.animation = 'beyond-infinity-explosion 5s ease-out';
+                    particle.style.animationDelay = (Math.random() * 2) + 's';
+                    overlay.appendChild(particle);
+                }
             }
             
             // Remove overlay after animation (ALL ANIMATIONS NOW 5 SECONDS OR LESS!)
-            const duration = rarityName === 'Beyond Infinity' ? 5000 :
+            const duration = rarityName === 'Reality Itself' ? 5000 :
+                           rarityName === 'The Omnipotent' || rarityName === 'The Totality' ? 5000 :
+                           rarityName === 'Absolute Beyond' || rarityName === 'Omniversal' ? 5000 :
+                           rarityName === 'Transcendent Infinity' || rarityName === 'Infinite Beyond' ? 5000 :
+                           rarityName === 'Beyond Infinity' ? 5000 :
                            rarityName === 'The Absolute Infinity' || rarityName === 'The Source' || rarityName === 'The Eternal' ? 5000 :
                            rarityName === 'Hyperversal' || rarityName === 'Outerversal' ? 4000 :
                            rarityName === 'Quantum' || rarityName === 'Dimensional' ? 4000 :
                            rarityName === 'Celestial Prime' ? 3000 :
                            rarityName === 'Primeval' ? 3000 :
                            rarityName === 'Admin' ? 3000 :
+                           rarityName === 'Shaw' ? 2000 :
                            rarityName === 'The One' ? 5000 :
                            rarityName === 'True Infinity' ? 5000 :
                            rarityName === 'Alpha Omega' ? 5000 :
@@ -7139,6 +7436,23 @@
                     prestigeShopPurchases: gameState.prestigeShopPurchases,
                     claimedBPTiers: gameState.claimedBPTiers,
                     redeemedCodes: gameState.redeemedCodes,
+                    // NEW SYSTEMS
+                    skillsUnlocked: gameState.skillsUnlocked,
+                    leaderboardUnlocked: gameState.leaderboardUnlocked,
+                    guildUnlocked: gameState.guildUnlocked,
+                    gachaUnlocked: gameState.gachaUnlocked,
+                    themesUnlocked: gameState.themesUnlocked,
+                    titlesUnlocked: gameState.titlesUnlocked,
+                    skillPoints: gameState.skillPoints,
+                    skillsPurchased: gameState.skillsPurchased,
+                    currentGuild: gameState.currentGuild,
+                    gems: gameState.gems,
+                    gachaPulls: gameState.gachaPulls,
+                    gachaPity: gameState.gachaPity,
+                    currentTheme: gameState.currentTheme,
+                    unlockedThemes: gameState.unlockedThemes,
+                    currentTitle: gameState.currentTitle,
+                    unlockedTitles: gameState.unlockedTitles,
                     saveDate: new Date().toISOString()
                 };
                 
@@ -7292,6 +7606,24 @@
                 gameState.prestigeShopPurchases = data.prestigeShopPurchases || {};
                 gameState.redeemedCodes = data.redeemedCodes || [];
                 
+                // NEW SYSTEMS
+                gameState.skillsUnlocked = data.skillsUnlocked;
+                gameState.leaderboardUnlocked = data.leaderboardUnlocked;
+                gameState.guildUnlocked = data.guildUnlocked;
+                gameState.gachaUnlocked = data.gachaUnlocked;
+                gameState.themesUnlocked = data.themesUnlocked;
+                gameState.titlesUnlocked = data.titlesUnlocked;
+                gameState.skillPoints = data.skillPoints || 0;
+                gameState.skillsPurchased = data.skillsPurchased || {};
+                gameState.currentGuild = data.currentGuild || null;
+                gameState.gems = data.gems || 100;
+                gameState.gachaPulls = data.gachaPulls || 0;
+                gameState.gachaPity = data.gachaPity || 0;
+                gameState.currentTheme = data.currentTheme || 'default';
+                gameState.unlockedThemes = data.unlockedThemes || ['default'];
+                gameState.currentTitle = data.currentTitle || null;
+                gameState.unlockedTitles = data.unlockedTitles || [];
+                
                 // Update all displays
                 updateStats();
                 updateInventory();
@@ -7305,6 +7637,15 @@
                 updateArtifactsDisplay();
                 updateRedeemedCodesList();
                 checkAchievements();
+                
+                // Update new systems displays
+                initializeNewSystems();
+                updateSkillsDisplay();
+                updateLeaderboardDisplay();
+                updateGuildDisplay();
+                updateGachaDisplay();
+                updateThemesDisplay();
+                updateTitlesDisplay();
                 
                 const saveDate = data.saveDate ? new Date(data.saveDate) : 'Unknown';
                 showNotification(`Game loaded! (Saved: ${saveDate})`, 'var(--success)');
@@ -7424,6 +7765,20 @@
             gameState.potionsUnlocked = true;
             showNotification('🧪 Admin: Potions system unlocked early!', 'var(--accent-primary)');
             updatePotionsDisplay();
+        }
+        
+        function adminGiveSkillPoints(amount) {
+            gameState.skillPoints += amount;
+            showNotification(`✅ Admin: +${amount} Skill Points!`, 'var(--accent-primary)');
+            updateSkillsDisplay();
+            saveGame(true);
+        }
+        
+        function adminGiveGems(amount) {
+            gameState.gems += amount;
+            showNotification(`💎 Admin: +${amount} Gems!`, 'var(--accent-primary)');
+            updateGachaDisplay();
+            saveGame(true);
         }
         
         function adminClearInventory() {
@@ -7710,9 +8065,27 @@
         
         function unlockAdmin() {
             gameState.adminUnlocked = true;
+            // Show the admin toggle button
+            document.getElementById('showAdminBtn').style.display = 'inline-block';
+            showCenterNotification('🔓 ADMIN PANEL UNLOCKED! 🔓\nClick "Admin Panel" button to access.', '#ff0000', 5000);
+        }
+        
+        function showCodesPanel() {
+            document.getElementById('codesPanel').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('showCodesBtn').className = 'btn btn-accept';
+            document.getElementById('showAdminBtn').className = 'btn btn-decline';
+        }
+        
+        function showAdminPanel() {
+            if (!gameState.adminUnlocked) {
+                showNotification('🔒 Admin panel is locked! Redeem the admin code first.', 'var(--warning)');
+                return;
+            }
             document.getElementById('codesPanel').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            showCenterNotification('🔓 ADMIN PANEL UNLOCKED! 🔓', '#ff0000', 4000);
+            document.getElementById('showCodesBtn').className = 'btn btn-decline';
+            document.getElementById('showAdminBtn').className = 'btn btn-accept';
         }
         
         // ===== CODE REDEMPTION SYSTEM =====
@@ -8050,6 +8423,307 @@
                         items.push(itemName);
                     }
                     return `🏆 ULTIMATE REWARD! $5B + 5.0x Luck + 3 ADMIN ITEMS: ${items.join(', ')}!`;
+                }
+            },
+            'SPEEDRUN_MASTER': {
+                name: 'Speed Demon',
+                reward: () => {
+                    gameState.upgrades.spinSpeed = Math.min((gameState.upgrades.spinSpeed || 0) + 10, upgradeData.spinSpeed.maxLevel);
+                    gameState.money += 25000000;
+                    return '⚡ +10 Speed upgrades + $25M!';
+                }
+            },
+            'TRIPLE_THREAT': {
+                name: 'Triple Power',
+                reward: () => {
+                    gameState.permanentLuckBoost += 1.0;
+                    gameState.money += 100000000;
+                    // Give 3 Primordial items
+                    const items = [];
+                    for (let i = 0; i < 3; i++) {
+                        const rarity = rarities.find(r => r.name === 'Primordial');
+                        const itemName = generateItemName(rarity);
+                        addItemToInventory(itemName, rarity);
+                        items.push(itemName);
+                    }
+                    return `⚡ +1x Luck + $100M + 3 Primordial Items!`;
+                }
+            },
+            'PRESTIGE_BOOST': {
+                name: 'Prestige Power',
+                reward: () => {
+                    if (!gameState.prestigeLevel) gameState.prestigeLevel = 0;
+                    gameState.prestigeLevel += 5;
+                    updatePrestigeDisplay();
+                    return '⭐ +5 Prestige Levels! Massive bonuses!';
+                }
+            },
+            'ARTIFACT_HUNTER': {
+                name: 'Legendary Collector',
+                reward: () => {
+                    // Give all basic artifacts
+                    const artifacts = ['luck_charm', 'golden_ring', 'magic_crystal', 'ancient_coin', 'mystic_amulet', 'crystal_orb', 'enchanted_stone', 'blessed_talisman'];
+                    artifacts.forEach(id => {
+                        if (!gameState.artifacts.includes(id)) {
+                            gameState.artifacts.push(id);
+                        }
+                    });
+                    return '💎 8 Artifacts Added! Massive stat boost!';
+                }
+            },
+            'PET_ARMY': {
+                name: 'Pet Legion',
+                reward: () => {
+                    // Give 10 random pets
+                    const allPets = ['lucky_cat', 'money_dog', 'golden_bird', 'mystic_fox', 'shadow_wolf', 'cosmic_dragon', 'phoenix_fire', 'crystal_turtle', 'storm_eagle', 'fortune_panda'];
+                    allPets.forEach(id => {
+                        if (!gameState.pets.includes(id)) {
+                            gameState.pets.push(id);
+                            gameState.petLevels[id] = 5; // Start at level 5!
+                        }
+                    });
+                    return '🐾 10 Pets Added at Level 5!';
+                }
+            },
+            'BOSS_CRUSHER': {
+                name: 'Boss Destroyer',
+                reward: () => {
+                    gameState.money += 250000000;
+                    // Unlock all bosses
+                    if (gameState.bosses) {
+                        Object.keys(gameState.bosses).forEach(key => {
+                            gameState.bosses[key].defeated = true;
+                            gameState.bosses[key].lastFought = 0;
+                        });
+                    }
+                    return '👹 $250M + All Bosses Unlocked & Cooldowns Reset!';
+                }
+            },
+            'QUEST_COMPLETE': {
+                name: 'Quest Master',
+                reward: () => {
+                    gameState.xp += 50000;
+                    gameState.money += 50000000;
+                    return '📜 +50,000 XP + $50M Quest Reward!';
+                }
+            },
+            'LUCKY_SEVEN': {
+                name: 'Lucky Number',
+                reward: () => {
+                    gameState.permanentLuckBoost += 7.0;
+                    gameState.money += 777777777;
+                    return '🍀 +7x Permanent Luck + $777,777,777!';
+                }
+            },
+            'COLLECTION_MASTER': {
+                name: 'Complete Collector',
+                reward: () => {
+                    // Complete all collections
+                    gameState.collectionBonuses = {
+                        discoComplete: true,
+                        galacticComplete: true,
+                        glitchComplete: true,
+                        fullmoonComplete: true,
+                        bloodmoonComplete: true,
+                        weatherComplete: true,
+                        christmasComplete: true
+                    };
+                    return '🎨 ALL COLLECTIONS COMPLETED! Massive bonuses unlocked!';
+                }
+            },
+            'INFINITE_POWER': {
+                name: 'Infinite Force',
+                reward: () => {
+                    const infinityRarity = rarities.find(r => r.name === 'Infinite Absolute');
+                    const items = [];
+                    for (let i = 0; i < 5; i++) {
+                        const itemName = generateItemName(infinityRarity);
+                        addItemToInventory(itemName, infinityRarity);
+                        items.push(itemName);
+                    }
+                    return `♾️ 5 INFINITE ABSOLUTE ITEMS! ${items.join(', ')}`;
+                }
+            },
+            'OMEGA_STRIKE': {
+                name: 'Omega Assault',
+                reward: () => {
+                    const omegaRarity = rarities.find(r => r.name === 'Omega');
+                    const items = [];
+                    for (let i = 0; i < 10; i++) {
+                        const itemName = generateItemName(omegaRarity);
+                        addItemToInventory(itemName, omegaRarity);
+                        items.push(itemName);
+                    }
+                    gameState.money += 500000000;
+                    return `🔱 10 OMEGA ITEMS + $500M! ${items.slice(0,3).join(', ')} and more!`;
+                }
+            },
+            'MYTHIC_TREASURE': {
+                name: 'Mythic Vault',
+                reward: () => {
+                    const rarityNames = ['Mythical', 'Supreme', 'Divine', 'Primordial', 'Ethereal'];
+                    const items = [];
+                    rarityNames.forEach(rarityName => {
+                        for (let i = 0; i < 2; i++) {
+                            const rarity = rarities.find(r => r.name === rarityName);
+                            if (rarity) {
+                                const itemName = generateItemName(rarity);
+                                addItemToInventory(itemName, rarity);
+                                items.push(rarityName);
+                            }
+                        }
+                    });
+                    return `🏺 10 MYTHIC ITEMS! 2x each: ${rarityNames.join(', ')}!`;
+                }
+            },
+            'TIME_TRAVELER': {
+                name: 'Time Master',
+                reward: () => {
+                    // Reset all cooldowns
+                    if (gameState.bosses) {
+                        Object.keys(gameState.bosses).forEach(key => {
+                            gameState.bosses[key].lastFought = 0;
+                        });
+                    }
+                    if (gameState.dungeons) {
+                        gameState.dungeons.cooldowns = {};
+                    }
+                    gameState.money += 100000000;
+                    return '⏰ ALL COOLDOWNS RESET + $100M!';
+                }
+            },
+            'VAULT_BREAKER': {
+                name: 'Vault Access',
+                reward: () => {
+                    gameState.money += 10000000000; // $10B
+                    gameState.lifetimeMoneyEarned += 10000000000;
+                    return '💰 VAULT OPENED! +$10,000,000,000!';
+                }
+            },
+            'DOUBLE_TROUBLE': {
+                name: 'Double Everything',
+                reward: () => {
+                    gameState.money *= 2;
+                    gameState.permanentLuckBoost *= 2;
+                    return '✨ DOUBLED YOUR MONEY & PERMANENT LUCK!';
+                }
+            },
+            'PRESTIGE_X10': {
+                name: 'Mega Prestige',
+                reward: () => {
+                    if (!gameState.prestigeLevel) gameState.prestigeLevel = 0;
+                    gameState.prestigeLevel += 10;
+                    gameState.money += 1000000000;
+                    updatePrestigeDisplay();
+                    return '⭐ +10 PRESTIGE LEVELS + $1B!';
+                }
+            },
+            'GODMODE_ACTIVATED': {
+                name: 'God Mode',
+                reward: () => {
+                    gameState.permanentLuckBoost += 10.0;
+                    gameState.money += 5000000000;
+                    // Max all upgrades
+                    Object.keys(upgradeData).forEach(upgradeId => {
+                        gameState.upgrades[upgradeId] = upgradeData[upgradeId].maxLevel;
+                    });
+                    updateEventBonuses();
+                    return '👁️ GOD MODE! +10x Luck + $5B + MAX UPGRADES!';
+                }
+            },
+            'PRIMEVAL_HOARD': {
+                name: 'Ancient Treasure',
+                reward: () => {
+                    const items = [];
+                    ['Primeval', 'Celestial Prime', 'Quantum'].forEach(rarityName => {
+                        for (let i = 0; i < 3; i++) {
+                            const rarity = rarities.find(r => r.name === rarityName);
+                            if (rarity) {
+                                const itemName = generateItemName(rarity);
+                                addItemToInventory(itemName, rarity);
+                                items.push(rarityName);
+                            }
+                        }
+                    });
+                    return `🦖 9 ANCIENT ITEMS! 3x Primeval, Celestial Prime, Quantum!`;
+                }
+            },
+            'POTION_FACTORY': {
+                name: 'Alchemist Supreme',
+                reward: () => {
+                    gameState.potionsUnlocked = true;
+                    gameState.money += 500000000;
+                    gameState.permanentLuckBoost += 2.0;
+                    return '🧪 POTIONS UNLOCKED + $500M + 2x Luck!';
+                }
+            },
+            'DUNGEON_LEGEND': {
+                name: 'Dungeon Conqueror',
+                reward: () => {
+                    gameState.money += 1000000000;
+                    // Unlock ALL dungeons
+                    if (!gameState.dungeons) gameState.dungeons = { unlocked: [], stats: {} };
+                    gameState.dungeons.unlocked = ['dark_forest', 'crystal_caves', 'ancient_ruins', 'volcanic_depths', 'frozen_citadel', 'shadow_realm', 'celestial_tower', 'the_abyss', 'infinity_nexus', 'primordial_void'];
+                    return '🗺️ $1B + ALL 10 DUNGEONS UNLOCKED!';
+                }
+            },
+            'ADMIN_OVERRIDE': {
+                name: 'Admin Authority',
+                reward: () => {
+                    unlockAdmin();
+                    gameState.potionsUnlocked = true;
+                    const adminRarity = rarities.find(r => r.name === 'Admin');
+                    const items = [];
+                    for (let i = 0; i < 5; i++) {
+                        const itemName = generateItemName(adminRarity);
+                        addItemToInventory(itemName, adminRarity);
+                        items.push(itemName);
+                    }
+                    return `🔴 ADMIN UNLOCKED + POTIONS + 5 ADMIN ITEMS!`;
+                }
+            },
+            'BEYOND_REALITY': {
+                name: 'Reality Breaker',
+                reward: () => {
+                    const items = [];
+                    ['Beyond Infinity', 'The Absolute Infinity', 'The Source', 'The Eternal'].forEach(rarityName => {
+                        const rarity = rarities.find(r => r.name === rarityName);
+                        if (rarity) {
+                            const itemName = generateItemName(rarity);
+                            addItemToInventory(itemName, rarity);
+                            items.push(`${itemName} (${rarityName})`);
+                        }
+                    });
+                    return `🌌 4 REALITY-BREAKING ITEMS! ${items.join(', ')}!`;
+                }
+            },
+            'ULTIMATE_STACK': {
+                name: 'Stack Master',
+                reward: () => {
+                    gameState.permanentLuckBoost += 15.0;
+                    gameState.money += 10000000000; // $10B
+                    // Give 10 random ultra-rare items
+                    const ultraRares = ['Primeval', 'Celestial Prime', 'Quantum', 'Dimensional', 'Hyperversal', 'Outerversal', 'The Source', 'The Eternal', 'Admin', 'Beyond Infinity'];
+                    ultraRares.forEach(rarityName => {
+                        const rarity = rarities.find(r => r.name === rarityName);
+                        if (rarity) {
+                            const itemName = generateItemName(rarity);
+                            addItemToInventory(itemName, rarity);
+                        }
+                    });
+                    return `💥 +15x LUCK + $10B + 10 ULTRA-RARES!`;
+                }
+            },
+            'Shaw': {
+                name: 'Shaw\'s Legacy',
+                reward: () => {
+                    const shawRarity = rarities.find(r => r.name === 'Shaw');
+                    if (shawRarity) {
+                        // Give the exact item "Shaw" - no random generation!
+                        addItemToInventory('Shaw', shawRarity);
+                        return `⭐ SHAW! The legendary item "Shaw" has been added to your inventory! (Code-Only Exclusive!)`;
+                    }
+                    return '❌ Error giving reward';
                 }
             }
         };
@@ -8419,6 +9093,24 @@
             }
             if (tabName === 'potions') {
                 updatePotionsDisplay();
+            }
+            if (tabName === 'skills') {
+                updateSkillsDisplay();
+            }
+            if (tabName === 'leaderboard') {
+                updateLeaderboardDisplay();
+            }
+            if (tabName === 'guild') {
+                updateGuildDisplay();
+            }
+            if (tabName === 'gacha') {
+                updateGachaDisplay();
+            }
+            if (tabName === 'themes') {
+                updateThemesDisplay();
+            }
+            if (tabName === 'titles') {
+                updateTitlesDisplay();
             }
             if (tabName === 'admin') {
                 if (gameState.adminUnlocked) {
@@ -11631,6 +12323,716 @@
             checkPotionsUnlockDate();
         }, 1000);
         
+        // ===== NEW SYSTEMS (SKILLS, LEADERBOARD, GUILD, GACHA, THEMES, TITLES) =====
+        
+        const FEATURES_UNLOCK_DATE = new Date('2025-12-12T00:00:00');
+        
+        // SKILLS SYSTEM DATA
+        const skillTreesData = {
+            wealth: {
+                name: '💰 Wealth Tree',
+                color: '#ffd700',
+                skills: [
+                    { id: 'wealth1', name: 'Midas Touch', cost: 1, bonus: { type: 'money', value: 1.1 }, desc: '+10% money per spin' },
+                    { id: 'wealth2', name: 'Golden Aura', cost: 2, bonus: { type: 'value', value: 1.15 }, desc: '+15% item value' },
+                    { id: 'wealth3', name: 'Treasury', cost: 3, bonus: { type: 'idle', value: 0.01 }, desc: '+1% money per minute idle' },
+                    { id: 'wealth4', name: 'Wealth Beyond', cost: 5, bonus: { type: 'money', value: 2.0 }, desc: 'Double all money gains' }
+                ]
+            },
+            luck: {
+                name: '🍀 Luck Tree',
+                color: '#00ff00',
+                skills: [
+                    { id: 'luck1', name: 'Four Leaf', cost: 1, bonus: { type: 'luck', value: 0.5 }, desc: '+0.5x luck' },
+                    { id: 'luck2', name: 'Rabbit Foot', cost: 2, bonus: { type: 'rare', value: 1.05 }, desc: '+5% rare chance' },
+                    { id: 'luck3', name: 'Fortune', cost: 3, bonus: { type: 'luck', value: 1.0 }, desc: '+1x luck' },
+                    { id: 'luck4', name: 'Destiny', cost: 5, bonus: { type: 'luck', value: 2.0 }, desc: '+2x luck' }
+                ]
+            },
+            speed: {
+                name: '⚡ Speed Tree',
+                color: '#00ffff',
+                skills: [
+                    { id: 'speed1', name: 'Haste', cost: 1, bonus: { type: 'speed', value: 1.2 }, desc: '+20% spin speed' },
+                    { id: 'speed2', name: 'Swift', cost: 2, bonus: { type: 'cooldown', value: 0.9 }, desc: '-10% cooldowns' },
+                    { id: 'speed3', name: 'Time Warp', cost: 3, bonus: { type: 'speed', value: 1.5 }, desc: '+50% speed' },
+                    { id: 'speed4', name: 'Instant', cost: 5, bonus: { type: 'speed', value: 2.0 }, desc: 'Double speed' }
+                ]
+            }
+        };
+        
+        // GUILDS DATA (Offline - fake guilds with bonuses)
+        const guildsData = [
+            { id: 'dragons', name: '🐉 Dragon Slayers', bonus: { luck: 0.15, money: 0.1 }, level: 25, members: 42, desc: 'Elite guild of dragon hunters' },
+            { id: 'fortune', name: '🍀 Fortune Seekers', bonus: { luck: 0.25, value: 0.15 }, level: 30, members: 58, desc: 'Masters of luck and fortune' },
+            { id: 'wealth', name: '💰 Wealth Hoarders', bonus: { money: 0.3, value: 0.2 }, level: 28, members: 51, desc: 'Richest guild in the realm' },
+            { id: 'speed', name: '⚡ Speed Runners', bonus: { speed: 0.4, luck: 0.1 }, level: 22, members: 38, desc: 'Fastest spinners alive' },
+            { id: 'elite', name: '👑 Elite Masters', bonus: { luck: 0.2, money: 0.2, value: 0.15 }, level: 35, members: 67, desc: 'The best of the best' }
+        ];
+        
+        // GACHA BANNERS DATA
+        const gachaBannersData = {
+            current: {
+                name: 'Legendary Treasures',
+                featured: ['Legendary', 'Mythic', 'Exotic'],
+                rateUp: 2.0,
+                cost: 100,
+                pityAt: 50,
+                desc: '2x chance for Legendary+ items!'
+            }
+        };
+        
+        // THEMES DATA
+        const themesData = [
+            { id: 'default', name: '🌙 Default Dark', unlocked: true, colors: { primary: '#6366f1', bg: '#1a1a2e' } },
+            { id: 'light', name: '☀️ Light Mode', unlocked: false, colors: { primary: '#3b82f6', bg: '#f0f0f0' } },
+            { id: 'ocean', name: '🌊 Ocean Blue', unlocked: false, colors: { primary: '#0ea5e9', bg: '#0c4a6e' } },
+            { id: 'forest', name: '🌲 Forest Green', unlocked: false, colors: { primary: '#10b981', bg: '#064e3b' } },
+            { id: 'sunset', name: '🌅 Sunset Orange', unlocked: false, colors: { primary: '#f59e0b', bg: '#78350f' } },
+            { id: 'galaxy', name: '🌌 Galaxy Purple', unlocked: false, colors: { primary: '#a855f7', bg: '#581c87' } }
+        ];
+        
+        // TITLES DATA
+        const titlesData = [
+            { id: 'beginner', name: 'Beginner', emoji: '🌱', requirement: { type: 'start' }, unlocked: true },
+            { id: 'millionaire', name: 'Millionaire', emoji: '💰', requirement: { type: 'money', value: 1000000 }, unlocked: false },
+            { id: 'billionaire', name: 'Billionaire', emoji: '💎', requirement: { type: 'money', value: 1000000000 }, unlocked: false },
+            { id: 'lucky', name: 'The Lucky One', emoji: '🍀', requirement: { type: 'luck', value: 100 }, unlocked: false },
+            { id: 'collector', name: 'Collector', emoji: '🎁', requirement: { type: 'items', value: 1000 }, unlocked: false },
+            { id: 'master', name: 'Dungeon Master', emoji: '🗺️', requirement: { type: 'dungeons', value: 100 }, unlocked: false },
+            { id: 'shaw', name: 'Shaw Holder', emoji: '⭐', requirement: { type: 'shaw' }, unlocked: false },
+            { id: 'prestige', name: 'Prestige King', emoji: '👑', requirement: { type: 'prestige', value: 10 }, unlocked: false }
+        ];
+        
+        // INITIALIZE ALL NEW SYSTEMS
+        function initializeNewSystems() {
+            initializeSkillsState();
+            initializeLeaderboardState();
+            initializeGuildState();
+            initializeGachaState();
+            initializeThemesState();
+            initializeTitlesState();
+        }
+        
+        function initializeSkillsState() {
+            if (gameState.skillsUnlocked === undefined) {
+                const now = new Date();
+                gameState.skillsUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+            if (!gameState.skillsPurchased) gameState.skillsPurchased = {};
+            if (gameState.skillPoints === undefined) gameState.skillPoints = 0;
+        }
+        
+        function initializeLeaderboardState() {
+            if (gameState.leaderboardUnlocked === undefined) {
+                const now = new Date();
+                gameState.leaderboardUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+        }
+        
+        function initializeGuildState() {
+            if (gameState.guildUnlocked === undefined) {
+                const now = new Date();
+                gameState.guildUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+            if (gameState.currentGuild === undefined) gameState.currentGuild = null;
+        }
+        
+        function initializeGachaState() {
+            if (gameState.gachaUnlocked === undefined) {
+                const now = new Date();
+                gameState.gachaUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+            if (gameState.gems === undefined) gameState.gems = 100; // Start with 100 gems
+            if (gameState.gachaPity === undefined) gameState.gachaPity = 0;
+        }
+        
+        function initializeThemesState() {
+            if (gameState.themesUnlocked === undefined) {
+                const now = new Date();
+                gameState.themesUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+            if (!gameState.unlockedThemes) gameState.unlockedThemes = ['default'];
+            if (!gameState.currentTheme) gameState.currentTheme = 'default';
+        }
+        
+        function initializeTitlesState() {
+            if (gameState.titlesUnlocked === undefined) {
+                const now = new Date();
+                gameState.titlesUnlocked = now >= FEATURES_UNLOCK_DATE;
+            }
+            if (!gameState.unlockedTitles) gameState.unlockedTitles = [];
+            if (gameState.currentTitle === undefined) gameState.currentTitle = null;
+            checkTitleUnlocks(); // Check on init
+        }
+        
+        // CHECK UNLOCK DATES (Similar to potions)
+        function checkNewSystemsUnlock() {
+            const now = new Date();
+            const features = ['skills', 'leaderboard', 'guild', 'gacha', 'themes', 'titles'];
+            
+            features.forEach(feature => {
+                const unlockKey = `${feature}Unlocked`;
+                if (now >= FEATURES_UNLOCK_DATE && !gameState[unlockKey]) {
+                    gameState[unlockKey] = true;
+                    showCenterNotification(`🎉 ${feature.toUpperCase()} UNLOCKED! 🎉`, 'var(--accent-primary)', 5000);
+                    playSound('achievement');
+                }
+                
+                // Update countdown
+                if (!gameState[unlockKey]) {
+                    const timeLeft = FEATURES_UNLOCK_DATE - now;
+                    if (timeLeft > 0) {
+                        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        
+                        const countdownEl = document.getElementById(`${feature}Countdown`);
+                        if (countdownEl) {
+                            countdownEl.textContent = `⏰ ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // SKILLS SYSTEM FUNCTIONS
+        function updateSkillsDisplay() {
+            const locked = document.getElementById('skillsLockedMessage');
+            const content = document.getElementById('skillsContent');
+            
+            if (!gameState.skillsUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            document.getElementById('skillPointsDisplay').textContent = gameState.skillPoints;
+            
+            const container = document.getElementById('skillTreesContainer');
+            container.innerHTML = '';
+            
+            Object.entries(skillTreesData).forEach(([treeId, tree]) => {
+                const treeDiv = document.createElement('div');
+                treeDiv.style.cssText = 'margin: 20px 0; padding: 20px; background: var(--bg-dark); border-radius: 10px; border: 2px solid ' + tree.color;
+                
+                let html = `<h3 style="color: ${tree.color}">${tree.name}</h3><div style="margin-top: 15px;">`;
+                
+                tree.skills.forEach(skill => {
+                    const purchased = gameState.skillsPurchased[skill.id] || false;
+                    const canAfford = gameState.skillPoints >= skill.cost;
+                    
+                    html += `
+                        <div style="padding: 15px; margin: 10px 0; background: var(--bg-medium); border-radius: 8px; border-left: 4px solid ${tree.color};">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="margin: 0; color: ${purchased ? '#00ff00' : 'var(--text-primary)'};">${skill.name} ${purchased ? '✅' : ''}</h4>
+                                    <p style="margin: 5px 0; color: var(--text-secondary);">${skill.desc}</p>
+                                </div>
+                                <button class="btn ${purchased ? 'btn-decline' : (canAfford ? 'btn-accept' : 'btn-decline')}" 
+                                        onclick="purchaseSkill('${skill.id}')" 
+                                        ${purchased ? 'disabled' : ''} 
+                                        style="min-width: 100px;">
+                                    ${purchased ? 'Owned' : `${skill.cost} SP`}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                treeDiv.innerHTML = html;
+                container.appendChild(treeDiv);
+            });
+        }
+        
+        function purchaseSkill(skillId) {
+            if (gameState.skillsPurchased[skillId]) {
+                showNotification('❌ Skill already purchased!', 'var(--warning)');
+                return;
+            }
+            
+            // Find skill
+            let skill = null;
+            for (const tree of Object.values(skillTreesData)) {
+                skill = tree.skills.find(s => s.id === skillId);
+                if (skill) break;
+            }
+            
+            if (!skill) return;
+            
+            if (gameState.skillPoints < skill.cost) {
+                showNotification('❌ Not enough skill points!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.skillPoints -= skill.cost;
+            gameState.skillsPurchased[skillId] = true;
+            
+            showNotification(`✅ Purchased: ${skill.name}!`, 'var(--accent-primary)');
+            playSound('trade');
+            updateSkillsDisplay();
+            saveGame(true);
+        }
+        
+        function getSkillBonus(type) {
+            let bonus = 0;
+            for (const tree of Object.values(skillTreesData)) {
+                for (const skill of tree.skills) {
+                    if (gameState.skillsPurchased[skill.id] && skill.bonus.type === type) {
+                        bonus += skill.bonus.value;
+                    }
+                }
+            }
+            return bonus;
+        }
+        
+        // LEADERBOARD SYSTEM
+        function generateFakeLeaderboard(category) {
+            const names = ['DragonSlayer', 'LuckMaster', 'RNGKing', 'ShawHunter', 'WealthLord', 'SpinGoddess', 'FortuneSeeker', 'RarityCollector', 'EpicGamer', 'ProTrader'];
+            const leaderboard = [];
+            
+            for (let i = 0; i < 10; i++) {
+                let value;
+                switch(category) {
+                    case 'money':
+                        value = Math.floor(Math.random() * 10000000000) + 1000000000;
+                        break;
+                    case 'luck':
+                        value = Math.floor(Math.random() * 500) + 100;
+                        break;
+                    case 'items':
+                        value = Math.floor(Math.random() * 5000) + 500;
+                        break;
+                    case 'prestige':
+                        value = Math.floor(Math.random() * 50) + 10;
+                        break;
+                }
+                
+                leaderboard.push({
+                    rank: i + 1,
+                    name: names[i],
+                    value: value
+                });
+            }
+            
+            // Sort by value
+            leaderboard.sort((a, b) => b.value - a.value);
+            leaderboard.forEach((entry, idx) => entry.rank = idx + 1);
+            
+            return leaderboard;
+        }
+        
+        function switchLeaderboardCategory(category) {
+            const leaderboard = generateFakeLeaderboard(category);
+            const display = document.getElementById('leaderboardDisplay');
+            
+            let categoryName, icon, formatter;
+            switch(category) {
+                case 'money':
+                    categoryName = 'Richest Players';
+                    icon = '💰';
+                    formatter = (v) => '$' + formatNumber(v);
+                    break;
+                case 'luck':
+                    categoryName = 'Luckiest Players';
+                    icon = '🍀';
+                    formatter = (v) => v + 'x Luck';
+                    break;
+                case 'items':
+                    categoryName = 'Most Items';
+                    icon = '🎁';
+                    formatter = (v) => v + ' Items';
+                    break;
+                case 'prestige':
+                    categoryName = 'Highest Prestige';
+                    icon = '⭐';
+                    formatter = (v) => 'Level ' + v;
+                    break;
+            }
+            
+            let html = `<h3>${icon} ${categoryName}</h3><div style="margin-top: 20px;">`;
+            
+            leaderboard.forEach(entry => {
+                html += `
+                    <div style="padding: 15px; margin: 10px 0; background: var(--bg-dark); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="font-size: 1.5rem; font-weight: bold; color: ${entry.rank === 1 ? '#ffd700' : entry.rank === 2 ? '#c0c0c0' : entry.rank === 3 ? '#cd7f32' : 'var(--text-secondary)'};">
+                                #${entry.rank}
+                            </span>
+                            <span style="font-size: 1.1rem;">${entry.name}</span>
+                        </div>
+                        <span style="font-size: 1.1rem; color: var(--accent-gold); font-weight: bold;">
+                            ${formatter(entry.value)}
+                        </span>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            display.innerHTML = html;
+        }
+        
+        function updateLeaderboardDisplay() {
+            const locked = document.getElementById('leaderboardLockedMessage');
+            const content = document.getElementById('leaderboardContent');
+            
+            if (!gameState.leaderboardUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            switchLeaderboardCategory('money'); // Default
+        }
+        
+        // GUILD SYSTEM
+        function updateGuildDisplay() {
+            const locked = document.getElementById('guildLockedMessage');
+            const content = document.getElementById('guildContent');
+            
+            if (!gameState.guildUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            const noGuild = document.getElementById('noGuildPanel');
+            const inGuild = document.getElementById('inGuildPanel');
+            
+            if (!gameState.currentGuild) {
+                noGuild.style.display = 'block';
+                inGuild.style.display = 'none';
+                
+                const container = document.getElementById('availableGuildsContainer');
+                container.innerHTML = '<div class="crafting-grid">';
+                
+                guildsData.forEach(guild => {
+                    const bonusText = Object.entries(guild.bonus).map(([k, v]) => `${k}: +${(v*100).toFixed(0)}%`).join(', ');
+                    container.innerHTML += `
+                        <div class="recipe-card">
+                            <h3>${guild.name}</h3>
+                            <p style="color: var(--text-secondary); margin: 10px 0;">${guild.desc}</p>
+                            <p style="margin: 10px 0;">Level: ${guild.level} | Members: ${guild.members}</p>
+                            <p style="color: var(--accent-gold); margin: 10px 0; font-weight: bold;">${bonusText}</p>
+                            <button class="btn btn-accept" onclick="joinGuild('${guild.id}')">Join Guild</button>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML += '</div>';
+            } else {
+                noGuild.style.display = 'none';
+                inGuild.style.display = 'block';
+                
+                const guild = guildsData.find(g => g.id === gameState.currentGuild);
+                if (guild) {
+                    document.getElementById('guildNameDisplay').textContent = guild.name;
+                    const bonusText = Object.entries(guild.bonus).map(([k, v]) => `${k}: +${(v*100).toFixed(0)}%`).join(', ');
+                    document.getElementById('guildStatsContainer').innerHTML = `
+                        <p style="color: var(--text-secondary);">${guild.desc}</p>
+                        <p style="margin: 10px 0;">Level: ${guild.level} | Members: ${guild.members}</p>
+                        <div style="padding: 20px; background: var(--bg-dark); border-radius: 8px; margin: 20px 0;">
+                            <h3 style="color: var(--accent-gold);">Guild Bonuses</h3>
+                            <p style="margin-top: 10px; font-size: 1.1rem;">${bonusText}</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        function joinGuild(guildId) {
+            gameState.currentGuild = guildId;
+            const guild = guildsData.find(g => g.id === guildId);
+            showNotification(`✅ Joined ${guild.name}!`, 'var(--accent-primary)');
+            playSound('achievement');
+            updateGuildDisplay();
+            saveGame(true);
+        }
+        
+        function leaveGuild() {
+            gameState.currentGuild = null;
+            showNotification('👋 Left guild!', 'var(--warning)');
+            updateGuildDisplay();
+            saveGame(true);
+        }
+        
+        function getGuildBonus(type) {
+            if (!gameState.currentGuild) return 0;
+            const guild = guildsData.find(g => g.id === gameState.currentGuild);
+            return guild && guild.bonus[type] ? guild.bonus[type] : 0;
+        }
+        
+        // GACHA SYSTEM
+        function updateGachaDisplay() {
+            const locked = document.getElementById('gachaLockedMessage');
+            const content = document.getElementById('gachaContent');
+            
+            if (!gameState.gachaUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            document.getElementById('gemsDisplay').textContent = gameState.gems;
+            
+            const banner = gachaBannersData.current;
+            const container = document.getElementById('currentBannerContainer');
+            container.innerHTML = `
+                <div style="padding: 30px; background: linear-gradient(135deg, var(--bg-dark) 0%, var(--accent-primary) 100%); border-radius: 15px; text-align: center;">
+                    <h2 style="margin: 0 0 15px 0;">🎲 ${banner.name}</h2>
+                    <p style="font-size: 1.1rem; margin: 10px 0;">${banner.desc}</p>
+                    <p style="color: var(--accent-gold); margin: 15px 0;">Featured: ${banner.featured.join(', ')}</p>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">Pity: ${gameState.gachaPity}/${banner.pityAt}</p>
+                    <div style="margin-top: 20px;">
+                        <button class="btn btn-accept" onclick="pullGacha(1)" style="margin: 5px; padding: 15px 30px;">Pull x1 (${banner.cost} gems)</button>
+                        <button class="btn btn-accept" onclick="pullGacha(10)" style="margin: 5px; padding: 15px 30px;">Pull x10 (${banner.cost * 10} gems)</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function pullGacha(count) {
+            const banner = gachaBannersData.current;
+            const cost = banner.cost * count;
+            
+            if (gameState.gems < cost) {
+                showNotification('❌ Not enough gems!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.gems -= cost;
+            
+            for (let i = 0; i < count; i++) {
+                gameState.gachaPity++;
+                
+                // Check pity
+                if (gameState.gachaPity >= banner.pityAt) {
+                    gameState.gachaPity = 0;
+                    // Give featured item
+                    const featuredRarity = rarities.find(r => banner.featured.includes(r.name));
+                    if (featuredRarity) {
+                        const itemName = generateItemName(featuredRarity);
+                        addItemToInventory(itemName, featuredRarity);
+                        showCenterNotification(`🎲 GACHA PITY! ${itemName}!`, 'var(--accent-gold)', 5000);
+                    }
+                } else {
+                    // Normal pull with rate up
+                    const rng = Math.random();
+                    const selectedRarity = selectRarityForGacha(rng, banner.rateUp, banner.featured);
+                    const itemName = generateItemName(selectedRarity);
+                    addItemToInventory(itemName, selectedRarity);
+                }
+            }
+            
+            playSound('trade');
+            showNotification(`🎲 Pulled ${count} time(s)!`, 'var(--accent-primary)');
+            updateGachaDisplay();
+            updateInventory();
+            saveGame(true);
+        }
+        
+        function selectRarityForGacha(rng, rateUp, featured) {
+            // Similar to normal spin but with rate up for featured
+            for (let i = rarities.length - 1; i >= 0; i--) {
+                const rarity = rarities[i];
+                let chance = rarity.chance;
+                
+                // Apply rate up if featured
+                if (featured.includes(rarity.name)) {
+                    chance *= rateUp;
+                }
+                
+                if (rng < chance) {
+                    return rarity;
+                }
+            }
+            return rarities[0]; // Common as fallback
+        }
+        
+        // THEMES SYSTEM
+        function updateThemesDisplay() {
+            const locked = document.getElementById('themesLockedMessage');
+            const content = document.getElementById('themesContent');
+            
+            if (!gameState.themesUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            const container = document.getElementById('themesContainer');
+            container.innerHTML = '<div class="crafting-grid">';
+            
+            themesData.forEach(theme => {
+                const unlocked = gameState.unlockedThemes.includes(theme.id);
+                const current = gameState.currentTheme === theme.id;
+                
+                container.innerHTML += `
+                    <div class="recipe-card" style="border: 3px solid ${current ? 'var(--accent-gold)' : 'var(--bg-dark)'};">
+                        <h3>${theme.name}</h3>
+                        <div style="width: 100%; height: 60px; background: ${theme.colors.bg}; border-radius: 8px; margin: 10px 0; border: 2px solid ${theme.colors.primary};"></div>
+                        <button class="btn ${current ? 'btn-decline' : 'btn-accept'}" 
+                                onclick="applyTheme('${theme.id}')" 
+                                ${!unlocked ? 'disabled' : ''}>
+                            ${current ? 'Active' : unlocked ? 'Apply' : 'Locked'}
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML += '</div>';
+        }
+        
+        function applyTheme(themeId) {
+            const theme = themesData.find(t => t.id === themeId);
+            if (!theme || !gameState.unlockedThemes.includes(themeId)) {
+                showNotification('❌ Theme not unlocked!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.currentTheme = themeId;
+            
+            // Apply CSS variables (basic implementation)
+            document.documentElement.style.setProperty('--accent-primary', theme.colors.primary);
+            // Note: Full theme implementation would require more CSS variables
+            
+            showNotification(`✅ Applied ${theme.name}!`, 'var(--accent-primary)');
+            updateThemesDisplay();
+            saveGame(true);
+        }
+        
+        // TITLES SYSTEM
+        function updateTitlesDisplay() {
+            const locked = document.getElementById('titlesLockedMessage');
+            const content = document.getElementById('titlesContent');
+            
+            if (!gameState.titlesUnlocked) {
+                locked.style.display = 'block';
+                content.style.display = 'none';
+                return;
+            }
+            
+            locked.style.display = 'none';
+            content.style.display = 'block';
+            
+            document.getElementById('currentTitleDisplay').textContent = gameState.currentTitle || 'None';
+            
+            const container = document.getElementById('titlesListContainer');
+            container.innerHTML = '<div class="crafting-grid">';
+            
+            titlesData.forEach(title => {
+                const unlocked = gameState.unlockedTitles.includes(title.id);
+                const current = gameState.currentTitle === title.id;
+                
+                let reqText = '';
+                switch(title.requirement.type) {
+                    case 'start': reqText = 'Automatic'; break;
+                    case 'money': reqText = `Have $${formatNumber(title.requirement.value)}`; break;
+                    case 'luck': reqText = `Have ${title.requirement.value}x luck`; break;
+                    case 'items': reqText = `Own ${title.requirement.value} items`; break;
+                    case 'dungeons': reqText = `Clear ${title.requirement.value} dungeons`; break;
+                    case 'prestige': reqText = `Reach prestige ${title.requirement.value}`; break;
+                    case 'shaw': reqText = 'Own Shaw item'; break;
+                }
+                
+                container.innerHTML += `
+                    <div class="recipe-card" style="border: 3px solid ${current ? 'var(--accent-gold)' : unlocked ? 'var(--accent-primary)' : 'var(--bg-dark)'};">
+                        <h3>${title.emoji} ${title.name}</h3>
+                        <p style="color: var(--text-secondary); margin: 10px 0; font-size: 0.9rem;">${reqText}</p>
+                        <button class="btn ${current ? 'btn-decline' : unlocked ? 'btn-accept' : 'btn-decline'}" 
+                                onclick="equipTitle('${title.id}')" 
+                                ${!unlocked ? 'disabled' : ''}>
+                            ${current ? 'Equipped' : unlocked ? 'Equip' : 'Locked'}
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML += '</div>';
+        }
+        
+        function equipTitle(titleId) {
+            if (!gameState.unlockedTitles.includes(titleId)) {
+                showNotification('❌ Title not unlocked!', 'var(--danger)');
+                return;
+            }
+            
+            gameState.currentTitle = titleId;
+            const title = titlesData.find(t => t.id === titleId);
+            showNotification(`✅ Equipped: ${title.emoji} ${title.name}!`, 'var(--accent-primary)');
+            updateTitlesDisplay();
+            saveGame(true);
+        }
+        
+        function checkTitleUnlocks() {
+            titlesData.forEach(title => {
+                if (gameState.unlockedTitles.includes(title.id)) return;
+                
+                let unlocked = false;
+                switch(title.requirement.type) {
+                    case 'start':
+                        unlocked = true;
+                        break;
+                    case 'money':
+                        unlocked = gameState.money >= title.requirement.value;
+                        break;
+                    case 'luck':
+                        unlocked = gameState.luckMultiplier >= title.requirement.value;
+                        break;
+                    case 'items':
+                        unlocked = Object.values(gameState.inventory).reduce((sum, items) => sum + items.length, 0) >= title.requirement.value;
+                        break;
+                    case 'prestige':
+                        unlocked = gameState.prestigeLevel >= title.requirement.value;
+                        break;
+                    case 'shaw':
+                        unlocked = Object.keys(gameState.inventory).some(key => key.includes('Shaw'));
+                        break;
+                }
+                
+                if (unlocked) {
+                    gameState.unlockedTitles.push(title.id);
+                    showCenterNotification(`🏅 Title Unlocked: ${title.emoji} ${title.name}!`, 'var(--accent-gold)', 5000);
+                    playSound('achievement');
+                }
+            });
+        }
+        
+        // ADMIN FUNCTIONS FOR NEW SYSTEMS
+        function adminUnlockAllNewSystems() {
+            gameState.skillsUnlocked = true;
+            gameState.leaderboardUnlocked = true;
+            gameState.guildUnlocked = true;
+            gameState.gachaUnlocked = true;
+            gameState.themesUnlocked = true;
+            gameState.titlesUnlocked = true;
+            
+            showCenterNotification('🔓 ALL NEW SYSTEMS UNLOCKED! 🔓', 'var(--accent-primary)', 5000);
+            saveGame(true);
+        }
+        
+        // Check new systems every second
+        setInterval(() => {
+            checkNewSystemsUnlock();
+        }, 1000);
+        
         // ===== SOUND EFFECTS SYSTEM =====
         
         let audioContext;
@@ -12017,8 +13419,22 @@
             updateArtifactsDisplay();
             updatePetsDisplay();
             
+            // NEW SYSTEMS initialization
+            initializeNewSystems();
+            updateSkillsDisplay();
+            updateLeaderboardDisplay();
+            updateGuildDisplay();
+            updateGachaDisplay();
+            updateThemesDisplay();
+            updateTitlesDisplay();
+            
             // Codes list
             updateRedeemedCodesList();
+            
+            // Show admin button if already unlocked
+            if (gameState.adminUnlocked) {
+                document.getElementById('showAdminBtn').style.display = 'inline-block';
+            }
         });
         
         // Auto-save every 30 seconds
